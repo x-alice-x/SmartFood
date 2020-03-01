@@ -45,8 +45,8 @@
             show() {
               this.$modal.show('profile-modal');
             },
-            logout() {
-                this.$store.dispatch("Logout");
+            async logout() {
+                await this.$store.dispatch("Logout");
                 if (!this.errors) {
                     this.$router.push("/signin");
                 }

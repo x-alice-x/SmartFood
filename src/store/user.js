@@ -1,4 +1,5 @@
 import axios from "axios";
+import Vue from "vue";
 
 export default {
 	state: {
@@ -18,8 +19,9 @@ export default {
 	},
 	actions: {
 		async SignIn({ commit }, email) {
-			commit("CLEAR_ERROR");			
-			console.log(email);
+			Vue.$cookies.set("email" ,email);
+			console.log(Vue.$cookies.get("email"));
+			commit("CLEAR_ERROR");
 			const url = "/api/v1/food/auth/login";
 			let requestParams = {
 				url: url,
@@ -46,17 +48,25 @@ export default {
 				url: url,
 				method: "POST"
 			};
-			axios(requestParams)
-				.then(
-					resp => {
-						if (resp.data.success) {
-							commit("SET_USER_AUTHENTICATED", false);
-						}
-					},
-					err => {
-						commit("SET_ERROR", err.message);
+			await axios(requestParams).then(
+				resp => {
+					if (resp.data.success) {
+						Vue.$cookies.remove("email");
+						commit("SET_USER_AUTHENTICATED", false);
 					}
-				);
+				},
+				err => {
+					commit("SET_ERROR", err.message);
+				}
+			);
+		},
+		async CHECK_AUTHORIZED({ commit }) {
+			console.log(Vue.$cookies.get("email"));
+			if (Vue.$cookies.get("email")) {
+				commit("SET_USER_AUTHENTICATED", true);
+			} else {
+				commit("SET_USER_AUTHENTICATED", false);
+			}
 		}
 	},
 	getters: {
