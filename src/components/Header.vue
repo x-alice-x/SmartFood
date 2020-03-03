@@ -1,0 +1,179 @@
+<template>
+    <div class="header">
+        <div class="container">
+            <div class="user">
+                <img src="../assets/img/user.svg" 
+                     alt="User Image"
+                     @click="show" >
+            </div>
+            <div class="logo">
+                <a>SmartFood</a>
+            </div>
+
+            <div class="cart">
+                <img src="../assets/img/cart.svg"
+                     alt="Cart"
+                     @click="showCart = !showCart">
+            </div>
+        </div>
+
+        <modal name="profile-modal">
+        <div class="profile-modal">
+          <div class="head">
+            <img src="../assets/img/user.svg"
+                 alt="User Image">
+              <h3 class="username">{{ username }}</h3>
+              <h4 class="email">{{ email }}</h4>
+          </div>
+          <div class="logout-btn">
+            <button @click="logout()">Logout</button>
+          </div>
+        </div>
+      </modal>
+
+      <Cart class="cart_comp" 
+            v-if="showCart"
+            @closeCart = "showCart=false" />
+
+    </div>
+</template>
+
+<script>
+    import Cart from "../components/Cart.vue";
+    export default {
+        components: {
+            Cart
+        },
+        data() {
+            return {
+                showCart: false
+            }
+        },
+        computed: {
+            username() {
+                return "Gram"; // getters
+            },
+            email() {
+                return "kjhkjh@khj.com"; //getters
+            },
+            errors() {
+                return this.$store.getters.getError;
+            }
+        },
+        methods: {
+            show() {
+              this.$modal.show('profile-modal');
+            },
+            async logout() {
+                await this.$store.dispatch("Logout");
+                if (!this.errors) {
+                    this.$router.push("/signin");
+                }
+                else {
+                    console.log(this.errors);
+                }
+            }
+        }
+    }
+</script>
+
+<style>
+  .v--modal-box.v--modal {
+    width: 508px !important;
+    height: 428px !important;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0px 4px 33px rgba(0, 0, 0, 0.75);
+  }
+</style>
+<style scoped lang="scss">
+    @import "../assets/scss/vars.scss";
+    @import "../assets/scss/root.scss";
+
+    .header{
+        height: 80px;
+        width: 100%;
+        background: $c-main;
+        color: $font-color;
+        .container{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 100%;
+            padding: 0 75px;
+            .user{
+                cursor: pointer;
+            }
+            .logo {
+                a {
+                font-weight: 900;
+                font-size: 48px;
+                line-height: 45px;
+                }
+            }
+            .cart {
+                cursor: pointer;
+                width: 57px;
+                height: 57px;
+            }
+        }
+    }
+.head {
+    width: 508px;
+    height: 250px;
+    background: $c-main;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    img {
+        width: 45px;
+        height: 57.43px;
+        margin-bottom: 20px;
+        margin-top: 10px;
+    }
+}
+.username {
+  text-align: center;
+  font-family: $font;
+  font-weight: 900;
+  font-size: 36px;
+  line-height: 42px;
+  color: #460B79;
+  margin-bottom: 5px;
+}
+.email {
+  font-family: Roboto, sans-serif;
+  font-weight: 200;
+  font-size: 24px;
+  line-height: 28px;
+  text-align: center;
+  color: #460B79;
+  margin-bottom: 18px;
+}
+.logout-btn {
+  display: flex;
+  justify-content: center;
+  margin-top: 60px;
+    button {
+        background: #460B79;
+        border-radius: 46px;
+        border: none;
+        width: 200px;
+        height: 50px;
+        font-weight: 900;
+        font-size: 24px;
+        line-height: 28px;
+        text-align: center;
+        color: #FFFFFF;
+        text-transform: uppercase;
+        cursor: pointer;
+        outline: none;
+    }
+}
+.cart_comp {
+    position: absolute;
+    right: 5%;
+    z-index: 200;
+}
+</style>
