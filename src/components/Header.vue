@@ -9,27 +9,46 @@
             <div class="logo">
                 <a>SmartFood</a>
             </div>
+
+            <div class="cart">
+                <img src="../assets/img/cart.svg"
+                     alt="Cart"
+                     @click="showCart = !showCart">
+            </div>
         </div>
 
         <modal name="profile-modal">
         <div class="profile-modal">
-          <div class="avatar">
-            <img src="" v-if="avatar">
-            <img src="../assets/img/avatar.svg" v-else>
+          <div class="head">
+            <img src="../assets/img/user.svg"
+                 alt="User Image">
+              <h3 class="username">{{ username }}</h3>
+              <h4 class="email">{{ email }}</h4>
           </div>
-          <h3 class="username">{{ username }}</h3>
-          <h4 class="email">{{ email }}</h4>
           <div class="logout-btn">
             <button @click="logout()">Logout</button>
           </div>
         </div>
       </modal>
 
+      <Cart class="cart_comp" 
+            v-if="showCart"
+            @closeCart = "showCart=false" />
+
     </div>
 </template>
 
 <script>
+    import Cart from "../components/Cart.vue";
     export default {
+        components: {
+            Cart
+        },
+        data() {
+            return {
+                showCart: false
+            }
+        },
         computed: {
             username() {
                 return "Gram"; // getters
@@ -72,39 +91,46 @@
     @import "../assets/scss/root.scss";
 
     .header{
-        z-index: 1000;
-        position: fixed;
-        top: 0px;
         height: 80px;
         width: 100%;
         background: $c-main;
+        color: $font-color;
         .container{
             display: flex;
-            flex-wrap: wrap;
-            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
             height: 100%;
-            padding: 15px;
+            padding: 0 75px;
             .user{
-                position: absolute;
-                align-self: flex-start;
                 cursor: pointer;
             }
             .logo {
-                align-self: center;
                 a {
                 font-weight: 900;
                 font-size: 48px;
                 line-height: 45px;
-                color: white;
                 }
+            }
+            .cart {
+                cursor: pointer;
+                width: 57px;
+                height: 57px;
             }
         }
     }
-.avatar {
-  margin-bottom: 16px;
-  img {
+.head {
     width: 508px;
     height: 250px;
+    background: $c-main;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    img {
+        width: 45px;
+        height: 57.43px;
+        margin-bottom: 20px;
+        margin-top: 10px;
     }
 }
 .username {
@@ -114,6 +140,7 @@
   font-size: 36px;
   line-height: 42px;
   color: #460B79;
+  margin-bottom: 5px;
 }
 .email {
   font-family: Roboto, sans-serif;
@@ -127,8 +154,9 @@
 .logout-btn {
   display: flex;
   justify-content: center;
+  margin-top: 60px;
     button {
-        background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
+        background: #460B79;
         border-radius: 46px;
         border: none;
         width: 200px;
@@ -140,6 +168,12 @@
         color: #FFFFFF;
         text-transform: uppercase;
         cursor: pointer;
+        outline: none;
     }
+}
+.cart_comp {
+    position: absolute;
+    right: 5%;
+    z-index: 200;
 }
 </style>

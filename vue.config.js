@@ -3,7 +3,7 @@ module.exports = {
         ? './' // prod
         : '/', // dev
     devServer: {
-        proxy: 'http://digitalization.student.smartworld.team:2280/'
+        proxy: 'http://digitalization.student.smartworld.team:2280'
         // https: true
     }
 }

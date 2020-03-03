@@ -7,6 +7,9 @@ import VueAwesomeSwiper from 'vue-awesome-swiper'
 import VModal from 'vue-js-modal'
 import 'swiper/dist/css/swiper.css'
 
+let VueTouch = require('vue-touch')
+Vue.use(VueTouch, {name: 'v-touch'})
+
 Vue.config.productionTip = false
 
 Vue.use(VueCookies)

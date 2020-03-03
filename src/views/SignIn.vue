@@ -13,7 +13,7 @@
           <!-- @focusout="checkEmail()" -->
         <div class="form-error" v-if="emailError != ''">{{ emailError }}</div>
       </div>
-      <button class="form-submit" type="submit" v-if="email">Login</button>
+      <button class="form-submit" type="submit" v-if="email"><span>Login</span></button>
     </form>
   </div>
 </template>
@@ -80,17 +80,16 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
+  background: #EDEBEF;
+  /*opacity: 10%;*/
   background-size: cover;
 }
 
   .signin-title {
     font-family: Roboto, sans-serif;
-    font-style: normal;
-    font-weight: 900;
     font-size: 72px;
     line-height: 84px;
-    color: #ffffff;
+    color: #460B79;
     margin-bottom: 58px;
     margin-top: -100px;
   }
@@ -108,12 +107,12 @@ export default {
     padding: 10px 0;
     border: none;
     background-color: transparent;
-    border-bottom: 1px solid #ffffff;
+    border-bottom: 1px solid #460B79;
     font-family: Roboto, sans-serif;
     font-weight: 300;
     font-size: 36px;
     text-align: right;
-    color: #ffffff;
+    color: #460B79;
     transition: 0.2s;
     text-align: center;
     outline: none;
@@ -123,7 +122,7 @@ export default {
       font-weight: 300;
       font-size: 36px;
       text-align: right;
-      color: #ffffff;
+      color: #460B79;
     }
 
   .form-submit {
@@ -131,22 +130,42 @@ export default {
     width: 200px;
     height: 50px;
     padding: 10px;
-    background-color: #ffffff;
-    border: 1px solid #ffffff;
+    background-color: #460B79;
+    border: 1px solid #460B79;
     border-radius: 46px;
     font-weight: 900;
     font-size: 24px;
     line-height: 28px;
-    color: #88267F;
     text-align: center;
     transition: 0.2s;
     text-transform: uppercase;
     outline: none;
     cursor: pointer;
   }
+  .form-submit span {
+    background: #EDEBEF;
+
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    display: block;
+  }
     :hover {
       border: 1px solid lighten(#88267F, 35)
     }
+  .form-error {
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    color: #FF6D56;
+  }
+@media(max-width: 768px) {
+  .from-submit {
+    width: 100%;
+  }
+  input {
+    width: 100% !important;
+  }
+}
 
 @media(max-width: 576px) {
   .signin-title {
@@ -157,8 +176,8 @@ export default {
       height: 100px;
     }
     input {
-      padding: 3px 0 10px 0;
-      font-size: 15px;
+      padding: 3px 0 10px 0 !important;
+      font-size: 15px !important;
     }
     ::placeholder {
       font-size: 15px;
