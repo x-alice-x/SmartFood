@@ -1,5 +1,3 @@
-# qwe
-
 ## Project setup
 ```
 npm install
