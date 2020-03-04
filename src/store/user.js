@@ -61,7 +61,7 @@ export default {
 			);
 		},
 		async CHECK_AUTHORIZED({ commit }) {
-			console.log(Vue.$cookies.get("email"));
+			console.log(Vue.$cookies.keys());
 			if (Vue.$cookies.get("email")) {
 				commit("SET_USER_AUTHENTICATED", true);
 			} else {
@@ -75,6 +75,9 @@ export default {
 		},
 		getError(state) {
 			return state.error;
+		},
+		getUserEmail() {
+			return Vue.$cookies.get("email");
 		}
 	}
 };

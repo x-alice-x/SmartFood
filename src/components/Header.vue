@@ -11,9 +11,6 @@
             </div>
 
             <div class="cart">
-                <img src="../assets/img/cart.svg"
-                     alt="Cart"
-                     @click="showCart = !showCart">
             </div>
         </div>
 
@@ -31,30 +28,17 @@
         </div>
       </modal>
 
-      <Cart class="cart_comp" 
-            v-if="showCart"
-            @closeCart = "showCart=false" />
-
     </div>
 </template>
 
 <script>
-    import Cart from "../components/Cart.vue";
-    export default {
-        components: {
-            Cart
-        },
-        data() {
-            return {
-                showCart: false
-            }
-        },
+  export default {
         computed: {
             username() {
                 return "Gram"; // getters
             },
             email() {
-                return "kjhkjh@khj.com"; //getters
+                return this.$store.getters.getUserEmail;
             },
             errors() {
                 return this.$store.getters.getError;
@@ -111,11 +95,6 @@
                 line-height: 45px;
                 }
             }
-            .cart {
-                cursor: pointer;
-                width: 57px;
-                height: 57px;
-            }
         }
     }
 .head {
@@ -170,10 +149,5 @@
         cursor: pointer;
         outline: none;
     }
-}
-.cart_comp {
-    position: absolute;
-    right: 5%;
-    z-index: 200;
 }
 </style>
