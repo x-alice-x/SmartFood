@@ -1,7 +1,7 @@
 <template>
     <div class="dishes" @click="qwe">
         <div class="container">
-            <div class="dish" v-for="(dish, index) in dishes.dishes" :key="index">
+            <div class="dish" v-for="(dish, index) in dishes" :key="index">
                 <div class="dish-top" >
                     <div class="dish-img" :style="{'background-image': `url(${dish.image})`}"></div>
                 </div>
@@ -96,21 +96,21 @@
             },
             onSwipeLeft(index, direction) {
                 this.dishes[index].swipe = 'left'
+                setTimeout(this.setSwipeMiddle, 200, index)
                 console.log(index,direction)
-                console.log(this.dishes[index].swipe)
             },
             onSwipeRight(index, direction) {
+                this.dishes[index].swipe = 'right'
+                setTimeout(this.setSwipeMiddle, 200, index)
                 console.log(index,direction)
-
-
             },
+            setSwipeMiddle(index) {
+                this.dishes[index].swipe = 'middle'
+            }
         },
         computed: {
             dishes() {
                 if (this.$store.getters.currentDishes){
-                    this.$store.getters.currentDishes.forEach((item) => {
-                        item.swipe = 'middle'
-                        return item})
                     return this.$store.getters.currentDishes
                 }
                 else {
