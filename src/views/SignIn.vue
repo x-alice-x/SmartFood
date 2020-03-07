@@ -112,7 +112,7 @@ export default {
     font-weight: 300;
     font-size: 36px;
     text-align: right;
-    color: #FFFFFF;
+    color: #ffffff;
     transition: 0.2s;
     text-align: center;
     outline: none;
@@ -137,7 +137,6 @@ export default {
     font-size: 24px;
     line-height: 28px;
     text-align: center;
-    transition: 0.2s;
     text-transform: uppercase;
     outline: none;
     cursor: pointer;
@@ -148,8 +147,8 @@ export default {
     -webkit-background-clip: text;
     display: block;
   }
-    :hover {
-      border: 1px solid lighten(#88267F, 35)
+    :hover button{
+      border: 1px solid lighten(#88267F, 35);
     }
   .form-error {
     font-family: 'Roboto', sans-serif;

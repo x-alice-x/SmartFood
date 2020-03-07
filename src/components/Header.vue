@@ -11,9 +11,6 @@
             </div>
 
             <div class="cart">
-                <img src="../assets/img/cart.svg"
-                     alt="Cart"
-                     @click="showCart = !showCart">
             </div>
         </div>
 
@@ -22,8 +19,8 @@
           <div class="head">
             <img src="../assets/img/user.svg"
                  alt="User Image">
-              <h3 class="username">{{username}}</h3>
-              <h4 class="email">{{email}}</h4>
+              <h3 class="username">{{ username }}</h3>
+              <h4 class="email">{{ email }}</h4>
           </div>
           <div class="logout-btn">
             <button @click="logout()">Logout</button>
@@ -31,30 +28,17 @@
         </div>
       </modal>
 
-      <Cart class="cart_comp" 
-            v-if="showCart"
-            @closeCart = "showCart=false" />
-
     </div>
 </template>
 
 <script>
-    import Cart from "../components/Cart.vue";
-    export default {
-        components: {
-            Cart
-        },
-        data() {
-            return {
-                showCart: false
-            }
-        },
+  export default {
         computed: {
             username() {
                 return "Gram"; // getters
             },
             email() {
-                return "kjhkjh@khj.com"; //getters
+                return this.$store.getters.getUserEmail;
             },
             errors() {
                 return this.$store.getters.getError;
@@ -129,9 +113,6 @@
                 font-size: 40px;
                 line-height: 45px;
                 }
-            }
-            .cart {
-                opacity: 0;
             }
         }
     }
@@ -229,9 +210,6 @@
                 }
             }
             .user{
-                width: 35px;
-            }
-            .cart{
                 width: 35px;
             }
         }

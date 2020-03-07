@@ -28,6 +28,7 @@
                 </div>
             </div>
         </div>
+
         <div class="dish-mobile" v-for="(dish, index) in dishes" :key="index" @click="qwe"
              v-touch:swipe.left="onSwipeLeft.bind(this, index)"
              v-touch:swipe.right="onSwipeRight.bind(this, index)">
