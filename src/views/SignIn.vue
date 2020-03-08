@@ -9,8 +9,8 @@
           id="signin-email"
           placeholder="@smartworld.team"
           v-model.trim="email"
+          @focusout="checkEmail()"
         />
-          <!-- @focusout="checkEmail()" -->
         <div class="form-error" v-if="emailError != ''">{{ emailError }}</div>
       </div>
       <button class="form-submit" type="submit" v-if="email"><span>Login</span></button>
@@ -29,10 +29,6 @@ export default {
   methods: {
     async SignIn() {
       await this.$store.dispatch("SignIn", this.email);
-      // .then (
-      //   resp => {
-      //     console.log(resp);
-      //   });
       console.log(this.errors);
       if (!this.errors) {
           this.$router.push("/");
@@ -41,25 +37,11 @@ export default {
         this.emailError = this.errors;
       }
     },
-    // checkEmail() {
-    //   this.$store.dispatch("CLEAR_ERRORS", "auth");
-    //   this.authError = "";
-    //   const emailArr = this.email.split("@");
-    //   if (this.email != "" && emailArr[1] == undefined)
-    //     this.email = emailArr[0] + "@smartworld.team";
-    //   this.$store.dispatch("CHECK_EMAIL", this.email).then(
-    //     result => {
-    //       if (result == "empty") this.emailError = "Заполните e-mail";
-    //       // else if (result == 'wrong')
-    //       //   this.emailError = 'Невалидный e-mail'
-    //       else {
-    //         this.emailError = "";
-    //         this.$store.dispatch("CLEAR_ERRORS", "email");
-    //       }
-    //     },
-    //     error => console.log("Email checker rejected: " + error.message)
-    //   );
-    // }
+    checkEmail() {
+      if ((this.email.indexOf('@') == -1)&&(this.email)) {
+        this.email = this.email + "@smartworld.team";
+      } 
+    }
   },
   computed: {
     errors() {
@@ -117,6 +99,9 @@ export default {
     text-align: center;
     outline: none;
   }
+   input:focus {
+    text-align: left;
+  }
   ::placeholder {
       font-family: Roboto, sans-serif;
       font-weight: 300;
@@ -147,7 +132,7 @@ export default {
     -webkit-background-clip: text;
     display: block;
   }
-    :hover button{
+    button:hover{
       border: 1px solid lighten(#88267F, 35);
     }
   .form-error {

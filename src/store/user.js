@@ -19,9 +19,10 @@ export default {
 	},
 	actions: {
 		async SignIn({ commit }, email) {
-			Vue.$cookies.set("email" ,email);
-			console.log(Vue.$cookies.get("email"));
 			commit("CLEAR_ERROR");
+			Vue.$cookies.remove("email");
+			Vue.$cookies.remove("name");
+			Vue.$cookies.remove("photo");
 			const url = "/api/v1/food/auth/login";
 			let requestParams = {
 				url: url,
@@ -33,10 +34,13 @@ export default {
 					console.log(resp);
 					if (resp.data.success) {
 						commit("SET_USER_AUTHENTICATED", true);
+						Vue.$cookies.set("email" ,email);
+						Vue.$cookies.set("name", resp.data.data.name);
+						Vue.$cookies.set("photo", resp.data.data.photo);
 					}
 				},
 				err => {
-					console.log(err.message);
+					console.log(err);
 					commit("SET_ERROR", err.message);
 				}
 			);
@@ -52,19 +56,19 @@ export default {
 				resp => {
 					if (resp.data.success) {
 						Vue.$cookies.remove("email");
-						// Vue.$cookies.remove("laravel_session");
+						Vue.$cookies.remove("name");
+						Vue.$cookies.remove("photo");
 						commit("SET_USER_AUTHENTICATED", false);
 					}
 				},
 				err => {
 					commit("SET_ERROR", err.message);
+					commit("SET_USER_AUTHENTICATED", true);
 				}
 			);
 		},
 		async CHECK_AUTHORIZED({ commit }) {
-			console.log(Vue.$cookies.get("email"));
-			console.log(Vue.$cookies.keys());
-			if (Vue.$cookies.get("email")) {
+			if (Vue.$cookies.get("name")) {
 				commit("SET_USER_AUTHENTICATED", true);
 			} else {
 				commit("SET_USER_AUTHENTICATED", false);
@@ -80,6 +84,12 @@ export default {
 		},
 		getUserEmail() {
 			return Vue.$cookies.get("email");
+		},
+		getUserName() {
+			return Vue.$cookies.get("name");
+		},
+		getUserPhoto() {
+			return Vue.$cookies.get("photo");
 		}
 	}
 };

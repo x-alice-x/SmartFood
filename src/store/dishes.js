@@ -1,5 +1,6 @@
 // import Vue from 'vue'
-import axios from 'axios'
+import axios from 'axios';
+import Router from 'vue-router';
 
 export default {
     state:{
@@ -35,7 +36,9 @@ export default {
                         commit('setDishes')
                     },
                     err => {
-                        console.log(err)
+                        console.log(err);
+                        commit("SET_USER_AUTHENTICATED", false);
+                        Router.push('/signin');             
                     })
         }
     },
