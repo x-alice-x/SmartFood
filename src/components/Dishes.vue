@@ -120,7 +120,12 @@
             },
         },
         async mounted(){
-            this.$store.dispatch('fetchMenu')
+            await this.$store.dispatch('fetchMenu');
+            if (this.$store.getters.getError) {
+                await this.$store.dispatch("SetNotAuth");
+                await this.$store.dispatch("ClearCookies");
+                this.$router.push('/signin');
+            }
         }
     }
 </script>
