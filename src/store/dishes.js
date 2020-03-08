@@ -31,9 +31,16 @@ export default {
             }
             axios(requestParams)
                 .then(resp => {
+                    if(resp.data.data){
+                        for (let i = 0; i < resp.data.data.length; i++){
+                            resp.data.data[i].dishes.forEach((item) => {
+                                item.swipe = 'middle'
+                                return item})
+                        }
                         dishes = resp.data.data
                         commit('updateDates', dishes)
                         commit('setDishes')
+                    }
                     },
                     err => {
                         console.log(err);

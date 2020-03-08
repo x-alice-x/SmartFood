@@ -1,23 +1,27 @@
 <template>
-    <div class="dishes" @click="qwe">
+    <div class="dishes">
         <div class="container">
-            <div class="dish" v-for="(dish, index) in dishes.dishes" :key="index">
-                <div class="dish-top" >
+            <div class="dish" v-for="(dish, index) in dishes" :key="index" @click="buyDish">
+                <div class="dish-top">
                     <div class="dish-img" :style="{'background-image': `url(${dish.image})`}"></div>
                 </div>
                 <div class="dish-middle">
                     <div class="dish-name">
                         {{ dish.name }}
                     </div>
-                    <div v-if="!showBuy" class="dish-descr">{{dish.description}}</div>
-                    <div class="dish-add" v-if="showBuy">
-                        <img src="../assets/img/minus.svg">
+                    <div v-if="dish.inEmployeeBasket === 0" class="dish-descr">{{dish.description}}</div>
+                    <div class="dish-add" v-if="dish.inEmployeeBasket > 0">
+                        <button>
+                            <img src="../assets/img/minus.svg" @click="deleteDish">
+                        </button>
                         <div class="dish-amount">
                             <div class="dish-amount-color">
-                                {{dish.amount}}
+                                {{dish.inEmployeeBasket}}
                             </div>
                         </div>
-                        <img src="../assets/img/plus.svg" @click="deleteDish">
+                        <button>
+                            <img src="../assets/img/plus.svg" @click="buyDish">
+                        </button>
                     </div>
                 </div>
                 <div class="dish-bottom">
@@ -28,8 +32,7 @@
                 </div>
             </div>
         </div>
-
-        <div class="dish-mobile" v-for="(dish, index) in dishes" :key="index" @click="qwe"
+        <div class="dish-mobile" v-for="(dish, index) in dishes" :key="index"
              v-touch:swipe.left="onSwipeLeft.bind(this, index)"
              v-touch:swipe.right="onSwipeRight.bind(this, index)">
             <section class="dish-mobile-basket"
@@ -54,7 +57,7 @@
                 </div>
                 <div class="dish-mobile-middle-typ">
                     <div class="dish-mobile-middle-typ-counter">
-                        В корзине:{{date}}
+                        В корзине: {{dish.inEmployeeBasket}}
                     </div>
                     <div class="dish-mobile-middle-typ-PW">
                         <a>{{ dish.weight }} г.</a>
@@ -79,38 +82,36 @@
 
     Vue.use(Vue2TouchEvents)
     export default {
-        data() {
-            return {
-                showBuy: false,
-                date: 0,
-            }
-        },
         methods: {
-            qwe(){
-                console.log(this.dishes)
+            // Добавление блюда
+            buyDish() {
+
             },
-            // Удаление блюда в корзину
+            // Удаление блюда
             deleteDish() {
-                console.log(this.showBuy)
-                this.showBuy = false
+                // stopPropagination для того что бы не работал клик по карточке
+                event.stopPropagation()
             },
+            // Удаление блюда по свайпу
             onSwipeLeft(index, direction) {
                 this.dishes[index].swipe = 'left'
+                setTimeout(this.setSwipeMiddle, 200, index)
                 console.log(index,direction)
-                console.log(this.dishes[index].swipe)
             },
+            // Добавление блюда по свайпу
             onSwipeRight(index, direction) {
+                this.dishes[index].swipe = 'right'
+                setTimeout(this.setSwipeMiddle, 200, index)
                 console.log(index,direction)
-
-
             },
+            // Это нужно для свайпа обратно
+            setSwipeMiddle(index) {
+                this.dishes[index].swipe = 'middle'
+            }
         },
         computed: {
             dishes() {
                 if (this.$store.getters.currentDishes){
-                    this.$store.getters.currentDishes.forEach((item) => {
-                        item.swipe = 'middle'
-                        return item})
                     return this.$store.getters.currentDishes
                 }
                 else {
@@ -158,14 +159,13 @@
             background: #FFFFFF;
             border: 1px solid $font-color;
             border-radius: 10px;
+            color: $font-color;
             &-color {
-                background: $c-main;
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                font-weight: 900;
+                font-weight: 700;
                 font-size: 18px;
-                line-height: 21px;
-                height: 100%;
+                display: flex;
+                justify-content: center;
+                padding-top: 5px;
             }
         }
         &-middle {
@@ -200,11 +200,16 @@
             padding-bottom: 20px;
             display: flex;
             justify-content: center;
-            img {
+            button{
+                background: none;
+                border: none;
                 outline: none;
-                margin: 0 10px;
-                width: 30px;
-                height: 30px;
+                img {
+                    outline: none;
+                    margin: 0 10px;
+                    width: 30px;
+                    height: 30px;
+                }
             }
         }
         &-top {
@@ -246,14 +251,14 @@
         }
     }
     .dish-mobile{display: none;}
-    @media (max-width: 768px) {
+    @media (max-width: 790px) {
         .dish {display: none;}
         .container{margin-top: 10px;}
         .dish-mobile {
             position: relative;
             position: relative;
             color: $font-color;
-            margin-top: 30px;
+            margin: 30px 0;
             display: grid;
             grid-template-columns: 15% 100% 15%;
             overflow: hidden;
@@ -389,11 +394,39 @@
             }
         }
     }
-    @media (max-width: 400px) {
+    @media (max-width: 420px) {
         .dish-mobile {
             &-middle{
                 &-about{
                     padding-left: 10px;
+                    width: 65%;
+                    &-name{
+                        font-size: 18px;
+                    }
+                    &-desc{
+                        padding-top: 5px;
+                        font-size: 13px;
+                    }
+                }
+                &-typ{
+                    padding: 5px 10px 5px 0;
+                }
+            }
+        }
+    }
+    @media (max-width: 360px) {
+        .dish-mobile {
+            &-middle{
+                &-about{
+                    padding-left: 10px;
+                    width: 65%;
+                    &-name{
+                        font-size: 16px;
+                    }
+                    &-desc{
+                        padding-top: 5px;
+                        font-size: 12px;
+                    }
                 }
                 &-typ{
                     padding: 5px 10px 5px 0;
