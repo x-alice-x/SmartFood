@@ -37,7 +37,6 @@ export default {
                                 return item})
                         }
                         dishes = resp.data.data
-                        console.log(resp.data.data)
                         commit('updateDates', dishes)
                         commit('setDishes')
                     }

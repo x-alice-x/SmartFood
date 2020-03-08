@@ -1,8 +1,8 @@
 <template>
-    <div class="dishes" @click="qwe">
+    <div class="dishes">
         <div class="container">
-            <div class="dish" v-for="(dish, index) in dishes" :key="index">
-                <div class="dish-top" >
+            <div class="dish" v-for="(dish, index) in dishes" :key="index" @click="buyDish">
+                <div class="dish-top">
                     <div class="dish-img" :style="{'background-image': `url(${dish.image})`}"></div>
                 </div>
                 <div class="dish-middle">
@@ -11,13 +11,17 @@
                     </div>
                     <div v-if="!showBuy" class="dish-descr">{{dish.description}}</div>
                     <div class="dish-add" v-if="showBuy">
-                        <img src="../assets/img/minus.svg">
+                        <button>
+                            <img src="../assets/img/minus.svg" @click="deleteDish">
+                        </button>
                         <div class="dish-amount">
                             <div class="dish-amount-color">
                                 {{dish.amount}}
                             </div>
                         </div>
-                        <img src="../assets/img/plus.svg" @click="deleteDish">
+                        <button>
+                            <img src="../assets/img/plus.svg">
+                        </button>
                     </div>
                 </div>
                 <div class="dish-bottom">
@@ -28,8 +32,7 @@
                 </div>
             </div>
         </div>
-
-        <div class="dish-mobile" v-for="(dish, index) in dishes" :key="index" @click="qwe"
+        <div class="dish-mobile" v-for="(dish, index) in dishes" :key="index"
              v-touch:swipe.left="onSwipeLeft.bind(this, index)"
              v-touch:swipe.right="onSwipeRight.bind(this, index)">
             <section class="dish-mobile-basket"
@@ -86,11 +89,18 @@
             }
         },
         methods: {
-            qwe(){
-                console.log(this.dishes)
+            buyDish() {
+                if (this.showBuy){
+                    console.log('+1')
+                }
+                else{
+                    this.showBuy = true
+                    console.log('+1')
+                }
             },
             // Удаление блюда в корзину
             deleteDish() {
+                event.stopPropagation()
                 console.log(this.showBuy)
                 this.showBuy = false
             },
@@ -200,11 +210,16 @@
             padding-bottom: 20px;
             display: flex;
             justify-content: center;
-            img {
+            button{
+                background: none;
+                border: none;
                 outline: none;
-                margin: 0 10px;
-                width: 30px;
-                height: 30px;
+                img {
+                    outline: none;
+                    margin: 0 10px;
+                    width: 30px;
+                    height: 30px;
+                }
             }
         }
         &-top {
