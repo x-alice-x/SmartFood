@@ -9,18 +9,18 @@
                     <div class="dish-name">
                         {{ dish.name }}
                     </div>
-                    <div v-if="!showBuy" class="dish-descr">{{dish.description}}</div>
-                    <div class="dish-add" v-if="showBuy">
+                    <div v-if="dish.inEmployeeBasket === 0" class="dish-descr">{{dish.description}}</div>
+                    <div class="dish-add" v-if="dish.inEmployeeBasket > 0">
                         <button>
                             <img src="../assets/img/minus.svg" @click="deleteDish">
                         </button>
                         <div class="dish-amount">
                             <div class="dish-amount-color">
-                                {{dish.amount}}
+                                {{dish.inEmployeeBasket}}
                             </div>
                         </div>
                         <button>
-                            <img src="../assets/img/plus.svg">
+                            <img src="../assets/img/plus.svg" @click="buyDish">
                         </button>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                 </div>
                 <div class="dish-mobile-middle-typ">
                     <div class="dish-mobile-middle-typ-counter">
-                        В корзине:{{date}}
+                        В корзине: {{dish.inEmployeeBasket}}
                     </div>
                     <div class="dish-mobile-middle-typ-PW">
                         <a>{{ dish.weight }} г.</a>
@@ -82,38 +82,29 @@
 
     Vue.use(Vue2TouchEvents)
     export default {
-        data() {
-            return {
-                showBuy: false,
-                date: 0,
-            }
-        },
         methods: {
+            // Добавление блюда
             buyDish() {
-                if (this.showBuy){
-                    console.log('+1')
-                }
-                else{
-                    this.showBuy = true
-                    console.log('+1')
-                }
+
             },
-            // Удаление блюда в корзину
+            // Удаление блюда
             deleteDish() {
+                // stopPropagination для того что бы не работал клик по карточке
                 event.stopPropagation()
-                console.log(this.showBuy)
-                this.showBuy = false
             },
+            // Удаление блюда по свайпу
             onSwipeLeft(index, direction) {
                 this.dishes[index].swipe = 'left'
                 setTimeout(this.setSwipeMiddle, 200, index)
                 console.log(index,direction)
             },
+            // Добавление блюда по свайпу
             onSwipeRight(index, direction) {
                 this.dishes[index].swipe = 'right'
                 setTimeout(this.setSwipeMiddle, 200, index)
                 console.log(index,direction)
             },
+            // Это нужно для свайпа обратно
             setSwipeMiddle(index) {
                 this.dishes[index].swipe = 'middle'
             }
@@ -168,14 +159,13 @@
             background: #FFFFFF;
             border: 1px solid $font-color;
             border-radius: 10px;
+            color: $font-color;
             &-color {
-                background: $c-main;
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                font-weight: 900;
+                font-weight: 700;
                 font-size: 18px;
-                line-height: 21px;
-                height: 100%;
+                display: flex;
+                justify-content: center;
+                padding-top: 5px;
             }
         }
         &-middle {
@@ -261,14 +251,14 @@
         }
     }
     .dish-mobile{display: none;}
-    @media (max-width: 768px) {
+    @media (max-width: 790px) {
         .dish {display: none;}
         .container{margin-top: 10px;}
         .dish-mobile {
             position: relative;
             position: relative;
             color: $font-color;
-            margin-top: 30px;
+            margin: 30px 0;
             display: grid;
             grid-template-columns: 15% 100% 15%;
             overflow: hidden;
@@ -404,11 +394,39 @@
             }
         }
     }
-    @media (max-width: 400px) {
+    @media (max-width: 420px) {
         .dish-mobile {
             &-middle{
                 &-about{
                     padding-left: 10px;
+                    width: 65%;
+                    &-name{
+                        font-size: 18px;
+                    }
+                    &-desc{
+                        padding-top: 5px;
+                        font-size: 13px;
+                    }
+                }
+                &-typ{
+                    padding: 5px 10px 5px 0;
+                }
+            }
+        }
+    }
+    @media (max-width: 360px) {
+        .dish-mobile {
+            &-middle{
+                &-about{
+                    padding-left: 10px;
+                    width: 65%;
+                    &-name{
+                        font-size: 16px;
+                    }
+                    &-desc{
+                        padding-top: 5px;
+                        font-size: 12px;
+                    }
                 }
                 &-typ{
                     padding: 5px 10px 5px 0;
