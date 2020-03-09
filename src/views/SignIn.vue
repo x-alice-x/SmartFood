@@ -5,7 +5,7 @@
       <div>
         <input
           :class="{'form-input': domain==false}"
-          type="text"
+          type="email"
           id="signin-email"
           v-model.trim="email"
           @focusout="checkEmail()"
@@ -117,6 +117,12 @@ export default {
     /*text-align: left;*/
     text-indent: 1%;
   }
+  input:invalid {
+    border-bottom: 1px solid red;
+  }
+  /*input:focus:invalid {
+    border-bottom: 1px solid #ffffff;
+  }*/
   .form-input:focus {
     /*text-align: center;*/
     text-indent: 25%;
