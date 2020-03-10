@@ -4,13 +4,13 @@
     <form class="signin-form" @submit.prevent="SignIn()">
       <div>
         <input
-          :class="{'form-input': domain==false}"
-          type="email"
+          class="form-input"
+          type="text"
           id="signin-email"
+          placeholder="@smartworld.team"
           v-model.trim="email"
           @focusout="checkEmail()"
         />
-        <label v-if="domain">@smartworld.team</label> 
         <div class="form-error" v-if="emailError != ''">{{ emailError }}</div>
       </div>
       <button class="form-submit" type="submit" v-if="email"><span>Login</span></button>
@@ -46,20 +46,15 @@ export default {
   computed: {
     errors() {
       return this.$store.getters.getError;
-    },
-    domain() {
-      if (this.email.indexOf('@') != -1) {
-        return false;
-      }
-      else {
-        return true;
-      }
     }
   }
 };
 </script>
 
 <style>
+/*
+@import "../assets/scss/vars.scss";
+@import "../assets/scss/root.scss";*/
 
 .signin {
   min-height: 100vh;
@@ -68,6 +63,7 @@ export default {
   justify-content: center;
   align-items: center;
   background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
+  /*opacity: 10%;*/
   background-size: cover;
 }
 
@@ -97,36 +93,22 @@ export default {
     font-family: Roboto, sans-serif;
     font-weight: 300;
     font-size: 36px;
-    text-indent: 25%;
-    /*text-align: center; */
-    transition: .4s;
-    color: #ffffff;
-    outline: none;
-  }
-  .signin-form label {
-    position: absolute;
-    font-family: Roboto, sans-serif;
-    font-weight: 300;
-    font-size: 36px;
     text-align: right;
     color: #ffffff;
-    left: 50%;
-    margin-top: 10px;
+    transition: 0.2s;
+    text-align: center;
+    outline: none;
   }
    input:focus {
-    /*text-align: left;*/
-    text-indent: 1%;
+    text-align: left;
   }
-  input:invalid {
-    border-bottom: 1px solid red;
-  }
-  /*input:focus:invalid {
-    border-bottom: 1px solid #ffffff;
-  }*/
-  .form-input:focus {
-    /*text-align: center;*/
-    text-indent: 25%;
-  }
+  ::placeholder {
+      font-family: Roboto, sans-serif;
+      font-weight: 300;
+      font-size: 36px;
+      text-align: right;
+      color: white;
+    }
 
   .form-submit {
     font-family: Roboto, sans-serif;
@@ -164,19 +146,6 @@ export default {
     width: 100%;
   }
   input {
-    text-indent: 15% !important;
-  }
-  .signin-form label {
-    left: 40%;
-  }
-  input:focus {
-    /*text-align: left;*/
-    text-indent: 0% !important;
-  }
-}
-
-@media(max-width: 666px) {
-  input {
     width: 100% !important;
   }
 }
@@ -193,7 +162,7 @@ export default {
       padding: 3px 0 10px 0 !important;
       font-size: 15px !important;
     }
-    .signin-form label {
+    ::placeholder {
       font-size: 15px;
     }
     .form-submit {
@@ -201,9 +170,6 @@ export default {
       height: 35px;
       font-size: 16px;
       padding: 0;
-    }
-    .signin-form label {
-      margin-top: 3px;
     }
 }
 

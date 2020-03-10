@@ -184,7 +184,7 @@
     right: 5%;
     z-index: 200;
 }
-@media (max-width: 790px){
+@media (max-width: 768px){
     .header{
         .container{
             padding: 0 15px;

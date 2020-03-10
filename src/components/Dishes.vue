@@ -1,27 +1,23 @@
 <template>
-    <div class="dishes">
+    <div class="dishes" @click="qwe">
         <div class="container">
-            <div class="dish" v-for="(dish, index) in dishes" :key="index" @click="buyDish(dish)">
-                <div class="dish-top">
+            <div class="dish" v-for="(dish, index) in dishes.dishes" :key="index">
+                <div class="dish-top" >
                     <div class="dish-img" :style="{'background-image': `url(${dish.image})`}"></div>
                 </div>
                 <div class="dish-middle">
                     <div class="dish-name">
                         {{ dish.name }}
                     </div>
-                    <div v-if="dish.inEmployeeBasket === 0" class="dish-descr">{{dish.description}}</div>
-                    <div class="dish-add" v-if="dish.inEmployeeBasket > 0">
-                        <button>
-                            <img src="../assets/img/minus.svg" @click="deleteDish(dish)">
-                        </button>
+                    <div v-if="!showBuy" class="dish-descr">{{dish.description}}</div>
+                    <div class="dish-add" v-if="showBuy">
+                        <img src="../assets/img/minus.svg">
                         <div class="dish-amount">
                             <div class="dish-amount-color">
-                                {{dish.inEmployeeBasket}}
+                                {{dish.amount}}
                             </div>
                         </div>
-                        <button>
-                            <img src="../assets/img/plus.svg" @click="buyDish(dish)">
-                        </button>
+                        <img src="../assets/img/plus.svg" @click="deleteDish">
                     </div>
                 </div>
                 <div class="dish-bottom">
@@ -32,7 +28,8 @@
                 </div>
             </div>
         </div>
-        <div class="dish-mobile" v-for="(dish, index) in dishes" :key="index"
+
+        <div class="dish-mobile" v-for="(dish, index) in dishes" :key="index" @click="qwe"
              v-touch:swipe.left="onSwipeLeft.bind(this, index)"
              v-touch:swipe.right="onSwipeRight.bind(this, index)">
             <section class="dish-mobile-basket"
@@ -57,7 +54,7 @@
                 </div>
                 <div class="dish-mobile-middle-typ">
                     <div class="dish-mobile-middle-typ-counter">
-                        В корзине: {{dish.inEmployeeBasket}}
+                        В корзине:{{date}}
                     </div>
                     <div class="dish-mobile-middle-typ-PW">
                         <a>{{ dish.weight }} г.</a>
@@ -82,36 +79,38 @@
 
     Vue.use(Vue2TouchEvents)
     export default {
+        data() {
+            return {
+                showBuy: false,
+                date: 0,
+            }
+        },
         methods: {
-            // Добавление блюда
-            // buyDish(dish) {
-                // this.$store.dispatch("OrderDish", {dish.id, dish.menu_id});
-            // },
-            // Удаление блюда
-            // deleteDish(dish) {
-                // stopPropagination для того что бы не работал клик по карточке
-                // event.stopPropagation()
-            // },
-            // Удаление блюда по свайпу
+            qwe(){
+                console.log(this.dishes)
+            },
+            // Удаление блюда в корзину
+            deleteDish() {
+                console.log(this.showBuy)
+                this.showBuy = false
+            },
             onSwipeLeft(index, direction) {
                 this.dishes[index].swipe = 'left'
-                setTimeout(this.setSwipeMiddle, 200, index)
                 console.log(index,direction)
+                console.log(this.dishes[index].swipe)
             },
-            // Добавление блюда по свайпу
             onSwipeRight(index, direction) {
-                this.dishes[index].swipe = 'right'
-                setTimeout(this.setSwipeMiddle, 200, index)
                 console.log(index,direction)
+
+
             },
-            // Это нужно для свайпа обратно
-            setSwipeMiddle(index) {
-                this.dishes[index].swipe = 'middle'
-            }
         },
         computed: {
             dishes() {
                 if (this.$store.getters.currentDishes){
+                    this.$store.getters.currentDishes.forEach((item) => {
+                        item.swipe = 'middle'
+                        return item})
                     return this.$store.getters.currentDishes
                 }
                 else {
@@ -120,12 +119,7 @@
             },
         },
         async mounted(){
-            await this.$store.dispatch('fetchMenu');
-            if (this.$store.getters.getError) {
-                await this.$store.dispatch("SetNotAuth");
-                await this.$store.dispatch("ClearCookies");
-                this.$router.push('/signin');
-            }
+            this.$store.dispatch('fetchMenu')
         }
     }
 </script>
@@ -164,13 +158,14 @@
             background: #FFFFFF;
             border: 1px solid $font-color;
             border-radius: 10px;
-            color: $font-color;
             &-color {
-                font-weight: 700;
+                background: $c-main;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                font-weight: 900;
                 font-size: 18px;
-                display: flex;
-                justify-content: center;
-                padding-top: 5px;
+                line-height: 21px;
+                height: 100%;
             }
         }
         &-middle {
@@ -205,16 +200,11 @@
             padding-bottom: 20px;
             display: flex;
             justify-content: center;
-            button{
-                background: none;
-                border: none;
+            img {
                 outline: none;
-                img {
-                    outline: none;
-                    margin: 0 10px;
-                    width: 30px;
-                    height: 30px;
-                }
+                margin: 0 10px;
+                width: 30px;
+                height: 30px;
             }
         }
         &-top {
@@ -256,14 +246,14 @@
         }
     }
     .dish-mobile{display: none;}
-    @media (max-width: 790px) {
+    @media (max-width: 768px) {
         .dish {display: none;}
         .container{margin-top: 10px;}
         .dish-mobile {
             position: relative;
             position: relative;
             color: $font-color;
-            margin: 30px 0;
+            margin-top: 30px;
             display: grid;
             grid-template-columns: 15% 100% 15%;
             overflow: hidden;
@@ -399,39 +389,11 @@
             }
         }
     }
-    @media (max-width: 420px) {
+    @media (max-width: 400px) {
         .dish-mobile {
             &-middle{
                 &-about{
                     padding-left: 10px;
-                    width: 65%;
-                    &-name{
-                        font-size: 18px;
-                    }
-                    &-desc{
-                        padding-top: 5px;
-                        font-size: 13px;
-                    }
-                }
-                &-typ{
-                    padding: 5px 10px 5px 0;
-                }
-            }
-        }
-    }
-    @media (max-width: 360px) {
-        .dish-mobile {
-            &-middle{
-                &-about{
-                    padding-left: 10px;
-                    width: 65%;
-                    &-name{
-                        font-size: 16px;
-                    }
-                    &-desc{
-                        padding-top: 5px;
-                        font-size: 12px;
-                    }
                 }
                 &-typ{
                     padding: 5px 10px 5px 0;
