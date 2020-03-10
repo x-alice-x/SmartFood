@@ -132,6 +132,7 @@
                 await this.$store.dispatch("SetNotAuth");
                 await this.$store.dispatch("ClearCookies");
                 this.$router.push('/signin');
+            }
         }
     }
 </script>
