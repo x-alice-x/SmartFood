@@ -19,8 +19,7 @@ export default {
 					console.log(err);
 				}
 			);
-		}
-
+		},
 		async DeleteDish(dish_id, menu_id) {
 			const url = "/api/v1/food/basket";
 			let requestParams = {
