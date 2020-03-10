@@ -1,7 +1,7 @@
 <template>
     <div class="dishes">
         <div class="container">
-            <div class="dish" v-for="(dish, index) in dishes" :key="index" @click="buyDish">
+            <div class="dish" v-for="(dish, index) in dishes" :key="index" @click="buyDish(dish)">
                 <div class="dish-top">
                     <div class="dish-img" :style="{'background-image': `url(${dish.image})`}"></div>
                 </div>
@@ -12,7 +12,7 @@
                     <div v-if="dish.inEmployeeBasket === 0" class="dish-descr">{{dish.description}}</div>
                     <div class="dish-add" v-if="dish.inEmployeeBasket > 0">
                         <button>
-                            <img src="../assets/img/minus.svg" @click="deleteDish">
+                            <img src="../assets/img/minus.svg" @click="deleteDish(dish)">
                         </button>
                         <div class="dish-amount">
                             <div class="dish-amount-color">
@@ -20,7 +20,7 @@
                             </div>
                         </div>
                         <button>
-                            <img src="../assets/img/plus.svg" @click="buyDish">
+                            <img src="../assets/img/plus.svg" @click="buyDish(dish)">
                         </button>
                     </div>
                 </div>
@@ -84,14 +84,14 @@
     export default {
         methods: {
             // Добавление блюда
-            buyDish() {
-
-            },
+            // buyDish(dish) {
+                // this.$store.dispatch("OrderDish", {dish.id, dish.menu_id});
+            // },
             // Удаление блюда
-            deleteDish() {
+            // deleteDish(dish) {
                 // stopPropagination для того что бы не работал клик по карточке
-                event.stopPropagation()
-            },
+                // event.stopPropagation()
+            // },
             // Удаление блюда по свайпу
             onSwipeLeft(index, direction) {
                 this.dishes[index].swipe = 'left'
@@ -120,7 +120,12 @@
             },
         },
         async mounted(){
-            this.$store.dispatch('fetchMenu')
+            await this.$store.dispatch('fetchMenu');
+            if (this.$store.getters.getError) {
+                await this.$store.dispatch("SetNotAuth");
+                await this.$store.dispatch("ClearCookies");
+                this.$router.push('/signin');
+            }
         }
     }
 </script>

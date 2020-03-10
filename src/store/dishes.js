@@ -1,5 +1,5 @@
 // import Vue from 'vue'
-import axios from 'axios'
+import axios from 'axios';
 
 export default {
     state:{
@@ -21,6 +21,7 @@ export default {
     },
     actions: {
         async fetchMenu({commit}) {
+            commit("CLEAR_ERROR");
             let requestParams = {}
             let dishes = []
             const url = '/api/v1/food/menu'
@@ -28,7 +29,7 @@ export default {
                 url: url,
                 method: 'GET',
             }
-            axios(requestParams)
+            await axios(requestParams)
                 .then(resp => {
                     if(resp.data.data){
                         for (let i = 0; i < resp.data.data.length; i++){
@@ -47,7 +48,8 @@ export default {
                     }
                     },
                     err => {
-                        console.log(err)
+                        console.log(err);
+                        commit("SET_ERROR", err);      
                     })
         }
     },

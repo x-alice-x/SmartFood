@@ -17,10 +17,14 @@
         <modal name="profile-modal">
         <div class="profile-modal">
           <div class="head">
-            <img src="../assets/img/user.svg"
+            <img v-if="avatar"
+                 src="../assets/img/user.svg"
                  alt="User Image">
-              <h3 class="username">{{ username }}</h3>
-              <h4 class="email">{{ email }}</h4>
+            <img v-if="!avatar"
+                 :src="avatar"
+                 alt="User Photo">
+            <h3 class="username">{{ username }}</h3>
+            <h4 class="email">{{ email }}</h4>
           </div>
           <div class="logout-btn">
             <button @click="logout()">Logout</button>
@@ -35,10 +39,15 @@
   export default {
         computed: {
             username() {
-                return "Gram"; // getters
+                return this.$store.getters.getUserName;
             },
             email() {
                 return this.$store.getters.getUserEmail;
+            },
+            avatar() {
+              console.log(this.$store.getters.getUserPhoto);
+              return this.$store.getters.getUserPhoto;
+              // return "../assets/img/avatar.svg";
             },
             errors() {
                 return this.$store.getters.getError;
@@ -127,6 +136,7 @@
     img {
         width: 45px;
         height: 57.43px;
+        border-radius: 50px;
         margin-bottom: 20px;
         margin-top: 10px;
     }

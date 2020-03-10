@@ -4,13 +4,13 @@
     <form class="signin-form" @submit.prevent="SignIn()">
       <div>
         <input
-          class="form-input"
-          type="text"
+          :class="{'form-input': domain==false}"
+          type="email"
           id="signin-email"
-          placeholder="@smartworld.team"
           v-model.trim="email"
+          @focusout="checkEmail()"
         />
-          <!-- @focusout="checkEmail()" -->
+        <label v-if="domain">@smartworld.team</label> 
         <div class="form-error" v-if="emailError != ''">{{ emailError }}</div>
       </div>
       <button class="form-submit" type="submit" v-if="email"><span>Login</span></button>
@@ -29,10 +29,6 @@ export default {
   methods: {
     async SignIn() {
       await this.$store.dispatch("SignIn", this.email);
-      // .then (
-      //   resp => {
-      //     console.log(resp);
-      //   });
       console.log(this.errors);
       if (!this.errors) {
           this.$router.push("/");
@@ -41,38 +37,29 @@ export default {
         this.emailError = this.errors;
       }
     },
-    // checkEmail() {
-    //   this.$store.dispatch("CLEAR_ERRORS", "auth");
-    //   this.authError = "";
-    //   const emailArr = this.email.split("@");
-    //   if (this.email != "" && emailArr[1] == undefined)
-    //     this.email = emailArr[0] + "@smartworld.team";
-    //   this.$store.dispatch("CHECK_EMAIL", this.email).then(
-    //     result => {
-    //       if (result == "empty") this.emailError = "Заполните e-mail";
-    //       // else if (result == 'wrong')
-    //       //   this.emailError = 'Невалидный e-mail'
-    //       else {
-    //         this.emailError = "";
-    //         this.$store.dispatch("CLEAR_ERRORS", "email");
-    //       }
-    //     },
-    //     error => console.log("Email checker rejected: " + error.message)
-    //   );
-    // }
+    checkEmail() {
+      if ((this.email.indexOf('@') == -1)&&(this.email)) {
+        this.email = this.email + "@smartworld.team";
+      } 
+    }
   },
   computed: {
     errors() {
       return this.$store.getters.getError;
+    },
+    domain() {
+      if (this.email.indexOf('@') != -1) {
+        return false;
+      }
+      else {
+        return true;
+      }
     }
   }
 };
 </script>
 
 <style>
-/*
-@import "../assets/scss/vars.scss";
-@import "../assets/scss/root.scss";*/
 
 .signin {
   min-height: 100vh;
@@ -81,7 +68,6 @@ export default {
   justify-content: center;
   align-items: center;
   background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
-  /*opacity: 10%;*/
   background-size: cover;
 }
 
@@ -111,19 +97,36 @@ export default {
     font-family: Roboto, sans-serif;
     font-weight: 300;
     font-size: 36px;
-    text-align: right;
+    text-indent: 25%;
+    /*text-align: center; */
+    transition: .4s;
     color: #ffffff;
-    transition: 0.2s;
-    text-align: center;
     outline: none;
   }
-  ::placeholder {
-      font-family: Roboto, sans-serif;
-      font-weight: 300;
-      font-size: 36px;
-      text-align: right;
-      color: white;
-    }
+  .signin-form label {
+    position: absolute;
+    font-family: Roboto, sans-serif;
+    font-weight: 300;
+    font-size: 36px;
+    text-align: right;
+    color: #ffffff;
+    left: 50%;
+    margin-top: 10px;
+  }
+   input:focus {
+    /*text-align: left;*/
+    text-indent: 1%;
+  }
+  input:invalid {
+    border-bottom: 1px solid red;
+  }
+  /*input:focus:invalid {
+    border-bottom: 1px solid #ffffff;
+  }*/
+  .form-input:focus {
+    /*text-align: center;*/
+    text-indent: 25%;
+  }
 
   .form-submit {
     font-family: Roboto, sans-serif;
@@ -147,7 +150,7 @@ export default {
     -webkit-background-clip: text;
     display: block;
   }
-    :hover button{
+    button:hover{
       border: 1px solid lighten(#88267F, 35);
     }
   .form-error {
@@ -160,6 +163,19 @@ export default {
   .from-submit {
     width: 100%;
   }
+  input {
+    text-indent: 15% !important;
+  }
+  .signin-form label {
+    left: 40%;
+  }
+  input:focus {
+    /*text-align: left;*/
+    text-indent: 0% !important;
+  }
+}
+
+@media(max-width: 666px) {
   input {
     width: 100% !important;
   }
@@ -177,7 +193,7 @@ export default {
       padding: 3px 0 10px 0 !important;
       font-size: 15px !important;
     }
-    ::placeholder {
+    .signin-form label {
       font-size: 15px;
     }
     .form-submit {
@@ -185,6 +201,9 @@ export default {
       height: 35px;
       font-size: 16px;
       padding: 0;
+    }
+    .signin-form label {
+      margin-top: 3px;
     }
 }
 
