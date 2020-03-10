@@ -35,6 +35,11 @@ export default {
                             resp.data.data[i].dishes.forEach((item) => {
                                 item.swipe = 'middle'
                                 return item})
+                            for (let j = 0; j < resp.data.data[i].dishes.length; j++){
+                                if (resp.data.data[i].dishes[j].image === 'https://edatomsk.ru/images/delivery/delivery.svg'){
+                                    resp.data.data[i].dishes[j].image = 'https://imageog.flaticon.com/icons/png/512/60/60847.png?size=1200x630f&pad=10,10,10,10&ext=png&bg=FFFFFFFF'
+                                }
+                            }
                         }
                         dishes = resp.data.data
                         commit('updateDates', dishes)
