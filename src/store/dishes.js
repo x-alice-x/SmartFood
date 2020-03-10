@@ -1,6 +1,5 @@
 // import Vue from 'vue'
 import axios from 'axios';
-import Router from 'vue-router';
 
 export default {
     state:{
