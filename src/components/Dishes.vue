@@ -1,7 +1,7 @@
 <template>
     <div class="dishes">
         <div class="container">
-            <div class="dish" v-for="(dish, index) in dishes" :key="index" @click="buyDish(dish)">
+            <div class="dish" v-for="(dish, index) in dishes.dishes" :key="index" @click="buyDish(dishes.id, dish.id)">
                 <div class="dish-top">
                     <div class="dish-img" :style="{'background-image': `url(${dish.image})`}"></div>
                 </div>
@@ -12,7 +12,7 @@
                     <div v-if="dish.inEmployeeBasket === 0" class="dish-descr">{{dish.description}}</div>
                     <div class="dish-add" v-if="dish.inEmployeeBasket > 0">
                         <button>
-                            <img src="../assets/img/minus.svg" @click="deleteDish(dish)">
+                            <img src="../assets/img/minus.svg" @click="deleteDish(dishes.id, dish.id)">
                         </button>
                         <div class="dish-amount">
                             <div class="dish-amount-color">
@@ -20,7 +20,7 @@
                             </div>
                         </div>
                         <button>
-                            <img src="../assets/img/plus.svg" @click="buyDish(dish)">
+                            <img src="../assets/img/plus.svg" @click="buyDish(dishes.id, dish.id)">
                         </button>
                     </div>
                 </div>
@@ -32,9 +32,9 @@
                 </div>
             </div>
         </div>
-        <div class="dish-mobile" v-for="(dish, index) in dishes" :key="index"
-             v-touch:swipe.left="onSwipeLeft.bind(this, index)"
-             v-touch:swipe.right="onSwipeRight.bind(this, index)">
+        <div class="dish-mobile" v-for="(dish, index) in dishes.dishes" :key="index"
+             v-touch:swipe.left="onSwipeLeft.bind(this, index, dishes.id, dish.id)"
+             v-touch:swipe.right="onSwipeRight.bind(this, index, dishes.id, dish.id)">
             <section class="dish-mobile-basket"
                     :class="{
                     'dish-mobile-basket-to-right': dish.swipe === 'right',
@@ -84,34 +84,35 @@
     export default {
         methods: {
             // Добавление блюда
-            // buyDish(dish) {
-                // this.$store.dispatch("OrderDish", {dish.id, dish.menu_id});
-            // },
+            buyDish(menu_id, dish_id) {
+                this.$store.dispatch("OrderDish", {menu_id, dish_id});
+            },
             // Удаление блюда
-            // deleteDish(dish) {
-                // stopPropagination для того что бы не работал клик по карточке
-                // event.stopPropagation()
-            // },
+            deleteDish(menu_id, dish_id) {
+                this.$store.dispatch("DeleteDish", {menu_id, dish_id});
+                event.stopPropagation()
+            },
             // Удаление блюда по свайпу
-            onSwipeLeft(index, direction) {
-                this.dishes[index].swipe = 'left'
+            onSwipeLeft(index, menu_id, dish_id) {
+                this.$store.dispatch("DeleteDish", {menu_id, dish_id});
+                this.dishes.dishes[index].swipe = 'left'
                 setTimeout(this.setSwipeMiddle, 200, index)
-                console.log(index,direction)
             },
             // Добавление блюда по свайпу
-            onSwipeRight(index, direction) {
-                this.dishes[index].swipe = 'right'
+            onSwipeRight(index, menu_id, dish_id) {
+                this.$store.dispatch("OrderDish", {menu_id, dish_id});
+                this.dishes.dishes[index].swipe = 'right'
                 setTimeout(this.setSwipeMiddle, 200, index)
-                console.log(index,direction)
             },
             // Это нужно для свайпа обратно
             setSwipeMiddle(index) {
-                this.dishes[index].swipe = 'middle'
+                this.dishes.dishes[index].swipe = 'middle'
             }
         },
         computed: {
             dishes() {
                 if (this.$store.getters.currentDishes){
+                    console.log(this.$store.getters.currentDishes)
                     return this.$store.getters.currentDishes
                 }
                 else {

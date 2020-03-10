@@ -4,12 +4,12 @@ export default {
 
 	},
 	actions: {
-		async OrderDish(dish_id, menu_id) {
+		async OrderDish(commit, ids) {
 			const url = "/api/v1/food/basket";
 			let requestParams = {
 				url: url,
 				method: "POST",
-				params: { dish_id: dish_id, menu_id: menu_id }
+				params: { dish_id: ids.dish_id, menu_id: ids.menu_id }
 			};
 			await axios(requestParams).then(
 				resp => {
@@ -20,12 +20,12 @@ export default {
 				}
 			);
 		},
-		async DeleteDish(dish_id, menu_id) {
+		async DeleteDish(commit, ids) {
 			const url = "/api/v1/food/basket";
 			let requestParams = {
 				url: url,
-				method: "DEL",
-				params: { dish_id: dish_id, menu_id: menu_id }
+				method: "DELETE",
+				params: { dish_id: ids.dish_id, menu_id: ids.menu_id }
 			};
 			await axios(requestParams).then(
 				resp => {

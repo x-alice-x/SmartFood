@@ -58,7 +58,7 @@ export default {
             return state.dishes
         },
         currentDishes(state){
-            return state.currentDishes.dishes
+            return state.currentDishes
         }
     }
 }
