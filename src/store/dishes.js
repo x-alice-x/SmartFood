@@ -49,7 +49,7 @@ export default {
                     },
                     err => {
                         console.log(err);
-                        commit("SET_ERROR", err);           
+                        commit("SET_ERROR", err);      
                     })
         }
     },

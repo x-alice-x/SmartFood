@@ -60,6 +60,7 @@ export default {
 </script>
 
 <style>
+
 .signin {
   min-height: 100vh;
   display: flex;
@@ -69,6 +70,7 @@ export default {
   background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
   background-size: cover;
 }
+
   .signin-title {
     font-family: Roboto, sans-serif;
     font-size: 72px;
@@ -77,6 +79,7 @@ export default {
     margin-bottom: 58px;
     margin-top: -100px;
   }
+
   .signin-form {
     display: flex;
     flex-direction: column;
@@ -84,6 +87,7 @@ export default {
     justify-content: space-between;
     height: 170px;
   }
+
   .signin-form input {
     width: 640px;
     padding: 10px 0;
@@ -123,6 +127,7 @@ export default {
     /*text-align: center;*/
     text-indent: 25%;
   }
+
   .form-submit {
     font-family: Roboto, sans-serif;
     width: 200px;
@@ -169,11 +174,13 @@ export default {
     text-indent: 0% !important;
   }
 }
+
 @media(max-width: 666px) {
   input {
     width: 100% !important;
   }
 }
+
 @media(max-width: 576px) {
   .signin-title {
       font-size: 34px;
@@ -199,4 +206,5 @@ export default {
       margin-top: 3px;
     }
 }
+
 </style>

@@ -2,24 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b676bf0c-936a-49f4-a993-111ee68cbcf7" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/assets/img/user.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/scss/root.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/scss/vars.scss" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/components/Dishes.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/components/Header.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/components/Weekdays.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/router/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/store/dishes.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/store/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/store/weekdays.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/views/Home.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../vue.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/logo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/HelloWorld.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/scss/root.scss" beforeDir="false" afterPath="$PROJECT_DIR$/assets/scss/root.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/scss/vars.scss" beforeDir="false" afterPath="$PROJECT_DIR$/assets/scss/vars.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/Dishes.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/Dishes.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/Header.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/Header.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/Weekdays.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/Weekdays.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/router/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/store/dishes.js" beforeDir="false" afterPath="$PROJECT_DIR$/store/dishes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/store/weekdays.js" beforeDir="false" afterPath="$PROJECT_DIR$/store/weekdays.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/Home.vue" beforeDir="false" afterPath="$PROJECT_DIR$/views/Home.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/SignIn.vue" beforeDir="false" afterPath="$PROJECT_DIR$/views/SignIn.vue" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -59,6 +52,7 @@
       <updated>1583214696098</updated>
       <workItem from="1583214697221" duration="411000" />
       <workItem from="1583215197533" duration="492000" />
+      <workItem from="1583853107617" duration="293000" />
     </task>
     <servers />
   </component>
@@ -70,7 +64,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>

@@ -1,5 +1,5 @@
 <template>
-    <div class="dishes" @click="qwe">
+    <div class="dishes">
         <div class="container">
             <div class="dish" v-for="(dish, index) in dishes.dishes" :key="index" @click="buyDish(dishes.id, dish.id)">
                 <div class="dish-top">
@@ -16,7 +16,7 @@
                         </button>
                         <div class="dish-amount">
                             <div class="dish-amount-color">
-                                {{dish.amount}}
+                                {{dish.inEmployeeBasket}}
                             </div>
                         </div>
                         <button>
@@ -57,7 +57,7 @@
                 </div>
                 <div class="dish-mobile-middle-typ">
                     <div class="dish-mobile-middle-typ-counter">
-                        В корзине:{{date}}
+                        В корзине: {{dish.inEmployeeBasket}}
                     </div>
                     <div class="dish-mobile-middle-typ-PW">
                         <a>{{ dish.weight }} г.</a>
@@ -82,16 +82,11 @@
 
     Vue.use(Vue2TouchEvents)
     export default {
-        data() {
-            return {
-                showBuy: false,
-                date: 0,
-            }
-        },
         methods: {
             // Добавление блюда
             buyDish(menu_id, dish_id) {
                 this.$store.dispatch("OrderDish", {menu_id, dish_id});
+                event.stopPropagation()
             },
             // Удаление блюда
             deleteDish(menu_id, dish_id) {
@@ -127,7 +122,7 @@
             },
         },
         async mounted(){
-            this.$store.dispatch('fetchMenu');
+            await this.$store.dispatch('fetchMenu');
             if (this.$store.getters.getError) {
                 await this.$store.dispatch("SetNotAuth");
                 await this.$store.dispatch("ClearCookies");
@@ -171,14 +166,13 @@
             background: #FFFFFF;
             border: 1px solid $font-color;
             border-radius: 10px;
+            color: $font-color;
             &-color {
-                background: $c-main;
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                font-weight: 900;
+                font-weight: 700;
                 font-size: 18px;
-                line-height: 21px;
-                height: 100%;
+                display: flex;
+                justify-content: center;
+                padding-top: 5px;
             }
         }
         &-middle {
@@ -213,11 +207,16 @@
             padding-bottom: 20px;
             display: flex;
             justify-content: center;
-            img {
+            button{
+                background: none;
+                border: none;
                 outline: none;
-                margin: 0 10px;
-                width: 30px;
-                height: 30px;
+                img {
+                    outline: none;
+                    margin: 0 10px;
+                    width: 30px;
+                    height: 30px;
+                }
             }
         }
         &-top {
@@ -259,14 +258,14 @@
         }
     }
     .dish-mobile{display: none;}
-    @media (max-width: 768px) {
+    @media (max-width: 790px) {
         .dish {display: none;}
         .container{margin-top: 10px;}
         .dish-mobile {
             position: relative;
             position: relative;
             color: $font-color;
-            margin-top: 30px;
+            margin: 30px 0;
             display: grid;
             grid-template-columns: 15% 100% 15%;
             overflow: hidden;
@@ -402,11 +401,39 @@
             }
         }
     }
-    @media (max-width: 400px) {
+    @media (max-width: 420px) {
         .dish-mobile {
             &-middle{
                 &-about{
                     padding-left: 10px;
+                    width: 65%;
+                    &-name{
+                        font-size: 18px;
+                    }
+                    &-desc{
+                        padding-top: 5px;
+                        font-size: 13px;
+                    }
+                }
+                &-typ{
+                    padding: 5px 10px 5px 0;
+                }
+            }
+        }
+    }
+    @media (max-width: 360px) {
+        .dish-mobile {
+            &-middle{
+                &-about{
+                    padding-left: 10px;
+                    width: 65%;
+                    &-name{
+                        font-size: 16px;
+                    }
+                    &-desc{
+                        padding-top: 5px;
+                        font-size: 12px;
+                    }
                 }
                 &-typ{
                     padding: 5px 10px 5px 0;
