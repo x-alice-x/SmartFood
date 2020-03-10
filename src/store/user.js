@@ -73,6 +73,14 @@ export default {
 			} else {
 				commit("SET_USER_AUTHENTICATED", false);
 			}
+		},
+		async SetNotAuth({ commit }) {
+			commit("SET_USER_AUTHENTICATED", false);
+		},
+		async ClearCookies() {
+			Vue.$cookies.remove("email");
+			Vue.$cookies.remove("name");
+			Vue.$cookies.remove("photo");
 		}
 	},
 	getters: {

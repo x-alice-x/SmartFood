@@ -4,13 +4,13 @@
     <form class="signin-form" @submit.prevent="SignIn()">
       <div>
         <input
-          class="form-input"
-          type="text"
+          :class="{'form-input': domain==false}"
+          type="email"
           id="signin-email"
-          placeholder="@smartworld.team"
           v-model.trim="email"
           @focusout="checkEmail()"
         />
+        <label v-if="domain">@smartworld.team</label> 
         <div class="form-error" v-if="emailError != ''">{{ emailError }}</div>
       </div>
       <button class="form-submit" type="submit" v-if="email"><span>Login</span></button>
@@ -46,16 +46,20 @@ export default {
   computed: {
     errors() {
       return this.$store.getters.getError;
+    },
+    domain() {
+      if (this.email.indexOf('@') != -1) {
+        return false;
+      }
+      else {
+        return true;
+      }
     }
   }
 };
 </script>
 
 <style>
-/*
-@import "../assets/scss/vars.scss";
-@import "../assets/scss/root.scss";*/
-
 .signin {
   min-height: 100vh;
   display: flex;
@@ -63,10 +67,8 @@ export default {
   justify-content: center;
   align-items: center;
   background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
-  /*opacity: 10%;*/
   background-size: cover;
 }
-
   .signin-title {
     font-family: Roboto, sans-serif;
     font-size: 72px;
@@ -75,7 +77,6 @@ export default {
     margin-bottom: 58px;
     margin-top: -100px;
   }
-
   .signin-form {
     display: flex;
     flex-direction: column;
@@ -83,7 +84,6 @@ export default {
     justify-content: space-between;
     height: 170px;
   }
-
   .signin-form input {
     width: 640px;
     padding: 10px 0;
@@ -93,23 +93,36 @@ export default {
     font-family: Roboto, sans-serif;
     font-weight: 300;
     font-size: 36px;
-    text-align: right;
+    text-indent: 25%;
+    /*text-align: center; */
+    transition: .4s;
     color: #ffffff;
-    transition: 0.2s;
-    text-align: center;
     outline: none;
   }
-   input:focus {
-    text-align: left;
+  .signin-form label {
+    position: absolute;
+    font-family: Roboto, sans-serif;
+    font-weight: 300;
+    font-size: 36px;
+    text-align: right;
+    color: #ffffff;
+    left: 50%;
+    margin-top: 10px;
   }
-  ::placeholder {
-      font-family: Roboto, sans-serif;
-      font-weight: 300;
-      font-size: 36px;
-      text-align: right;
-      color: white;
-    }
-
+   input:focus {
+    /*text-align: left;*/
+    text-indent: 1%;
+  }
+  input:invalid {
+    border-bottom: 1px solid red;
+  }
+  /*input:focus:invalid {
+    border-bottom: 1px solid #ffffff;
+  }*/
+  .form-input:focus {
+    /*text-align: center;*/
+    text-indent: 25%;
+  }
   .form-submit {
     font-family: Roboto, sans-serif;
     width: 200px;
@@ -146,10 +159,21 @@ export default {
     width: 100%;
   }
   input {
+    text-indent: 15% !important;
+  }
+  .signin-form label {
+    left: 40%;
+  }
+  input:focus {
+    /*text-align: left;*/
+    text-indent: 0% !important;
+  }
+}
+@media(max-width: 666px) {
+  input {
     width: 100% !important;
   }
 }
-
 @media(max-width: 576px) {
   .signin-title {
       font-size: 34px;
@@ -162,7 +186,7 @@ export default {
       padding: 3px 0 10px 0 !important;
       font-size: 15px !important;
     }
-    ::placeholder {
+    .signin-form label {
       font-size: 15px;
     }
     .form-submit {
@@ -171,6 +195,8 @@ export default {
       font-size: 16px;
       padding: 0;
     }
+    .signin-form label {
+      margin-top: 3px;
+    }
 }
-
 </style>

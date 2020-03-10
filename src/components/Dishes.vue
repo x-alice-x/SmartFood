@@ -1,23 +1,27 @@
 <template>
     <div class="dishes" @click="qwe">
         <div class="container">
-            <div class="dish" v-for="(dish, index) in dishes.dishes" :key="index">
-                <div class="dish-top" >
+            <div class="dish" v-for="(dish, index) in dishes.dishes" :key="index" @click="buyDish(dishes.id, dish.id)">
+                <div class="dish-top">
                     <div class="dish-img" :style="{'background-image': `url(${dish.image})`}"></div>
                 </div>
                 <div class="dish-middle">
                     <div class="dish-name">
                         {{ dish.name }}
                     </div>
-                    <div v-if="!showBuy" class="dish-descr">{{dish.description}}</div>
-                    <div class="dish-add" v-if="showBuy">
-                        <img src="../assets/img/minus.svg">
+                    <div v-if="dish.inEmployeeBasket === 0" class="dish-descr">{{dish.description}}</div>
+                    <div class="dish-add" v-if="dish.inEmployeeBasket > 0">
+                        <button>
+                            <img src="../assets/img/minus.svg" @click="deleteDish(dishes.id, dish.id)">
+                        </button>
                         <div class="dish-amount">
                             <div class="dish-amount-color">
                                 {{dish.amount}}
                             </div>
                         </div>
-                        <img src="../assets/img/plus.svg" @click="deleteDish">
+                        <button>
+                            <img src="../assets/img/plus.svg" @click="buyDish(dishes.id, dish.id)">
+                        </button>
                     </div>
                 </div>
                 <div class="dish-bottom">
@@ -28,10 +32,9 @@
                 </div>
             </div>
         </div>
-
-        <div class="dish-mobile" v-for="(dish, index) in dishes" :key="index" @click="qwe"
-             v-touch:swipe.left="onSwipeLeft.bind(this, index)"
-             v-touch:swipe.right="onSwipeRight.bind(this, index)">
+        <div class="dish-mobile" v-for="(dish, index) in dishes.dishes" :key="index"
+             v-touch:swipe.left="onSwipeLeft.bind(this, index, dishes.id, dish.id)"
+             v-touch:swipe.right="onSwipeRight.bind(this, index, dishes.id, dish.id)">
             <section class="dish-mobile-basket"
                     :class="{
                     'dish-mobile-basket-to-right': dish.swipe === 'right',
@@ -86,31 +89,36 @@
             }
         },
         methods: {
-            qwe(){
-                console.log(this.dishes)
+            // Добавление блюда
+            buyDish(menu_id, dish_id) {
+                this.$store.dispatch("OrderDish", {menu_id, dish_id});
             },
-            // Удаление блюда в корзину
-            deleteDish() {
-                console.log(this.showBuy)
-                this.showBuy = false
+            // Удаление блюда
+            deleteDish(menu_id, dish_id) {
+                this.$store.dispatch("DeleteDish", {menu_id, dish_id});
+                event.stopPropagation()
             },
-            onSwipeLeft(index, direction) {
-                this.dishes[index].swipe = 'left'
-                console.log(index,direction)
-                console.log(this.dishes[index].swipe)
+            // Удаление блюда по свайпу
+            onSwipeLeft(index, menu_id, dish_id) {
+                this.$store.dispatch("DeleteDish", {menu_id, dish_id});
+                this.dishes.dishes[index].swipe = 'left'
+                setTimeout(this.setSwipeMiddle, 200, index)
             },
-            onSwipeRight(index, direction) {
-                console.log(index,direction)
-
-
+            // Добавление блюда по свайпу
+            onSwipeRight(index, menu_id, dish_id) {
+                this.$store.dispatch("OrderDish", {menu_id, dish_id});
+                this.dishes.dishes[index].swipe = 'right'
+                setTimeout(this.setSwipeMiddle, 200, index)
             },
+            // Это нужно для свайпа обратно
+            setSwipeMiddle(index) {
+                this.dishes.dishes[index].swipe = 'middle'
+            }
         },
         computed: {
             dishes() {
                 if (this.$store.getters.currentDishes){
-                    this.$store.getters.currentDishes.forEach((item) => {
-                        item.swipe = 'middle'
-                        return item})
+                    console.log(this.$store.getters.currentDishes)
                     return this.$store.getters.currentDishes
                 }
                 else {
@@ -119,7 +127,11 @@
             },
         },
         async mounted(){
-            this.$store.dispatch('fetchMenu')
+            this.$store.dispatch('fetchMenu');
+            if (this.$store.getters.getError) {
+                await this.$store.dispatch("SetNotAuth");
+                await this.$store.dispatch("ClearCookies");
+                this.$router.push('/signin');
         }
     }
 </script>
