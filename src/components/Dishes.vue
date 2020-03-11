@@ -35,6 +35,9 @@
             </div>
             </div>
         </div>
+        
+        <div>              <!-- Mobile version -->
+        <Weekdays class="week-mob"></Weekdays>   
         <div class="dish-mobile" v-for="(dish, index) in dishes.dishes" :key="index"
              v-touch:swipe.left="onSwipeLeft.bind(this, index, dishes.id, dish.id)"
              v-touch:swipe.right="onSwipeRight.bind(this, index, dishes.id, dish.id)">
@@ -75,6 +78,7 @@
                      'dish-mobile-delete-to-middle': dish.swipe === 'middle'}">
                 <img src="../assets/img/delete.svg">
             </section>
+        </div>
         </div>
     </div>
 </template>
@@ -156,13 +160,9 @@
     }
     .container {
         display: flex;
-        // flex-wrap: wrap;
         flex-direction: column;
         justify-content: center;
         color: $font-color;
-        .week {
-            position: sticky;
-        }
     }
     .dish-main {
         display: flex;
@@ -285,7 +285,12 @@
     .dish-mobile{display: none;}
     @media (max-width: 790px) {
         .dish {display: none;}
-        .container{margin-top: 10px;}
+        .container {
+            margin-top: 10px;
+            .week {
+                display: none;
+            }
+        }
         .dish-mobile {
             position: relative;
             position: relative;
