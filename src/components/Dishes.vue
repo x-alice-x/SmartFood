@@ -4,6 +4,10 @@
             <div class="dish" v-for="(dish, index) in dishes.dishes" :key="index" @click="buyDish(dishes.id, dish.id, index)">
                 <div class="dish-top">
                     <div class="dish-img" :style="{'background-image': `url(${dish.image})`}"></div>
+                    <!-- <div v-if="dish.image"
+                         class="dish-img" 
+                         :style="{'background-image': `url(${dish.image})`}"></div>
+                    <div v-else class="dish-img" :style="{'background-image': `url(../assets/img/dish.svg)`}"></div> -->
                 </div>
                 <div class="dish-middle">
                     <div class="dish-name">
@@ -150,7 +154,7 @@
         height: 600px;
     }
     .container {
-        margin: 50px 25px;
+        margin: 20px 25px;
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
@@ -222,6 +226,7 @@
                 background: none;
                 border: none;
                 outline: none;
+                cursor: pointer;
                 img {
                     outline: none;
                     margin: 0 10px;

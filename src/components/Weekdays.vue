@@ -1,7 +1,10 @@
 <template>
     <div class="container">
         <swiper @slideChange="dateChange" class="swiper" ref="mySwiper" :options="swiperOption">
-            <swiper-slide v-for="(date, index) in transformDates" :key="index">
+            <swiper-slide v-for="(date, index) in transformDates" 
+                          :key="index"
+                          :class="{'second': index==1, 
+                                   'third': index==2}">
                 {{date}}
             </swiper-slide>
         </swiper>
@@ -16,7 +19,7 @@
                 swiperOption: {
                     slidesPerView: 'auto',
                     centeredSlides: true,
-                    grabCursor: true,
+                    // grabCursor: true,
                     slideToClickedSlide: true,
                     effect: 'nonr'
                 }
@@ -70,6 +73,13 @@
         width: auto;
         padding-top: 20px;
         padding-bottom: 10px;
+        cursor: pointer;
+        .second {
+            opacity: 75%;
+        }
+        .third {
+            opacity: 50%;
+        }
         &-slide{
             font-weight: 700;
             font-size: 20px;
@@ -82,9 +92,8 @@
             background: white;
             color: $font-color;
             border-radius: 46px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
             &-active{
-                background: $font-color !important;
+                background: linear-gradient(90deg, #460B79 0%, #88267F 100%) !important;
                 width: 150px !important;
                 height: 40px;
                 transition: 0.3s;
