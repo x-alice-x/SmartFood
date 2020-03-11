@@ -1,7 +1,7 @@
 <template>
     <div class="main">
         <Header></Header>
-        <Weekdays></Weekdays>
+        <Weekdays class="week"></Weekdays>
         <Dishes></Dishes>
     </div>
 </template>
@@ -23,4 +23,9 @@ import Dishes from '../components/Dishes'
 <style scoped lang="scss">
 @import "../assets/scss/vars.scss";
 @import "../assets/scss/root.scss";
+.week {
+    position: fixed;
+    width: 100%;
+    margin-top: 30px;
+}
 </style>

@@ -154,7 +154,7 @@
         height: 600px;
     }
     .container {
-        margin: 20px 25px;
+        margin: 80px 25px;
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
