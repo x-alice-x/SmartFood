@@ -1,13 +1,11 @@
 <template>
     <div class="dishes">
         <div class="container">
+            <Weekdays class="week"></Weekdays>
+            <div class="dish-main">
             <div class="dish" v-for="(dish, index) in dishes.dishes" :key="index" @click="buyDish(dishes.id, dish.id, index)">
                 <div class="dish-top">
                     <div class="dish-img" :style="{'background-image': `url(${dish.image})`}"></div>
-                    <!-- <div v-if="dish.image"
-                         class="dish-img" 
-                         :style="{'background-image': `url(${dish.image})`}"></div>
-                    <div v-else class="dish-img" :style="{'background-image': `url(../assets/img/dish.svg)`}"></div> -->
                 </div>
                 <div class="dish-middle">
                     <div class="dish-name">
@@ -34,6 +32,7 @@
                         <a>{{ dish.weight }} г.</a>
                     </div>
                 </div>
+            </div>
             </div>
         </div>
         <div class="dish-mobile" v-for="(dish, index) in dishes.dishes" :key="index"
@@ -83,9 +82,11 @@
 <script>
     import Vue from 'vue'
     import Vue2TouchEvents from 'vue2-touch-events'
+    import Weekdays from './Weekdays'
 
     Vue.use(Vue2TouchEvents)
     export default {
+        components: {Weekdays},
         methods: {
             // Добавление блюда
             buyDish(menu_id, dish_id, index) {
@@ -154,11 +155,19 @@
         height: 600px;
     }
     .container {
-        margin: 80px 25px;
+        display: flex;
+        // flex-wrap: wrap;
+        flex-direction: column;
+        justify-content: center;
+        color: $font-color;
+        .week {
+            position: sticky;
+        }
+    }
+    .dish-main {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        color: $font-color;
     }
     .dish {
         width: 350px;
