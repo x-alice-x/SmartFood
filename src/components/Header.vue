@@ -104,7 +104,7 @@
     .header{
         height: 50px;
         width: 100%;
-        background: $c-main;
+        background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
         color: $font-color;
         .container{
             display: flex;
@@ -114,13 +114,14 @@
             padding: 0 75px;
             .user{
                 cursor: pointer;
-                width: 30px;
+                width: 25px;
             }
             .logo {
                 a {
-                font-weight: 700;
-                font-size: 40px;
+                font-weight: 900;
+                font-size: 30px;
                 line-height: 45px;
+                color: #ffffff;
                 }
             }
         }
@@ -128,7 +129,7 @@
 .head {
     width: 100%;
     height: 250px;
-    background: $c-main;
+    background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -147,7 +148,7 @@
   font-weight: 900;
   font-size: 36px;
   line-height: 42px;
-  color: #460B79;
+  color: #ffffff;
   margin-bottom: 5px;
 }
 .email {
@@ -156,7 +157,7 @@
   font-size: 24px;
   line-height: 28px;
   text-align: center;
-  color: #460B79;
+  color: #ffffff;
   margin-bottom: 18px;
 }
 .logout-btn {
@@ -164,7 +165,7 @@
   justify-content: center;
   margin-top: 60px;
     button {
-        background: #460B79;
+        background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
         border-radius: 46px;
         border: none;
         width: 200px;

@@ -62,7 +62,7 @@ export default {
 					}
 				},
 				err => {
-					commit("SET_ERROR", err.message);
+					commit("SET_ERROR", err.status);
 					commit("SET_USER_AUTHENTICATED", true);
 				}
 			);

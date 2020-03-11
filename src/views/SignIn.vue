@@ -5,7 +5,7 @@
       <div>
         <input
           :class="{'form-input': domain==false}"
-          type="email"
+          type="text"
           id="signin-email"
           v-model.trim="email"
           @focusout="checkEmail()"
@@ -23,18 +23,36 @@ export default {
   data() {
     return {
       email: "",
-      emailError: ""
+      emailError: "",
+      validation: /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i
     };
   },
   methods: {
     async SignIn() {
-      await this.$store.dispatch("SignIn", this.email);
-      console.log(this.errors);
-      if (!this.errors) {
-          this.$router.push("/");
+      if ((this.email.indexOf('@') == -1)&&(this.email)) {
+        this.email = this.email + "@smartworld.team";
+      }
+      let regexp = new RegExp(this.validation);
+      let isEmail = regexp.test(this.email);
+      console.log(isEmail);
+      if (isEmail) {
+        await this.$store.dispatch("SignIn", this.email);
+        console.log(this.errors);
+        if (!this.errors) {
+            this.$router.push("/");
+        }
+        else {
+          console.log(this.errors.indexOf('401'));
+          if (this.errors.indexOf('401') != -1) {
+            this.emailError = 'Пользователь с такой почтой не зарегистрирован';
+          }
+          else {
+            this.emailError = this.errors;
+          }
+        }
       }
       else {
-        this.emailError = this.errors;
+        this.emailError = 'Неверно указана почта'
       }
     },
     checkEmail() {
@@ -98,6 +116,8 @@ export default {
     font-weight: 300;
     font-size: 36px;
     text-indent: 25%;
+    /*
+    transform: translate(-50%);*/
     /*text-align: center; */
     transition: .4s;
     color: #ffffff;
@@ -117,7 +137,7 @@ export default {
     /*text-align: left;*/
     text-indent: 1%;
   }
-  input:invalid {
+  .invalid {
     border-bottom: 1px solid red;
   }
   /*input:focus:invalid {

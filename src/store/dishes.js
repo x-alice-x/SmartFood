@@ -38,7 +38,8 @@ export default {
                                 return item})
                             for (let j = 0; j < resp.data.data[i].dishes.length; j++){
                                 if (resp.data.data[i].dishes[j].image === 'https://edatomsk.ru/images/delivery/delivery.svg'){
-                                    resp.data.data[i].dishes[j].image = 'https://imageog.flaticon.com/icons/png/512/60/60847.png?size=1200x630f&pad=10,10,10,10&ext=png&bg=FFFFFFFF'
+                                    // resp.data.data[i].dishes[j].image = 'https://imageog.flaticon.com/icons/png/512/60/60847.png?size=1200x630f&pad=10,10,10,10&ext=png&bg=FFFFFFFF'
+                                    resp.data.data[i].dishes[j].image = 'https://image.flaticon.com/icons/svg/857/857681.svg'
                                 }
                             }
                         }

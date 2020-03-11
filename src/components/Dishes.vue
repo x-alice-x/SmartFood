@@ -4,6 +4,10 @@
             <div class="dish" v-for="(dish, index) in dishes.dishes" :key="index" @click="buyDish(dishes.id, dish.id, index)">
                 <div class="dish-top">
                     <div class="dish-img" :style="{'background-image': `url(${dish.image})`}"></div>
+                    <!-- <div v-if="dish.image"
+                         class="dish-img" 
+                         :style="{'background-image': `url(${dish.image})`}"></div>
+                    <div v-else class="dish-img" :style="{'background-image': `url(../assets/img/dish.svg)`}"></div> -->
                 </div>
                 <div class="dish-middle">
                     <div class="dish-name">
@@ -26,7 +30,7 @@
                 </div>
                 <div class="dish-bottom">
                     <div class="dish-typ">
-                        <a>{{ dish.price.replace(/.00/, '') }} ₽</a>
+                        <a>{{ dish.price.replace(/.00/, '') }} Р</a>
                         <a>{{ dish.weight }} г.</a>
                     </div>
                 </div>
@@ -61,7 +65,7 @@
                     </div>
                     <div class="dish-mobile-middle-typ-PW">
                         <a>{{ dish.weight }} г.</a>
-                        <a>{{ dish.price.replace(/.00/, '') }} ₽</a>
+                        <a>{{ dish.price.replace(/.00/, '') }} Р</a>
                     </div>
                 </div>
             </section>
@@ -105,7 +109,9 @@
             // Удаление блюда по свайпу
             onSwipeLeft(index, menu_id, dish_id) {
                 this.$store.dispatch("DeleteDish", {menu_id, dish_id});
-                this.dishes.dishes[index].inEmployeeBasket--
+                if (this.dishes.dishes[index].inEmployeeBasket > 0){
+                    this.dishes.dishes[index].inEmployeeBasket--
+                }
                 this.dishes.dishes[index].swipe = 'left'
                 setTimeout(this.setSwipeMiddle, 200, index)
             },
@@ -150,7 +156,7 @@
         height: 600px;
     }
     .container {
-        margin: 50px 25px;
+        margin: 15px 25px;
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
@@ -222,6 +228,7 @@
                 background: none;
                 border: none;
                 outline: none;
+                cursor: pointer;
                 img {
                     outline: none;
                     margin: 0 10px;
