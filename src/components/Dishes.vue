@@ -28,7 +28,7 @@
                 </div>
                 <div class="dish-bottom">
                     <div class="dish-typ">
-                        <a>{{ dish.price.replace(/.00/, '') }} ₽</a>
+                        <a>{{ dish.price.replace(/.00/, '') }} Р</a>
                         <a>{{ dish.weight }} г.</a>
                     </div>
                 </div>
@@ -67,7 +67,7 @@
                     </div>
                     <div class="dish-mobile-middle-typ-PW">
                         <a>{{ dish.weight }} г.</a>
-                        <a>{{ dish.price.replace(/.00/, '') }} ₽</a>
+                        <a>{{ dish.price.replace(/.00/, '') }} Р</a>
                     </div>
                 </div>
             </section>
@@ -114,7 +114,9 @@
             // Удаление блюда по свайпу
             onSwipeLeft(index, menu_id, dish_id) {
                 this.$store.dispatch("DeleteDish", {menu_id, dish_id});
-                this.dishes.dishes[index].inEmployeeBasket--
+                if (this.dishes.dishes[index].inEmployeeBasket > 0){
+                    this.dishes.dishes[index].inEmployeeBasket--
+                }
                 this.dishes.dishes[index].swipe = 'left'
                 setTimeout(this.setSwipeMiddle, 200, index)
             },

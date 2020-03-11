@@ -2,9 +2,7 @@
     <div class="container">
         <swiper @slideChange="dateChange" class="swiper" ref="mySwiper" :options="swiperOption">
             <swiper-slide v-for="(date, index) in transformDates" 
-                          :key="index"
-                          :class="{'second': index==1, 
-                                   'third': index==2}">
+                          :key="index">
                 {{date}}
             </swiper-slide>
         </swiper>
@@ -21,7 +19,6 @@
                     centeredSlides: true,
                     // grabCursor: true,
                     slideToClickedSlide: true,
-                    effect: 'nonr'
                 }
             }
         },
@@ -53,9 +50,6 @@
                 }
                 return curentDates
             },
-            // curentDate() {
-            //
-            // }
         }
     }
 </script>
@@ -74,12 +68,6 @@
         padding-top: 20px;
         padding-bottom: 10px;
         cursor: pointer;
-        .second {
-            opacity: 75%;
-        }
-        .third {
-            opacity: 50%;
-        }
         &-slide{
             font-weight: 700;
             font-size: 20px;
@@ -92,6 +80,7 @@
             background: white;
             color: $font-color;
             border-radius: 46px;
+            opacity: 0.5;
             &-active{
                 background: linear-gradient(90deg, #460B79 0%, #88267F 100%) !important;
                 width: 150px !important;
@@ -102,6 +91,10 @@
                 align-items: center;
                 color: white !important;
                 -webkit-text-fill-color: white !important;
+                opacity: 1;
+            }
+            &-next,&-prev{
+                opacity: 0.75;
             }
         }
     }
