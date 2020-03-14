@@ -303,7 +303,6 @@
             position: relative;
             position: relative;
             color: $font-color;
-            margin: 30px 0;
             display: grid;
             grid-template-columns: 15% 100% 15%;
             overflow: hidden;

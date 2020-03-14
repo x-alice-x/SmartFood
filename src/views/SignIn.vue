@@ -39,7 +39,7 @@ export default {
         await this.$store.dispatch("SignIn", this.email);
         console.log(this.errors);
         if (!this.errors) {
-            this.$router.push("/");
+            this.$router.push("/menu");
         }
         else {
           console.log(this.errors.indexOf('401'));

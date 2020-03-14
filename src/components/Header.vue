@@ -60,7 +60,7 @@
             async logout() {
                 await this.$store.dispatch("Logout");
                 if (!this.errors) {
-                    this.$router.push("/signin");
+                    this.$router.push("/");
                 }
                 else {
                     console.log(this.errors);
