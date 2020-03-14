@@ -11,14 +11,14 @@
                     <div class="dish-name">
                         {{ dish.name }}
                     </div>
-                    <div v-if="dish.inEmployeeBasket === 0" class="dish-descr">{{dish.description}}</div>
-                    <div class="dish-add" v-if="dish.inEmployeeBasket > 0">
+                    <div v-if="dish.in_basket_count === 0" class="dish-descr">{{dish.description}}</div>
+                    <div class="dish-add" v-if="dish.in_basket_count > 0">
                         <button>
                             <img src="../assets/img/minus.svg" @click="deleteDish(dishes.id, dish.id, index)">
                         </button>
                         <div class="dish-amount">
                             <div class="dish-amount-color">
-                                {{dish.inEmployeeBasket}}
+                                {{dish.in_basket_count}}
                             </div>
                         </div>
                         <button>
@@ -63,7 +63,7 @@
                 </div>
                 <div class="dish-mobile-middle-typ">
                     <div class="dish-mobile-middle-typ-counter">
-                        В корзине: {{dish.inEmployeeBasket}}
+                        В корзине: {{dish.in_basket_count}}
                     </div>
                     <div class="dish-mobile-middle-typ-PW">
                         <a>{{ dish.weight }} г.</a>
@@ -94,28 +94,28 @@
         methods: {
             // Добавление блюда
             buyDish(menu_id, dish_id, index) {
-                if(this.dishes.dishes[index].inEmployeeBasket === 0){
+                if(this.dishes.dishes[index].in_basket_count === 0){
                     this.$store.dispatch("OrderDish", {menu_id, dish_id});
-                    this.dishes.dishes[index].inEmployeeBasket++
+                    this.dishes.dishes[index].in_basket_count++
                 }
                 event.stopPropagation()
             },
             buyDishOnPlus(menu_id, dish_id, index) {
                     this.$store.dispatch("OrderDish", {menu_id, dish_id});
-                this.dishes.dishes[index].inEmployeeBasket++
+                this.dishes.dishes[index].in_basket_count++
                 event.stopPropagation()
             },
             // Удаление блюда
             deleteDish(menu_id, dish_id, index) {
                 this.$store.dispatch("DeleteDish", {menu_id, dish_id});
-                this.dishes.dishes[index].inEmployeeBasket--
+                this.dishes.dishes[index].in_basket_count--
                 event.stopPropagation()
             },
             // Удаление блюда по свайпу
             onSwipeLeft(index, menu_id, dish_id) {
                 this.$store.dispatch("DeleteDish", {menu_id, dish_id});
-                if (this.dishes.dishes[index].inEmployeeBasket > 0){
-                    this.dishes.dishes[index].inEmployeeBasket--
+                if (this.dishes.dishes[index].in_basket_count > 0){
+                    this.dishes.dishes[index].in_basket_count--
                 }
                 this.dishes.dishes[index].swipe = 'left'
                 setTimeout(this.setSwipeMiddle, 200, index)
@@ -123,7 +123,7 @@
             // Добавление блюда по свайпу
             onSwipeRight(index, menu_id, dish_id) {
                 this.$store.dispatch("OrderDish", {menu_id, dish_id});
-                this.dishes.dishes[index].inEmployeeBasket++
+                this.dishes.dishes[index].in_basket_count++
                 this.dishes.dishes[index].swipe = 'right'
                 setTimeout(this.setSwipeMiddle, 200, index)
             },
