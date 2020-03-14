@@ -7,37 +7,37 @@ import NotFound from "../views/NotFound.vue"
 
 Vue.use(VueRouter);
 
-const ifNotAuthenticated = async (to, from, next) => { // delete
-	await Store.dispatch("CHECK_AUTHORIZED");
-	if (!Store.getters.isUserAuthenticated) {
-		next();
-	}
-	else {
-		next("/menu");
-	}
-};
-const ifAuthenticated = async (to, from, next) => {
-	await Store.dispatch("CHECK_AUTHORIZED");
-	if (Store.getters.isUserAuthenticated) {
-		next();
-	}
-	else {
-		next("/");
-	}
-};
+// const ifNotAuthenticated = async (to, from, next) => { // delete
+// 	await Store.dispatch("CHECK_AUTHORIZED");
+// 	if (!Store.getters.isUserAuthenticated) {
+// 		next();
+// 	}
+// 	else {
+// 		next("/menu");
+// 	}
+// };
+// const ifAuthenticated = async (to, from, next) => {
+// 	await Store.dispatch("CHECK_AUTHORIZED");
+// 	if (Store.getters.isUserAuthenticated) {
+// 		next();
+// 	}
+// 	else {
+// 		next("/");
+// 	}
+// };
 
 const routes = [
 	{
 		path: "/menu",
 		name: "home",
 		component: Home,
-		beforeEnter: ifAuthenticated
+		// beforeEnter: ifAuthenticated
 	},
 	{
 		path: "/",
 		name: "signin",
 		component: SignIn,
-		beforeEnter: ifNotAuthenticated
+		// beforeEnter: ifNotAuthenticated
 	},
 	{
 		path: "*",
@@ -52,18 +52,15 @@ const router = new VueRouter({
 	routes
 });
 
-// router.beforeEach((to, from, next) => {
-// 	console.log(to);
-// 	console.log(from);
-// 	console.log(next);
-//     if (to.matched.some(record => record.meta.requiresAuth)) {
-//         if (Store.getters.isUserAuthenticated) {
-//             next()
-//             return
-//         }
-//         next('/')
-//     } else {
-//         next()
-//     }
-// })
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        if (Store.getters.isUserAuthenticated) {
+            next()
+            return
+        }
+        next('/')
+    } else {
+        next()
+    }
+})
 export default router;
