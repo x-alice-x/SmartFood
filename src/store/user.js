@@ -16,9 +16,6 @@ export default {
 		CLEAR_ERROR(state) {
 			state.error = null;
 		},
-		CLEAR_ERRORwqwqw(state) {
-			state.error = null;
-		}
 	},
 	actions: {
 		async SignIn({ commit }, email) {
