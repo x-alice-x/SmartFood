@@ -3,12 +3,12 @@ import VueRouter from "vue-router";
 import Store from "../store/index";
 import Home from "../views/Home.vue";
 import SignIn from "../views/SignIn.vue";
+import NotFound from "../views/NotFound.vue"
 
 Vue.use(VueRouter);
 
-const ifNotAuthenticated = async (to, from, next) => {
+const ifNotAuthenticated = async (to, from, next) => { // delete
 	await Store.dispatch("CHECK_AUTHORIZED");
-	console.log(Store.getters.isUserAuthenticated);
 	if (!Store.getters.isUserAuthenticated) {
 		next();
 	}
@@ -38,6 +38,11 @@ const routes = [
 		name: "signin",
 		component: SignIn,
 		beforeEnter: ifNotAuthenticated
+	},
+	{
+		path: "*",
+		name: "notfound",
+		component: NotFound
 	}
 ];
 
@@ -47,4 +52,18 @@ const router = new VueRouter({
 	routes
 });
 
+// router.beforeEach((to, from, next) => {
+// 	console.log(to);
+// 	console.log(from);
+// 	console.log(next);
+//     if (to.matched.some(record => record.meta.requiresAuth)) {
+//         if (Store.getters.isUserAuthenticated) {
+//             next()
+//             return
+//         }
+//         next('/')
+//     } else {
+//         next()
+//     }
+// })
 export default router;

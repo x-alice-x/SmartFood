@@ -54,11 +54,18 @@
                      'dish-mobile-middle-to-left': dish.swipe === 'left',
                      'dish-mobile-middle-to-middle': dish.swipe === 'middle'}">
                 <div class="dish-mobile-middle-about">
-                    <div class="dish-mobile-middle-about-name">
-                        {{ dish.name }}
+                    <div class="dish-mobile-middle-about-img" 
+                         :style="{'background-image': `url(${dish.image})`}">
+                        <!-- <img :src="dish.image" alt="Dish Image"> -->
                     </div>
-                    <div class="dish-mobile-middle-about-desc">
-                        {{dish.description}}
+
+                    <div class="dish-mobile-middle-about-text">
+                        <div class="dish-mobile-middle-about-text-name">
+                            {{ dish.name }}
+                        </div>
+                        <div class="dish-mobile-middle-about-text-desc">
+                            {{dish.description}}
+                        </div>
                     </div>
                 </div>
                 <div class="dish-mobile-middle-typ">
@@ -135,7 +142,6 @@
         computed: {
             dishes() {
                 if (this.$store.getters.currentDishes){
-                    console.log(this.$store.getters.currentDishes)
                     return this.$store.getters.currentDishes
                 }
                 else {
@@ -143,12 +149,12 @@
                 }
             },
         },
-        async mounted(){
+        async created() {
             await this.$store.dispatch('fetchMenu');
             if (this.$store.getters.getError) {
                 await this.$store.dispatch("SetNotAuth");
                 await this.$store.dispatch("ClearCookies");
-                this.$router.push('/signin');
+                this.$router.push('/');
             }
         }
     }
@@ -298,6 +304,7 @@
         }
         .week-mob {
             display: block !important;
+            margin-bottom: 30px;
         }
         .dish-mobile {
             position: relative;
@@ -349,20 +356,30 @@
                 }
                 &-about{
                     display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    padding-left: 120px;
-                    width: 60%;
-                    &-name{
-                        font-weight: 700;
-                        font-size: 22px;
-                        line-height: 21px;
+                    max-width: 80%;
+                    &-img {
+                        height: 100px;
+                        width: 125px;
+                        background-size: 125px; 
+                        background-position: center;
                     }
-                    &-desc{
-                        padding-top: 10px;
-                        font-weight: 300;
-                        font-size: 14px;
-                        line-height: 16px;
+                    &-text {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        margin-left: 20px;
+                        max-width: 70%;
+                        &-name{
+                            font-weight: 700;
+                            font-size: 20px;
+                            line-height: 1;
+                        }
+                        &-desc{
+                            padding-top: 10px;
+                            font-weight: 300;
+                            font-size: 14px;
+                            line-height: 1;
+                        }
                     }
                 }
                 &-typ{
@@ -378,7 +395,7 @@
                         flex-direction: column;
                         align-items: flex-end;
                         font-size: 24px;
-                        a:nth-child(1){
+                        a:nth-child(2){
                             font-weight: 600;
                         }
                     }
@@ -422,17 +439,30 @@
                     transform: translateX(-25%);
                 }
                 &-about{
-                    padding-left: 60px;
-                    width: 60%;
-                    &-name{
-                        font-weight: 700;
-                        font-size: 20px;
+                    width: 82%;
+                    &-text {
+                        max-width: 60%;
+                        line-height: 1;
+                        &-name{
+                            font-weight: 700;
+                            font-size: 14px;
+                        }
+                        &-desc {
+                            font-size: 12px;
+                            padding-top: 0;
+                        }
+                    }
+                    &-img {
+                        width: 100px;
                     }
                 }
                 &-typ{
                     padding: 10px 5px 10px 0;
+                    &-counter {
+                        font-size: 12px;
+                    }
                     &-PW{
-                        font-size: 20px;
+                        font-size: 16px;
                     }
                 }
             }
@@ -442,14 +472,15 @@
         .dish-mobile {
             &-middle{
                 &-about{
-                    padding-left: 10px;
-                    width: 65%;
-                    &-name{
-                        font-size: 18px;
-                    }
-                    &-desc{
-                        padding-top: 5px;
-                        font-size: 13px;
+                    width: 75%;
+                    &-text {
+                        max-width: 55%;
+                        &-name{
+                            font-size: 12px;
+                        }
+                        &-desc{
+                            font-size: 10px;
+                        }
                     }
                 }
                 &-typ{
@@ -462,19 +493,22 @@
         .dish-mobile {
             &-middle{
                 &-about{
-                    padding-left: 10px;
-                    width: 65%;
-                    &-name{
-                        font-size: 16px;
-                    }
-                    &-desc{
-                        padding-top: 5px;
-                        font-size: 12px;
-                    }
+                    width: 75%;
+                     &-text {
+                        margin-left: 10px;
+                        max-width: 54%;
+                     }
+                    // &-name{
+                    //     font-size: 16px;
+                    // }
+                    // &-desc{
+                    //     padding-top: 5px;
+                    //     font-size: 12px;
+                    // }
                 }
-                &-typ{
-                    padding: 5px 10px 5px 0;
-                }
+                // &-typ{
+                //     padding: 5px 10px 5px 0;
+                // }
             }
         }
     }

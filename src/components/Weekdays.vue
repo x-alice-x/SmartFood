@@ -108,4 +108,18 @@
             }
         }
     }
+    @media (max-width: 660px) {
+        .swiper{
+            padding: 0;
+            &-slide{
+                font-size: 12px;
+                height: 30px;
+                width: 100px !important;
+                &-active{
+                    height: 30px;
+                    width: 100px !important;
+                }
+            }
+        }
+    }
 </style>

@@ -31,7 +31,6 @@ export default {
 			};
 			await axios(requestParams).then(
 				resp => {
-					console.log(resp);
 					if (resp.data.success) {
 						commit("SET_USER_AUTHENTICATED", true);
 						Vue.$cookies.set("email" ,email);
@@ -40,7 +39,6 @@ export default {
 					}
 				},
 				err => {
-					console.log(err);
 					commit("SET_ERROR", err.message);
 				}
 			);

@@ -34,7 +34,6 @@ export default {
       }
       let regexp = new RegExp(this.validation);
       let isEmail = regexp.test(this.email);
-      console.log(isEmail);
       if (isEmail) {
         await this.$store.dispatch("SignIn", this.email);
         console.log(this.errors);
@@ -72,6 +71,12 @@ export default {
       else {
         return true;
       }
+    }
+  },
+  async created() {
+    this.$store.dispatch("CHECK_AUTHORIZED");
+    if (this.$store.getters.isUserAuthenticated) {
+      this.$router.push("/menu");
     }
   }
 };

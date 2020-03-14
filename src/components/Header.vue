@@ -45,7 +45,6 @@
                 return this.$store.getters.getUserEmail;
             },
             avatar() {
-              console.log(this.$store.getters.getUserPhoto);
               return this.$store.getters.getUserPhoto;
               // return "../assets/img/avatar.svg";
             },
@@ -61,9 +60,6 @@
                 await this.$store.dispatch("Logout");
                 if (!this.errors) {
                     this.$router.push("/");
-                }
-                else {
-                    console.log(this.errors);
                 }
             }
         }
@@ -217,11 +213,11 @@
             padding: 0 15px;
             .logo {
                 a {
-                    font-size: 38px;
+                    font-size: 24px;
                 }
             }
             .user{
-                width: 35px;
+                width: 20px;
             }
         }
     }

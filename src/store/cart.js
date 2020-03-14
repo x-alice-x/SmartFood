@@ -6,6 +6,7 @@ export default {
 	actions: {
 		async OrderDish(commit, ids) {
 			const url = "/api/v1/food/basket";
+			console.log(ids, url);
 			let requestParams = {
 				url: url,
 				method: "POST",
