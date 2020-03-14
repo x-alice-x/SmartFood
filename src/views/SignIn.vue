@@ -220,15 +220,13 @@ export default {
     }
     .signin-form label {
       font-size: 15px;
+      margin-top: 6px;
     }
     .form-submit {
       height: 25px;
       height: 35px;
       font-size: 16px;
       padding: 0;
-    }
-    .signin-form label {
-      margin-top: 3px;
     }
 }
 
