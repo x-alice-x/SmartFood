@@ -160,6 +160,9 @@
     .dishes{
         height: 600px;
     }
+    .week-mob {
+        display: none !important;
+    }
     .container {
         display: flex;
         flex-direction: column;
@@ -292,6 +295,9 @@
             .week {
                 display: none;
             }
+        }
+        .week-mob {
+            display: block !important;
         }
         .dish-mobile {
             position: relative;

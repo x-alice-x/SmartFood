@@ -1,7 +1,7 @@
 <template>
   <div class="signin">
     <div class="signin-title">SmartFood</div>
-    <form class="signin-form" @submit.prevent="SignIn()">
+    <form class="signin-form" @submit.prevent="LogIn()">
       <div>
         <input
           :class="{'form-input': domain==false}"
@@ -28,7 +28,7 @@ export default {
     };
   },
   methods: {
-    async SignIn() {
+    async LogIn() {
       if ((this.email.indexOf('@') == -1)&&(this.email)) {
         this.email = this.email + "@smartworld.team";
       }
