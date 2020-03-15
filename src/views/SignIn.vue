@@ -35,20 +35,21 @@ export default {
       let regexp = new RegExp(this.validation);
       let isEmail = regexp.test(this.email);
       if (isEmail) {
-        await this.$store.dispatch("SignIn", this.email);
-        console.log(this.errors);
-        if (!this.errors) {
-            this.$router.push("/menu");
-        }
-        else {
-          console.log(this.errors.indexOf('401'));
-          if (this.errors.indexOf('401') != -1) {
-            this.emailError = 'Пользователь с такой почтой не зарегистрирован';
+        await this.$store.dispatch("SignIn", this.email).then(
+          resp => {
+            if (resp == "OK") {
+              this.$router.push("/menu");
+            }
+          },
+          err => {
+            if (err.message.indexOf('401') != -1) {
+              this.emailError = 'Пользователь с такой почтой не зарегистрирован';
+            }
+            else {
+              this.emailError = this.errors;
+            }
           }
-          else {
-            this.emailError = this.errors;
-          }
-        }
+        )
       }
       else {
         this.emailError = 'Неверно указана почта'
