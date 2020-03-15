@@ -123,7 +123,7 @@
         }
     }
 .head {
-    width: 100%;
+    width: auto;
     height: 250px;
     background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
     display: flex;

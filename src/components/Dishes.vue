@@ -56,7 +56,6 @@
                 <div class="dish-mobile-middle-about">
                     <div class="dish-mobile-middle-about-img" 
                          :style="{'background-image': `url(${dish.image})`}">
-                        <!-- <img :src="dish.image" alt="Dish Image"> -->
                     </div>
 
                     <div class="dish-mobile-middle-about-text">
@@ -266,9 +265,6 @@
             background-position: center;
             background-size: cover;
         }
-        &-bottom{
-
-        }
         &-typ {
             display: flex;
             justify-content: space-evenly;
@@ -387,9 +383,6 @@
                     display: flex;
                     flex-direction: column;
                     justify-content: space-between;
-                    &-count{
-
-                    }
                     &-PW{
                         display: flex;
                         flex-direction: column;

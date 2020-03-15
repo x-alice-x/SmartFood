@@ -172,7 +172,7 @@ export default {
   .form-submit span {
     background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
     -webkit-text-fill-color: transparent;
-    -webkit-background-clip: text;
+    background-clip: text;
     display: block;
   }
     button:hover{
