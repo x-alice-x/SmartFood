@@ -1,7 +1,7 @@
 <template>
   <div class="signin">
     <div class="signin-title">SmartFood</div>
-    <form class="signin-form" @submit.prevent="SignIn()">
+    <form class="signin-form" @submit.prevent="LogIn()">
       <div>
         <input
           :class="{'form-input': domain==false}"
@@ -28,28 +28,28 @@ export default {
     };
   },
   methods: {
-    async SignIn() {
+    async LogIn() {
       if ((this.email.indexOf('@') == -1)&&(this.email)) {
         this.email = this.email + "@smartworld.team";
       }
       let regexp = new RegExp(this.validation);
       let isEmail = regexp.test(this.email);
-      console.log(isEmail);
       if (isEmail) {
-        await this.$store.dispatch("SignIn", this.email);
-        console.log(this.errors);
-        if (!this.errors) {
-            this.$router.push("/");
-        }
-        else {
-          console.log(this.errors.indexOf('401'));
-          if (this.errors.indexOf('401') != -1) {
-            this.emailError = 'Пользователь с такой почтой не зарегистрирован';
+        await this.$store.dispatch("SignIn", this.email).then(
+          resp => {
+            if (resp == "OK") {
+              this.$router.push("/menu");
+            }
+          },
+          err => {
+            if (err.message.indexOf('401') != -1) {
+              this.emailError = 'Пользователь с такой почтой не зарегистрирован';
+            }
+            else {
+              this.emailError = this.errors;
+            }
           }
-          else {
-            this.emailError = this.errors;
-          }
-        }
+        )
       }
       else {
         this.emailError = 'Неверно указана почта'
@@ -72,6 +72,12 @@ export default {
       else {
         return true;
       }
+    }
+  },
+  async created() {
+    this.$store.dispatch("CHECK_AUTHORIZED");
+    if (this.$store.getters.isUserAuthenticated) {
+      this.$router.push("/menu");
     }
   }
 };
@@ -167,7 +173,7 @@ export default {
   .form-submit span {
     background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
     -webkit-text-fill-color: transparent;
-    -webkit-background-clip: text;
+    background-clip: text;
     display: block;
   }
     button:hover{
@@ -215,15 +221,13 @@ export default {
     }
     .signin-form label {
       font-size: 15px;
+      margin-top: 6px;
     }
     .form-submit {
       height: 25px;
       height: 35px;
       font-size: 16px;
       padding: 0;
-    }
-    .signin-form label {
-      margin-top: 3px;
     }
 }
 

@@ -45,7 +45,6 @@
                 return this.$store.getters.getUserEmail;
             },
             avatar() {
-              console.log(this.$store.getters.getUserPhoto);
               return this.$store.getters.getUserPhoto;
               // return "../assets/img/avatar.svg";
             },
@@ -60,10 +59,7 @@
             async logout() {
                 await this.$store.dispatch("Logout");
                 if (!this.errors) {
-                    this.$router.push("/signin");
-                }
-                else {
-                    console.log(this.errors);
+                    this.$router.push("/");
                 }
             }
         }
@@ -127,7 +123,7 @@
         }
     }
 .head {
-    width: 100%;
+    width: auto;
     height: 250px;
     background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
     display: flex;
@@ -217,11 +213,11 @@
             padding: 0 15px;
             .logo {
                 a {
-                    font-size: 38px;
+                    font-size: 24px;
                 }
             }
             .user{
-                width: 35px;
+                width: 20px;
             }
         }
     }

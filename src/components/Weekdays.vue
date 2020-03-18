@@ -1,6 +1,6 @@
 <template>
-    <div class="container" :class="{'scroled-dates': pageYOffset > 200}">
-    <swiper @slideChange="dateChange" class="swiper" ref="mySwiper" :options="swiperOption">
+    <div class="container">
+        <swiper @slideChange="dateChange" class="swiper" ref="mySwiper" :options="swiperOption">
             <swiper-slide v-for="(date, index) in transformDates" 
                           :key="index">
                 {{date}}
@@ -104,6 +104,20 @@
                 width: 150px !important;
                 &-active{
                     width: 150px !important;
+                }
+            }
+        }
+    }
+    @media (max-width: 660px) {
+        .swiper{
+            padding: 0;
+            &-slide{
+                font-size: 12px;
+                height: 30px;
+                width: 100px !important;
+                &-active{
+                    height: 30px;
+                    width: 100px !important;
                 }
             }
         }
