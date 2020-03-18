@@ -3,39 +3,54 @@ import axios from 'axios';
 
 export default {
     state:{
-        dishes: [],
-        currentDishes: 0
+        menu: [],
+        todayMenu: [],
+        dateIndex: 0
     },
     mutations:{
         updateDates(state, dishes) {
-            state.dishes = dishes
+            state.menu = dishes
         },
         setDishes(state, index) {
             if (index){
-                state.currentDishes = state.dishes[index]
+                state.dateIndex = index
+                state.todayMenu = state.menu[state.dateIndex]
             }
             else{
-                state.currentDishes = state.dishes[0]
+                if (index === 0){
+                    state.todayMenu = state.menu[0]
+                }
+                else{
+                    state.todayMenu = state.menu[state.dateIndex]
+                }
             }
         }
     },
     actions: {
-        async fetchMenu({commit}) {
+        async fetchMenu({commit}, blackList = 0) {
             commit("CLEAR_ERROR");
             let requestParams = {}
-            let dishes = []
+            let menu = []
             const url = '/api/v2/food/menu'
             requestParams = {
                 url: url,
                 method: 'GET',
+                params: {with_blacklist: blackList}
             }
             await axios(requestParams)
                 .then(resp => {
                     if(resp.data.data){
-                        dishes = resp.data.data
-                        console.log(dishes)
-                        // commit('updateDates', dishes)
-                        // commit('setDishes')
+                        // for (let i = 0; i < resp.data.data.length; i++){
+                        //     for (let j = 0; j < resp.data.data[i].dishes.length; j++){
+                        //         if (resp.data.data[i].dishes[j].image === 'https://edatomsk.ru/images/delivery/delivery.svg'){
+                        //             resp.data.data[i].dishes[j].image = 'https://image.flaticon.com/icons/svg/857/857681.svg'
+                        //         }
+                        //     }
+                        // }
+                        menu = resp.data.data
+                        console.log(menu)
+                        commit('updateDates', menu)
+                        commit('setDishes')
                     }
                     },
                     err => {
@@ -46,17 +61,10 @@ export default {
     },
     getters:{
         dates(state){
-            return state.dishes
+            return state.menu
         },
-        currentDishes(state){
-            return state.currentDishes
+        todayMenu(state){
+            return state.todayMenu
         }
     }
 }
-// Смена картинок
-// for (let j = 0; j < resp.data.data[i].dishes.length; j++){
-//     if (resp.data.data[i].dishes[j].image === 'https://edatomsk.ru/images/delivery/delivery.svg'){
-//         // resp.data.data[i].dishes[j].image = 'https://imageog.flaticon.com/icons/png/512/60/60847.png?size=1200x630f&pad=10,10,10,10&ext=png&bg=FFFFFFFF'
-//         resp.data.data[i].dishes[j].image = 'https://image.flaticon.com/icons/svg/857/857681.svg'
-//     }
-// }
