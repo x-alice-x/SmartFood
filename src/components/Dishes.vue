@@ -181,8 +181,8 @@
                 console.log('У вас блюд: ' + this.zak)
             },
             closeContent() {
-                // this.$refs.list.close()
-                // this.blackList = false
+                this.$refs.list.close()
+                this.blackList = false
             }
         },
         computed: {
@@ -206,6 +206,7 @@
             $(document).on("touchstart  mousedown", ".card-content", function (event) {
                 self.currentIndex = event.currentTarget.dataset.indexitem;
                 self.downX = event.changedTouches[0].clientX;
+                this.blackList = false;
             });
             $(document).on("touchend  mouseup", ".card-content", function (event) {
                 self.upX = event.changedTouches[0].clientX;
@@ -213,7 +214,7 @@
         },
         watch: {
             upX: function () {
-                if (Math.abs(this.upX - this.downX) <= 3 * window.screen.width / 4) {
+                if (Math.abs(this.upX - this.downX) >= 3 * window.screen.width / 4) {
                     if (this.revealed[this.currentIndex] === 'right') {
                         this.blackList = false;
                         console.log('right');
@@ -523,11 +524,6 @@
 
             .swipeout-list-item {
                 flex: 1;
-                border-bottom: 1px solid lightgray;
-            }
-
-            .swipeout-list-item:last-of-type {
-                border-bottom: none;
             }
 
             .card-content {
@@ -538,9 +534,12 @@
                 background: #FFFFFF;
 
                 .dish-mobile-img {
+                    border-radius: 50%;
 
                     img {
-                        width: 206px;
+                        width: 190px;
+                        border-radius: 50%;
+                        margin-left: 10px;
                     }
                 }
 
