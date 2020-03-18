@@ -5,7 +5,7 @@ export default {
 	},
 	actions: {
 		async OrderDish(commit, ids) {
-			const url = "/api/v1/food/basket";
+			const url = "/api/v2/food/basket";
 			console.log(ids, url);
 			let requestParams = {
 				url: url,
@@ -22,7 +22,7 @@ export default {
 			);
 		},
 		async DeleteDish(commit, ids) {
-			const url = "/api/v1/food/basket";
+			const url = "/api/v2/food/basket";
 			let requestParams = {
 				url: url,
 				method: "DELETE",
