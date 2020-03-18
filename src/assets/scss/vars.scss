@@ -1,4 +1,9 @@
 // Для обычных переменных
-$font: 'Roboto', sans-serif;
-$c-main: rgba(125, 70, 161, 0.1);
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap');
+$font: 'Roboto',
+sans-serif;
+$c-main: rgba(125,
+70,
+161,
+0.1);
 $font-color: #460B79;

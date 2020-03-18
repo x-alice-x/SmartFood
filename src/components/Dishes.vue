@@ -1,11 +1,20 @@
 <template>
     <div class="dishes">
         <div class="container">
-            <Weekdays class="week"></Weekdays>
+           <Weekdays class="week"></Weekdays>
+           <div class="dish-category">
+               <h3 class="category-name" >название категории</h3>
             <div class="dish-main">
-            <div class="dish" v-for="(dish, index) in dishes.dishes" :key="index" @click="buyDish(dishes.id, dish.id, index)">
-                <div class="dish-top">
-                    <div class="dish-img" :style="{'background-image': `url(${dish.image})`}"></div>
+            <div class="dish" id="blacklisted" v-for="(dish, index) in dishes.dishes" :key="index" @click="buyDish(dishes.id, dish.id, index)" >
+                <div class="dish-top"> 
+                    <div class="dish-img" :style="{'background-image': `url(${dish.image})`}">
+                        <div class="black-list-container">
+                             <img class="black-list" src="../assets/img/dots.svg" />
+                        </div>
+                        <div id="black-list-content">
+                            <button id="add-to-list"  @click="blackList(selectedDish == index)">{{button.text}}</button>
+                        </div>
+                    </div>
                 </div>
                 <div class="dish-middle">
                     <div class="dish-name">
@@ -35,6 +44,23 @@
             </div>
             </div>
         </div>
+    <div class="total-sum-container">
+        <div class="total-sum">
+            <div class="total-container">
+                <p class="money-spent">150p</p>
+                <img class="cart-icon" src="../assets/img/cart_white.svg" />
+                <p class="money-left">50p</p>
+            </div>
+            <div class="show-black-listed">
+                <label class="switch">
+                  <input type="checkbox">
+                  <span class="slider round"></span>
+                </label>
+                <p>Черный список</p>
+            </div>
+      </div>
+    </div>
+      </div>
         
         <div>              <!-- Mobile version -->
         <Weekdays class="week-mob"></Weekdays>   
@@ -97,6 +123,15 @@
     Vue.use(Vue2TouchEvents)
     export default {
         components: {Weekdays},
+        data () {
+            return {
+            selected: '',
+            selectedDish: '',
+            button: {
+                text: 'Добавить в черный список'
+            }
+            };
+        },
         methods: {
             // Добавление блюда
             buyDish(menu_id, dish_id, index) {
@@ -136,6 +171,15 @@
             // Это нужно для свайпа обратно
             setSwipeMiddle(index) {
                 this.dishes.dishes[index].swipe = 'middle'
+            },
+            blackList() {
+                document.getElementById('blacklisted').classList.toggle("is-blacklisted");
+                if (this.button.text == "Добавить в черный список") {
+                  this.button.text = "Убрать из черного списка";
+                  }
+                else if (this.button.text == "Убрать из черного списка") {
+                  this.button.text = "Добавить в черный список";
+                  }
             }
         },
         computed: {
@@ -162,8 +206,195 @@
 <style scoped lang="scss">
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
+
+// категории
+
+.category-name {
+    font-size: 36px;
+    color: #000;
+    margin-left: 2%;
+    margin-bottom: 2%;
+}
+
+/* контейнер для кнопочки открывающей кнопку чс */
+.black-list-container {
+ width: 100%;
+ height: auto;
+ padding: 10px 20px 10px 0;
+ background: transparent;
+ display: flex;
+ justify-content: flex-end;
+
+         .black-list {
+        width: 60px;
+        height: 20px;
+        cursor: pointer;
+         }
+}
+
+/* сама кнопка чс */    
+#black-list-content {
+  display: none;
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+}
+
+#black-list-content button {
+width: 90%;
+cursor: pointer;
+outline: none;
+border: none;
+background:#fff;
+color: #460B79;
+opacity: .8;
+margin: 0 5%;
+min-height: 45px;
+transition: 0.3s;
+font-weight: 700;
+font-size: 16px;
+z-index: 2;
+}
+
+.black-list-container:hover + #black-list-content, #black-list-content:hover {
+  display: block;
+  z-index: 1;
+}
+
+#black-list-content button:hover {
+opacity: 1;
+}
+
+/* класс, который делает карточки черно-белыми */
+
+.is-blacklisted {
+    transition: .3s;
+    filter: grayscale(100%);
+}
+
+/* плашка внизу страницы */
+
+.total-sum {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 50px; 
+    background: rgba(255, 255, 255, 0.5);
+    width: 100%;
+}
+
+.total-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    width: 300px;
+    background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
+    color: #fff;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    height: 50px; 
+    padding: 0 20px;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+
+    p {
+        font-size: 24px;
+    }
+}
+
+.cart-icon {
+    width: 30px;
+    height: 30px;
+}
+
+/* контейнер слайдера чс */
+
+.show-black-listed {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: fixed;
+    left: 70%;
+    transform: translateX(-50%);
+    z-index: 2;
+
+    p {
+        margin-left: 15px;
+        color: #000;
+        font-size: 18px;
+        font-weight: 700;
+    }
+}
+
+/* слайдер */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+  justify-content: center;
+  z-index: 2;
+}
+/* убрать дефолтный чекбокс */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* слайдер для включения чс*/
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .3s;
+
+   &:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+   }
+}
+
+input:checked + .slider {
+  background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 30px;
+
+  &:before {
+    border-radius: 50%;
+  }
+}
+
+
     .dishes{
         height: 600px;
+        
     }
     .week-mob {
         display: none !important;
@@ -173,6 +404,7 @@
         flex-direction: column;
         justify-content: center;
         color: $font-color;
+        margin-bottom: 60px;
     }
     .dish-main {
         display: flex;
