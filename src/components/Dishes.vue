@@ -4,15 +4,15 @@
            <Weekdays class="week"></Weekdays>
            <div class="dish-category">
                <h3 class="category-name" >название категории</h3>
-            <div class="dish-main">
-            <div class="dish" id="blacklisted" v-for="(dish, index) in dishes.dishes" :key="index" @click="buyDish(dishes.id, dish.id, index)" >
+            <div class="dish-main" id="blacklisted">
+            <div class="dish" :class="{ active: index === activeItem}" v-for="(dish, index) in dishes.dishes" :key="index" @click="buyDish(dishes.id, dish.id, index)" >
                 <div class="dish-top"> 
                     <div class="dish-img" :style="{'background-image': `url(${dish.image})`}">
                         <div class="black-list-container">
                              <img class="black-list" src="../assets/img/dots.svg" />
                         </div>
                         <div id="black-list-content">
-                            <button id="add-to-list"  @click="blackList(selectedDish == index)">{{button.text}}</button>
+                            <button id="add-to-list" @click="blackList(index)">{{button.text}}</button>
                         </div>
                     </div>
                 </div>
@@ -62,7 +62,7 @@
     </div>
       </div>
         
-        <div>              <!-- Mobile version -->
+        <div class="mobile-container">              <!-- Mobile version -->
         <Weekdays class="week-mob"></Weekdays>   
         <div class="dish-mobile" v-for="(dish, index) in dishes.dishes" :key="index"
              v-touch:swipe.left="onSwipeLeft.bind(this, index, dishes.id, dish.id)"
@@ -125,8 +125,7 @@
         components: {Weekdays},
         data () {
             return {
-            selected: '',
-            selectedDish: '',
+            activeItem: null,
             button: {
                 text: 'Добавить в черный список'
             }
@@ -172,8 +171,12 @@
             setSwipeMiddle(index) {
                 this.dishes.dishes[index].swipe = 'middle'
             },
-            blackList() {
-                document.getElementById('blacklisted').classList.toggle("is-blacklisted");
+            blackList(index) {
+                if (this.activeItem == index){
+                  document.getElementById('blacklisted').classList.toggle("is_blacklisted");
+                }
+                console.log(index)
+                // document.getElementById('blacklisted').classList.toggle("is-blacklisted");
                 if (this.button.text == "Добавить в черный список") {
                   this.button.text = "Убрать из черного списка";
                   }
@@ -267,7 +270,7 @@ opacity: 1;
 
 /* класс, который делает карточки черно-белыми */
 
-.is-blacklisted {
+.is_blacklisted {
     transition: .3s;
     filter: grayscale(100%);
 }
@@ -321,8 +324,8 @@ opacity: 1;
     flex-direction: row;
     align-items: center;
     position: fixed;
-    left: 70%;
-    transform: translateX(-50%);
+    right: 15%;
+    // transform: translateX(-50%);
     z-index: 2;
 
     p {
@@ -522,6 +525,41 @@ input:checked + .slider:before {
         }
     }
     .dish-mobile{display: none;}
+
+    @media (max-width: 1110px) {
+/* плашка внизу страницы */
+       .total-container {
+         width: 250px;
+        }
+
+/* контейнер слайдера чс */
+       .show-black-listed {
+         right: 7%;
+        }
+    }
+    
+    @media (max-width: 839px) {
+/* плашка внизу страницы */
+
+.total-sum {
+    flex-direction: column;
+}
+    .container {
+        margin-bottom: 90px;
+    }
+
+/* контейнер слайдера чс */
+
+.show-black-listed {
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 60px;
+  }
+  .mobile-container {
+      margin-bottom: 90px;
+  }
+}
+
     @media (max-width: 790px) {
         .dish {display: none;}
         .container {
@@ -714,7 +752,57 @@ input:checked + .slider:before {
             }
         }
     }
-    @media (max-width: 360px) {
+@media (max-width: 360px) {
+        /* плашка внизу страницы */
+
+.total-sum {
+    flex-direction: column;
+}
+
+.total-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    z-index: 2;
+}
+
+.cart-icon {
+    width: 30px;
+    height: 30px;
+}
+
+/* контейнер слайдера чс */
+
+.show-black-listed {
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    z-index: 2;
+    p {
+        font-size: 16px;
+    }
+}
+
+/* слайдер */
+.switch {
+  width: 50px;
+  height: 28px;
+}
+
+/* слайдер для включения чс*/
+.slider {
+   &:before {
+      height: 22px;
+      width: 22px;
+      left: 3px;
+      bottom: 3px;
+   }
+}
+
+input:checked + .slider:before {
+  transform: translateX(22px);
+}
+
         .dish-mobile {
             &-middle{
                 &-about{
@@ -736,5 +824,5 @@ input:checked + .slider:before {
                 // }
             }
         }
-    }
+}  
 </style>
