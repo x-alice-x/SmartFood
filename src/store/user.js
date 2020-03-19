@@ -15,7 +15,7 @@ export default {
 		},
 		CLEAR_ERROR(state) {
 			state.error = null;
-		}
+		},
 	},
 	actions: {
 		SignIn({ commit }, email) {

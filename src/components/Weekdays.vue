@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <swiper @slideChange="dateChange" class="swiper" ref="mySwiper" :options="swiperOption">
-            <swiper-slide v-for="(date, index) in transformDates" 
+            <swiper-slide v-for="(date, index) in transformDates"
                           :key="index">
                 {{date}}
             </swiper-slide>
@@ -13,7 +13,7 @@
     export default {
         name: "Weekdays",
         data() {
-            return{
+            return {
                 swiperOption: {
                     slidesPerView: 'auto',
                     centeredSlides: true,
@@ -22,19 +22,19 @@
                 }
             }
         },
-        methods:{
+        methods: {
             dateChange() {
                 let index = this.$refs.mySwiper.swiper.activeIndex
-                this.$store.commit('setDishes',index)
+                this.$store.commit('setDishes', index)
             }
         },
-        computed:{
+        computed: {
             date() {
                 return this.$store.getters.dates
             },
-            transformDates(){
+            transformDates() {
                 const curentDates = []
-                for (let i = 0; i < this.date.length; i++){
+                for (let i = 0; i < this.date.length; i++) {
                     let options = {day: 'numeric', month: 'short'}
                     let date = new Date(this.date[i].date).toLocaleString("ru", options).replace(/(\d+) (\D+)/, '$2 $1').toUpperCase()
                     curentDates.push(date)
@@ -57,18 +57,21 @@
 <style scoped lang="scss">
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
-    .container{
+
+    .container {
         z-index: 300;
         position: sticky;
         top: 20px;
         height: auto;
     }
-    .swiper{
+
+    .swiper {
         width: auto;
         padding-top: 20px;
         padding-bottom: 10px;
         cursor: pointer;
-        &-slide{
+
+        &-slide {
             font-weight: 700;
             font-size: 20px;
             display: flex;
@@ -81,7 +84,8 @@
             color: $font-color;
             border-radius: 46px;
             opacity: 0.5;
-            &-active{
+
+            &-active {
                 background: linear-gradient(90deg, #460B79 0%, #88267F 100%) !important;
                 width: 150px !important;
                 height: 40px;
@@ -93,16 +97,19 @@
                 -webkit-text-fill-color: white !important;
                 opacity: 1;
             }
-            &-next,&-prev{
+
+            &-next, &-prev {
                 opacity: 0.75;
             }
         }
     }
-    @media (max-width: 790px){
-        .swiper{
-            &-slide{
+
+    @media (max-width: 790px) {
+        .swiper {
+            &-slide {
                 width: 150px !important;
-                &-active{
+
+                &-active {
                     width: 150px !important;
                 }
             }

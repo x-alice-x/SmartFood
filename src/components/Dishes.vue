@@ -4,137 +4,168 @@
            <Weekdays class="week"></Weekdays>
            <div class="dish-category">
                <h3 class="category-name" >название категории</h3>
+           </div>
             <div class="dish-main" id="blacklisted">
-            <div class="dish" :class="{ active: index === activeItem}" v-for="(dish, index) in dishes.dishes" :key="index" @click="buyDish(dishes.id, dish.id, index)" >
-                <div class="dish-top"> 
-                    <div class="dish-img" :style="{'background-image': `url(${dish.image})`}">
-                        <div class="black-list-container">
-                             <img class="black-list" src="../assets/img/dots.svg" />
-                        </div>
-                        <div id="black-list-content">
-                            <button id="add-to-list" @click="blackList(index)">{{button.text}}</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="dish-middle">
-                    <div class="dish-name">
-                        {{ dish.name }}
-                    </div>
-                    <div v-if="dish.in_basket_count === 0" class="dish-descr">{{dish.description}}</div>
-                    <div class="dish-add" v-if="dish.in_basket_count > 0">
-                        <button>
-                            <img src="../assets/img/minus.svg" @click="deleteDish(dishes.id, dish.id, index)">
-                        </button>
-                        <div class="dish-amount">
-                            <div class="dish-amount-color">
-                                {{dish.in_basket_count}}
+                <div class="dish" :class="{ active: index === activeItem}" v-for="(dish, index) in dishes.dishes" :key="index" @click="buyDish(dishes.id, dish.id, index)" >
+                    <div class="dish-top"> 
+                        <div class="dish-img" :style="{'background-image': `url(${dish.image})`}">
+                            <div class="black-list-container">
+                                <img class="black-list" src="../assets/img/dots.svg" />
+                            </div>
+                            <div id="black-list-content">
+                                <button id="add-to-list" @click="blackList(index)">{{button.text}}</button>
                             </div>
                         </div>
-                        <button>
-                            <img src="../assets/img/plus.svg" @click="buyDishOnPlus(dishes.id, dish.id, index)">
-                        </button>
                     </div>
-                </div>
-                <div class="dish-bottom">
-                    <div class="dish-typ">
-                        <a>{{ dish.price.replace(/.00/, '') }} Р</a>
-                        <a>{{ dish.weight }} г.</a>
-                    </div>
-                </div>
-            </div>
-            </div>
-        </div>
-    <div class="total-sum-container">
-        <div class="total-sum">
-            <div class="total-container">
-                <p class="money-spent">150p</p>
-                <img class="cart-icon" src="../assets/img/cart_white.svg" />
-                <p class="money-left">50p</p>
-            </div>
-            <div class="show-black-listed">
-                <label class="switch">
-                  <input type="checkbox">
-                  <span class="slider round"></span>
-                </label>
-                <p>Черный список</p>
-            </div>
-      </div>
-    </div>
-      </div>
-        
-        <div class="mobile-container">              <!-- Mobile version -->
-        <Weekdays class="week-mob"></Weekdays>   
-        <div class="dish-mobile" v-for="(dish, index) in dishes.dishes" :key="index"
-             v-touch:swipe.left="onSwipeLeft.bind(this, index, dishes.id, dish.id)"
-             v-touch:swipe.right="onSwipeRight.bind(this, index, dishes.id, dish.id)">
-            <section class="dish-mobile-basket"
-                    :class="{
-                    'dish-mobile-basket-to-right': dish.swipe === 'right',
-                    'dish-mobile-basket-to-left': dish.swipe === 'left',
-                    'dish-mobile-basket-to-middle': dish.swipe === 'middle'}">
-                <img src="../assets/img/cart.svg">
-            </section>
-            <section class="dish-mobile-middle"
-                     :class="{
-                     'dish-mobile-middle-to-right': dish.swipe === 'right',
-                     'dish-mobile-middle-to-left': dish.swipe === 'left',
-                     'dish-mobile-middle-to-middle': dish.swipe === 'middle'}">
-                <div class="dish-mobile-middle-about">
-                    <div class="dish-mobile-middle-about-img" 
-                         :style="{'background-image': `url(${dish.image})`}">
-                    </div>
-
-                    <div class="dish-mobile-middle-about-text">
-                        <div class="dish-mobile-middle-about-text-name">
+                    <div class="dish-middle">
+                        <div class="dish-name">
                             {{ dish.name }}
                         </div>
-                        <div class="dish-mobile-middle-about-text-desc">
-                            {{dish.description}}
+                        <div v-if="dish.in_basket_count === 0" class="dish-descr">{{dish.description}}</div>
+                        <div class="dish-add" v-if="dish.in_basket_count > 0">
+                            <button>
+                                <img src="../assets/img/minus.svg" @click="deleteDish(dishes.id, dish.id, index)">
+                            </button>
+                            <div class="dish-amount">
+                                <div class="dish-amount-color">
+                                    {{dish.in_basket_count}}
+                                </div>
+                                <button>
+                                    <img src="../assets/img/plus.svg" @click="buyDishOnPlus(dishes.id, dish.id, index)">
+                                </button>
+                            </div>
+                        </div>
+                        <div class="dish-bottom">
+                            <div class="dish-typ">
+                                <a>{{ dish.price.replace(/.00/, '') }} Р</a>
+                                <a>{{ dish.weight }} г.</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="dish-mobile-middle-typ">
-                    <div class="dish-mobile-middle-typ-counter">
-                        В корзине: {{dish.in_basket_count}}
-                    </div>
-                    <div class="dish-mobile-middle-typ-PW">
-                        <a>{{ dish.weight }} г.</a>
-                        <a>{{ dish.price.replace(/.00/, '') }} Р</a>
-                    </div>
-                </div>
-            </section>
-            <section class="dish-mobile-delete"
-                     :class="{
-                     'dish-mobile-delete-to-right': dish.swipe === 'right',
-                     'dish-mobile-delete-to-left': dish.swipe === 'left',
-                     'dish-mobile-delete-to-middle': dish.swipe === 'middle'}">
-                <img src="../assets/img/delete.svg">
-            </section>
+            </div>
         </div>
+        <div class="total-sum-container">
+            <div class="total-sum">
+                <div class="total-container">
+                    <p class="money-spent">150p</p>
+                    <img class="cart-icon" src="../assets/img/cart_white.svg" />
+                    <p class="money-left">50p</p>
+                </div>
+                <div class="show-black-listed">
+                    <label class="switch">
+                    <input type="checkbox">
+                    <span class="slider round"></span>
+                    </label>
+                    <p>Черный список</p>
+                </div>
+            </div>
+        </div>
+
+        <div>              <!-- Mobile version -->
+            <Weekdays class="week-mob"></Weekdays>
+            <swipe-list
+                    ref="list"
+                    class="dish-mobile"
+                    :items="dishes.dishes"
+                    :revealed.sync="revealed"
+            >
+                <template v-slot="{item, index}">
+                    <!-- item is the corresponding object from the array -->
+                    <!-- index is clearly the index -->
+                    <!-- revealLeft is method which toggles the left side -->
+                    <!-- revealRight is method which toggles the right side -->
+                    <!-- close is method which closes an opened side -->
+                    <div ref="content" class="card-content" :data-indexItem="index" @click="closeContent">
+                        <div class="dish-mobile-img">
+                            <img :src="item.image">
+                        </div>
+                        <div class="dish-mobile-text">
+                            <div class="dish-mobile-text-disc">
+                                {{ item.name }}
+                            </div>
+                            <div class="dish-mobile-text-prelude">
+                                {{ item.description}}
+                            </div>
+                        </div>
+                        <div class="dish-mobile-price">
+                            <div class="dish-mobile-price-grams">
+                                {{ item.weight }} г.
+                            </div>
+                            <div class="dish-mobile-price-price">
+                                {{ item.price }} ₽
+                            </div>
+                        </div>
+                    </div>
+                </template>
+                <template v-slot:left="{ item, close, index }">
+                    <div class="swipeout-action dish-mobile-add" @click="delDish(index)">
+                        <div class="dish-mobile-add-dish">
+                            <img src="../assets/img/cartMobile.svg">
+                            <div>ДОБАВИТЬ</div>
+                        </div>
+                    </div>
+                    <div class="swipeout-action dish-mobile-black-add" @click="delDish(index)" v-if="black_list">
+                        <div class="dish-mobile-black-add-dish">
+                            <img src="../assets/img/blackListAdd.svg">
+                            <div>ЧЕРНЫЙ СПИСОК</div>
+                        </div>
+                    </div>
+                </template>
+                <template v-slot:right="{ item, close, index }">
+                    <div class="swipeout-action dish-mobile-black-delete" @click="delDish(index)" v-if="black_list">
+                        <div class="dish-mobile-black-delete-dish">
+                            <img src="../assets/img/blackListDelete.svg">
+                            <div>ЧЕРНЫЙ СПИСОК</div>
+                        </div>
+                    </div>
+                    <div class="swipeout-action dish-mobile-delete" @click="addDish(index)">
+                        <div class="dish-mobile-delete-dish">
+                            <img src="../assets/img/delete.svg">
+                            <div>УДАЛИТЬ</div>
+                        </div>
+                    </div>
+                </template>
+                <template v-slot:empty>
+                    <div>
+                        list is empty ( filtered or just empty )
+                    </div>
+                </template>
+            </swipe-list>
         </div>
     </div>
 </template>
 
 <script>
-    import Vue from 'vue'
-    import Vue2TouchEvents from 'vue2-touch-events'
-    import Weekdays from './Weekdays'
 
-    Vue.use(Vue2TouchEvents)
+    import {SwipeList} from 'vue-swipe-actions';
+    import 'vue-swipe-actions/dist/vue-swipe-actions.css';
+    import Weekdays from './Weekdays'
+    import $ from "jquery";
+
     export default {
-        components: {Weekdays},
-        data () {
+        data() {
             return {
-            activeItem: null,
-            button: {
-                text: 'Добавить в черный список'
-            }
+                activeItem: null,
+                button: {
+                    text: 'Добавить в черный список'
+                },
+                revealed: {},
+                zak: 0,
+                currentIndex: 0,
+                downX: 0,
+                upX: 0,
+                black_list: false
             };
+        },
+        components: {
+            Weekdays,
+            SwipeList,
         },
         methods: {
             // Добавление блюда
             buyDish(menu_id, dish_id, index) {
-                if(this.dishes.dishes[index].in_basket_count === 0){
+                if (this.dishes.dishes[index].in_basket_count === 0) {
                     this.$store.dispatch("OrderDish", {menu_id, dish_id});
                     this.dishes.dishes[index].in_basket_count++
                 }
@@ -183,26 +214,66 @@
                 else if (this.button.text == "Убрать из черного списка") {
                   this.button.text = "Добавить в черный список";
                   }
+            },
+            addDish(index) {
+                console.log(index)
+                this.zak++;
+                console.log('У вас блюд: ' + this.zak)
+                this.$refs.list.close()
+            },
+            delDish(index) {
+                console.log(index)
+                this.zak--;
+                console.log('У вас блюд: ' + this.zak)
+            },
+            closeContent() {
+                this.$refs.list.close()
+                this.black_list = false
             }
         },
         computed: {
             dishes() {
                 if (this.$store.getters.currentDishes){
                     return this.$store.getters.currentDishes
-                }
-                else {
+                } else {
                     return []
                 }
             },
         },
-        async created() {
+        async mounted() {
+            let self = this;
             await this.$store.dispatch('fetchMenu');
             if (this.$store.getters.getError) {
                 await this.$store.dispatch("SetNotAuth");
                 await this.$store.dispatch("ClearCookies");
                 this.$router.push('/');
             }
-        }
+            $(document).on("touchstart  mousedown", ".card-content", function (event) {
+                self.currentIndex = event.currentTarget.dataset.indexitem;
+                self.downX = event.changedTouches[0].clientX;
+                this.black_list = false;
+            });
+            $(document).on("touchend  mouseup", ".card-content", function (event) {
+                self.upX = event.changedTouches[0].clientX;
+            })
+        },
+        watch: {
+            upX: function () {
+                if (Math.abs(this.upX - this.downX) >= 3 * window.screen.width / 4) {
+                    if (this.revealed[this.currentIndex] === 'right') {
+                        this.black_list = false;
+                        console.log('right');
+                        this.$refs.list.close()
+                    } else if (this.revealed[this.currentIndex] === 'left') {
+                        this.black_list = false;
+                        console.log('left');
+                        this.$refs.list.close()
+                    }
+                } else {
+                    this.black_list = true
+                }
+            }
+        },
     }
 </script>
 
@@ -399,9 +470,11 @@ input:checked + .slider:before {
         height: 600px;
         
     }
+
     .week-mob {
         display: none !important;
     }
+
     .container {
         display: flex;
         flex-direction: column;
@@ -409,11 +482,13 @@ input:checked + .slider:before {
         color: $font-color;
         margin-bottom: 60px;
     }
+
     .dish-main {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
     }
+
     .dish {
         width: 350px;
         display: flex;
@@ -424,11 +499,13 @@ input:checked + .slider:before {
         height: auto;
         min-height: 411px;
         overflow: hidden;
-        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         transition: 0.3s;
-        &:hover{
-            box-shadow: 0 0 15px rgba(0,0,0,0.6);
+
+        &:hover {
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
         }
+
         &-amount {
             width: 82px;
             height: 30px;
@@ -436,6 +513,7 @@ input:checked + .slider:before {
             border: 1px solid $font-color;
             border-radius: 10px;
             color: $font-color;
+
             &-color {
                 font-weight: 700;
                 font-size: 18px;
@@ -444,6 +522,7 @@ input:checked + .slider:before {
                 padding-top: 5px;
             }
         }
+
         &-middle {
             width: 100%;
             background: white;
@@ -453,6 +532,7 @@ input:checked + .slider:before {
             flex-direction: column;
             justify-content: space-between;
         }
+
         &-name {
             font-weight: 700;
             font-size: 22px;
@@ -462,6 +542,7 @@ input:checked + .slider:before {
             margin-right: auto;
             margin-left: auto;
         }
+
         &-descr {
             width: 90%;
             font-weight: 300;
@@ -472,15 +553,18 @@ input:checked + .slider:before {
             margin-top: 20px;
             padding-bottom: 20px;
         }
+
         &-add {
             padding-bottom: 20px;
             display: flex;
             justify-content: center;
-            button{
+
+            button {
                 background: none;
                 border: none;
                 outline: none;
                 cursor: pointer;
+
                 img {
                     outline: none;
                     margin: 0 10px;
@@ -489,11 +573,13 @@ input:checked + .slider:before {
                 }
             }
         }
+
         &-top {
             height: 250px;
             position: relative;
             text-align: right;
         }
+
         &-img {
             height: 250px;
             background-repeat: no-repeat;
@@ -506,17 +592,20 @@ input:checked + .slider:before {
             align-items: center;
             background: $c-main;
             height: 60px;
+
             a {
                 z-index: 10;
                 font-weight: bold;
                 font-size: 30px;
                 line-height: 35px;
             }
+
             a:nth-child(2n) {
                 font-weight: 300;
                 font-size: 24px;
                 line-height: 28px;
             }
+
             /*&-background {*/
             /*    top: 0;*/
             /*    right: 0;*/
@@ -559,11 +648,13 @@ input:checked + .slider:before {
       margin-bottom: 90px;
   }
 }
-
     @media (max-width: 790px) {
-        .dish {display: none;}
+        .dish {
+            display: none;
+        }
         .container {
             margin-top: 10px;
+
             .week {
                 display: none;
             }
@@ -577,6 +668,7 @@ input:checked + .slider:before {
             position: relative;
             color: $font-color;
             display: grid;
+            // display: flex;
             grid-template-columns: 15% 100% 15%;
             overflow: hidden;
             section {
@@ -586,41 +678,76 @@ input:checked + .slider:before {
                 transition: 0.2s;
                 background: $c-main;
                 width: 100%;
+            }
+
+            .swipeout-action {
                 display: flex;
                 align-items: center;
-                justify-content: center;
-                transform: translateX(-100%);
-                img {
+                padding: 0 3rem;
+                cursor: pointer;
+                left: 0;
+            }
+
+            .swipeout-action.dish-mobile-delete {
+                width: 220px;
+                height: 150px;
+                background: linear-gradient(90deg, #A60000 0%, #CE0000 100%), #FFFFFF;
+
+                .dish-mobile-delete-dish {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
                     width: 60px;
-                    height: 60px;
-                }
-                &-to-right{
-                    transform: translateX(0%);
-                }
-                &-to-left{
-                    transform: translateX(-100%);
-                }
-                &-to-middle{
-                    transform: translateX(-100%);
+
+                    img {
+                        width: 70px;
+                    }
+
+                    div {
+                        margin-top: 5px;
+                        font-family: Roboto, sans-serif;
+                        font-style: normal;
+                        font-weight: 900;
+                        font-size: 18px;
+                        color: #FFFFFF;
+                    }
                 }
             }
-            &-middle{
-                transition: 0.2s;
-                transform: translateX(-15%);
-                border-bottom: 1px solid $c-main;
-                width: 100%;
+
+            .swipeout-action.dish-mobile-add {
                 display: flex;
-                justify-content: space-between;
-                &-to-right{
-                    transform: translateX(0%);
+                justify-content: flex-end;
+                width: 220px;
+                height: 150px;
+                background: linear-gradient(90deg, #460B79 0%, #88267F 100%), #FFFFFF;
+
+                .dish-mobile-add-dish {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    width: 60px;
+
+                    img {
+                        width: 70px;
+                    }
+
+                    div {
+                        margin-top: 5px;
+                        font-family: Roboto, sans-serif;
+                        font-style: normal;
+                        font-weight: 900;
+                        font-size: 18px;
+                        color: #FFFFFF;
+                    }
                 }
-                &-to-left{
-                    transform: translateX(-30%);
-                }
-                &-to-middle{
-                    transform: translateX(-15%);
-                }
-                &-about{
+            }
+
+            .swipeout-action.dish-mobile-black-add {
+                width: 60px;
+                height: 150px;
+                background: linear-gradient(0deg, #F2EDF6, #F2EDF6), #FFFFFF;
+
+                .dish-mobile-black-add-dish {
                     display: flex;
                     max-width: 80%;
                     &-img {
@@ -648,11 +775,20 @@ input:checked + .slider:before {
                         }
                     }
                 }
-                &-typ{
-                    padding: 25px 20px 25px 0;
+            }
+
+            .swipeout-action.dish-mobile-black-delete {
+                width: 60px;
+                height: 150px;
+                background: linear-gradient(90deg, #000000 0%, rgba(0, 0, 0, 0.81) 100%), #FFFFFF;
+
+                .dish-mobile-black-delete-dish {
                     display: flex;
                     flex-direction: column;
                     justify-content: space-between;
+                    // igor
+                    align-items: center;
+                    width: 60px;
                     &-PW{
                         display: flex;
                         flex-direction: column;
@@ -661,44 +797,146 @@ input:checked + .slider:before {
                         a:nth-child(2){
                             font-weight: 600;
                         }
+                    // igor
+                    img {
+                        width: 70px;
+                    }
+
+                    div {
+                        margin-top: 5px;
+                        font-family: Roboto, sans-serif;
+                        font-style: normal;
+                        font-weight: 900;
+                        font-size: 18px;
+                        color: #FFFFFF;
                     }
                 }
             }
-            &-delete{
-                background: linear-gradient(90deg, #A60000 0%, #CE0000 100%), #FFFFFF;
-                width: 100%;
+
+            .swipeout-list-item {
+                flex: 1;
+            }
+
+            .card-content {
                 display: flex;
+                justify-content: space-between;
                 align-items: center;
-                justify-content: center;
-                transition: 0.2s;
-                &-to-right{
-                    transform: translateX(-100%);
+                height: 150px;
+                background: #FFFFFF;
+
+                .dish-mobile-img {
+                    border-radius: 50%;
+
+                    img {
+                        width: 190px;
+                        border-radius: 50%;
+                        margin-left: 10px;
+                    }
                 }
-                &-to-left{
-                    transform: translateX(-200%);
+
+                .dish-mobile-text {
+                    width: 465px;
+                    height: 125px;
+
+                    .dish-mobile-text-disc {
+                        display: flex;
+                        flex-wrap: wrap;
+                        font-family: Roboto, sans-serif;
+                        font-style: normal;
+                        font-weight: 900;
+                        font-size: 30px;
+                        line-height: 30px;
+                        color: rgba(0, 0, 0, 0.75);
+                    }
+
+                    .dish-mobile-text-prelude {
+                        margin-top: 10px;
+                        height: 77px;
+                        font-family: Roboto, sans-serif;
+                        font-style: normal;
+                        font-weight: 200;
+                        font-size: 18px;
+                        line-height: 21px;
+
+                        color: #000000;
+                    }
                 }
-                &-to-middle{
-                    transform: translateX(0%);
-                }
-                img {
-                    width: 60px;
-                    height: 60px;
+
+                .dish-mobile-price {
+                    width: 100px;
+                    margin-top: 70px;
+
+                    .dish-mobile-price-grams {
+                        height: 34px;
+
+                        font-family: Roboto, sans-serif;
+                        font-style: normal;
+                        font-weight: 300;
+                        font-size: 24px;
+                        line-height: 28px;
+                        display: flex;
+                        align-items: center;
+                        text-align: right;
+
+                        color: #000000;
+                    }
+
+                    .dish-mobile-price-price {
+                        height: 34px;
+
+                        font-family: Roboto, sans-serif;
+                        font-style: normal;
+                        font-weight: bold;
+                        font-size: 25px;
+                        line-height: 35px;
+                        display: flex;
+                        align-items: center;
+                        text-align: right;
+
+                        color: #000000;
+                    }
                 }
             }
+
+            .transition-right {
+                transform: translate3d(100%, 0, 0) !important;
+            }
+
+            .transition-left {
+                transform: translate3d(-500%, 0, 0) !important;
+            }
+
+            .toolbar {
+                display: flex;
+                align-items: center;
+            }
+
+            .toolbar .toolbar-section {
+                flex: 0 0 auto;
+            }
+
+            .toolbar .toolbar-section--center {
+                flex: 1000 1 0%;
+            }
+        }
     }
-    }
+
     @media (max-width: 600px) {
         .dish-mobile {
             grid-template-columns: 25% 100% 25%;
-            &-middle{
+
+            &-middle {
                 transform: translateX(-25%);
-                &-to-right{
+
+                &-to-right {
                     transform: translateX(0%);
                 }
-                &-to-left{
+
+                &-to-left {
                     transform: translateX(-50%);
                 }
-                &-to-middle{
+
+                &-to-middle {
                     transform: translateX(-25%);
                 }
                 &-about{
@@ -719,7 +957,8 @@ input:checked + .slider:before {
                         width: 100px;
                     }
                 }
-                &-typ{
+
+                &-typ {
                     padding: 10px 5px 10px 0;
                     &-counter {
                         font-size: 12px;
@@ -731,6 +970,7 @@ input:checked + .slider:before {
             }
         }
     }
+
     @media (max-width: 420px) {
         .dish-mobile {
             &-middle{
@@ -746,7 +986,8 @@ input:checked + .slider:before {
                         }
                     }
                 }
-                &-typ{
+
+                &-typ {
                     padding: 5px 10px 5px 0;
                 }
             }
@@ -802,27 +1043,30 @@ input:checked + .slider:before {
 input:checked + .slider:before {
   transform: translateX(22px);
 }
-
         .dish-mobile {
-            &-middle{
-                &-about{
-                    width: 75%;
-                     &-text {
-                        margin-left: 10px;
-                        max-width: 54%;
-                     }
-                    // &-name{
-                    //     font-size: 16px;
-                    // }
-                    // &-desc{
-                    //     padding-top: 5px;
-                    //     font-size: 12px;
-                    // }
+            &-middle {
+                &-about {
+                    padding-left: 10px;
+                    width: 65%;
+
+                    &-name {
+                        font-size: 16px;
+                    }
+
+                    &-desc {
+                        padding-top: 5px;
+                        font-size: 12px;
+                    }
+                }
+
+                &-typ {
+                    padding: 5px 10px 5px 0;
                 }
                 // &-typ{
                 //     padding: 5px 10px 5px 0;
                 // }
             }
         }
+    }
 }  
 </style>
