@@ -15,7 +15,7 @@ export default {
 		},
 		CLEAR_ERROR(state) {
 			state.error = null;
-		}
+		},
 	},
 	actions: {
 		SignIn({ commit }, email) {
@@ -24,7 +24,8 @@ export default {
 				Vue.$cookies.remove("email");
 				Vue.$cookies.remove("name");
 				Vue.$cookies.remove("photo");
-				const url = "/api/v1/food/auth/login";
+
+				const url = "/api/v2/food/auth/login";
 				let requestParams = {
 					url: url,
 					method: "POST",
@@ -49,7 +50,7 @@ export default {
 		},
 		async Logout({ commit }) {
 			commit("CLEAR_ERROR");
-			const url = "/api/v1/food/auth/logout";
+			const url = "/api/v2/food/auth/logout";
 			let requestParams = {
 				url: url,
 				method: "POST"
