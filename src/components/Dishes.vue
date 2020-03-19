@@ -128,7 +128,7 @@
                     <div class="total-container">
                         <p class="money-spent">{{todayMenu.basket_summ}}р</p>
                         <img class="cart-icon" src="../assets/img/cart_white.svg"/>
-                        <p class="money-left">{{todayMenu.basket_summ - todayMenu.basket_summ_limit}}p</p>
+                        <p class="money-left">{{moneyLeft}}p</p>
                     </div>
                     <div class="show-black-listed">
                         <label class="switch">
@@ -243,6 +243,11 @@
                 } else {
                     return []
                 }
+            },
+            moneyLeft() {
+                return this.todayMenu.basket_summ >= this.todayMenu.basket_summ_limit ?
+                this.todayMenu.basket_summ - this.todayMenu.basket_summ_limit :
+                this.todayMenu.basket_summ_limit - this.todayMenu.basket_summ
             },
         },
         async mounted() {
