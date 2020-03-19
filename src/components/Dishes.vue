@@ -48,6 +48,77 @@
                             </div>
                         </div>
                     </div>
+                    <Weekdays class="week-mob"></Weekdays>
+                    <swipe-list
+                            ref="list"
+                            class="dish-mobile"
+                            :items="categories.dishes"
+                    >
+                        <template v-slot="{item, index, revealed}">
+                            <!-- item is the corresponding object from the array -->
+                            <!-- index is clearly the index -->
+                            <!-- revealLeft is method which toggles the left side -->
+                            <!-- revealRight is method which toggles the right side -->
+                            <!-- close is method which closes an opened side -->
+                            <div ref="content" class="card-content" :data-categoryIndex="categoryIndex" :data-revealed="revealed"
+                                 @click="closeContent(categoryIndex)">
+                                <div class="dish-mobile-img">
+                                    <img :src="item.image">
+                                </div>
+                                <div class="dish-mobile-text">
+                                    <div class="dish-mobile-text-disc">
+                                        {{ item.name }}
+                                    </div>
+                                    <div class="dish-mobile-text-prelude">
+                                        {{ item.description}}
+                                    </div>
+                                </div>
+                                <div class="dish-mobile-price">
+                                    <div class="dish-mobile-price-grams">
+                                        {{ item.weight }} г.
+                                    </div>
+                                    <div class="dish-mobile-price-price">
+                                        {{ item.price }} ₽
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                        <template v-slot:left="{ item, close, index }">
+                            <div class="swipeout-action dish-mobile-add" @click="delDish(index)">
+                                <div class="dish-mobile-add-dish">
+                                    <img src="../assets/img/cartMobile.svg">
+                                    <div>ДОБАВИТЬ</div>
+                                </div>
+                            </div>
+                            <div class="swipeout-action dish-mobile-black-add" @click="delDish(index)"
+                                 v-if="black_list">
+                                <div class="dish-mobile-black-add-dish">
+                                    <img src="../assets/img/blackListAdd.svg">
+                                    <div>ЧЕРНЫЙ СПИСОК</div>
+                                </div>
+                            </div>
+                        </template>
+                        <template v-slot:right="{ item, close, index }">
+                            <div class="swipeout-action dish-mobile-black-delete" @click="delDish(index)"
+                                 v-if="black_list">
+                                <div class="dish-mobile-black-delete-dish">
+                                    <img src="../assets/img/blackListDelete.svg">
+                                    <div>ЧЕРНЫЙ СПИСОК</div>
+                                </div>
+                            </div>
+                            <div class="swipeout-action dish-mobile-delete" @click="addDish(index)">
+                                <div class="dish-mobile-delete-dish">
+                                    <img src="../assets/img/delete.svg">
+                                    <div>УДАЛИТЬ</div>
+                                </div>
+                            </div>
+                        </template>
+                        <template v-slot:empty>
+                            <div>
+                                list is empty ( filtered or just empty )
+                            </div>
+                        </template>
+                    </swipe-list>
                 </div>
             </div>
             <div class="total-sum-container">
@@ -66,79 +137,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div>              <!-- Mobile version -->
-            <Weekdays class="week-mob"></Weekdays>
-            <swipe-list
-                    ref="list"
-                    class="dish-mobile"
-                    :items="todayMenu.categories.dishes"
-                    :revealed.sync="revealed"
-            >
-                <template v-slot="{item, index}">
-                    <!-- item is the corresponding object from the array -->
-                    <!-- index is clearly the index -->
-                    <!-- revealLeft is method which toggles the left side -->
-                    <!-- revealRight is method which toggles the right side -->
-                    <!-- close is method which closes an opened side -->
-                    <div ref="content" class="card-content" :data-indexItem="index" @click="closeContent">
-                        <div class="dish-mobile-img">
-                            <img :src="item.image">
-                        </div>
-                        <div class="dish-mobile-text">
-                            <div class="dish-mobile-text-disc">
-                                {{ item.name }}
-                            </div>
-                            <div class="dish-mobile-text-prelude">
-                                {{ item.description}}
-                            </div>
-                        </div>
-                        <div class="dish-mobile-price">
-                            <div class="dish-mobile-price-grams">
-                                {{ item.weight }} г.
-                            </div>
-                            <div class="dish-mobile-price-price">
-                                {{ item.price }} ₽
-                            </div>
-                        </div>
-                    </div>
-                </template>
-                <template v-slot:left="{ item, close, index }">
-                    <div class="swipeout-action dish-mobile-add" @click="delDish(index)">
-                        <div class="dish-mobile-add-dish">
-                            <img src="../assets/img/cartMobile.svg">
-                            <div>ДОБАВИТЬ</div>
-                        </div>
-                    </div>
-                    <div class="swipeout-action dish-mobile-black-add" @click="delDish(index)" v-if="black_list">
-                        <div class="dish-mobile-black-add-dish">
-                            <img src="../assets/img/blackListAdd.svg">
-                            <div>ЧЕРНЫЙ СПИСОК</div>
-                        </div>
-                    </div>
-                </template>
-                <template v-slot:right="{ item, close, index }">
-                    <div class="swipeout-action dish-mobile-black-delete" @click="delDish(index)" v-if="black_list">
-                        <div class="dish-mobile-black-delete-dish">
-                            <img src="../assets/img/blackListDelete.svg">
-                            <div>ЧЕРНЫЙ СПИСОК</div>
-                        </div>
-                    </div>
-                    <div class="swipeout-action dish-mobile-delete" @click="addDish(index)">
-                        <div class="dish-mobile-delete-dish">
-                            <img src="../assets/img/delete.svg">
-                            <div>УДАЛИТЬ</div>
-                        </div>
-                    </div>
-                </template>
-                <template v-slot:empty>
-                    <div>
-                        list is empty ( filtered or just empty )
-                    </div>
-                </template>
-            </swipe-list>
-
         </div>
     </div>
 </template>
