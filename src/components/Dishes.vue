@@ -244,6 +244,8 @@
                     return []
                 }
             },
+
+            // Юля добавила moneyLeft
             moneyLeft() {
                 return this.todayMenu.basket_summ >= this.todayMenu.basket_summ_limit ?
                 this.todayMenu.basket_summ - this.todayMenu.basket_summ_limit :
@@ -661,6 +663,7 @@
         }
     }
 
+// Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
     @media (max-width: 790px) {
         .category-name {
             width: 85%;
@@ -901,7 +904,7 @@ input:checked + .slider:before {
     }
 }
 
-
+// Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
 
 @media (max-width: 620px) {
     .container .week {
@@ -1012,7 +1015,7 @@ input:checked + .slider:before {
                 }
             }
         }
-
+// Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
     @media (max-width: 440px) {
         .container .week {
             margin-bottom: 0;
@@ -1119,6 +1122,7 @@ input:checked + .slider:before {
             }
         }
     }
+    
 @media (max-width: 360px) {
         /* плашка внизу страницы */
 
