@@ -48,7 +48,7 @@
                             </div>
                         </div>
                     </div>
-                    <Weekdays class="week-mob"></Weekdays>
+                    <!-- <Weekdays class="week-mob"></Weekdays> -->
                     <swipe-list
                             ref="list"
                             class="dish-mobile"
@@ -60,7 +60,9 @@
                             <!-- revealLeft is method which toggles the left side -->
                             <!-- revealRight is method which toggles the right side -->
                             <!-- close is method which closes an opened side -->
-                            <div ref="content" class="card-content" :data-categoryIndex="categoryIndex" :data-revealed="revealed"
+                            <div ref="content" class="card-content" 
+                                 :data-categoryIndex="categoryIndex" 
+                                 :data-revealed="revealed"
                                  @click="closeContent(categoryIndex)">
                                 <div class="dish-mobile-img">
                                     <img :src="item.image">
@@ -475,9 +477,9 @@
 
     }
 
-    .week-mob {
-        display: none !important;
-    }
+    // .week-mob {
+    //     display: none !important;
+    // }
 
     .container {
         display: flex;
@@ -660,13 +662,13 @@
         }
         .container {
             margin-top: 10px;
-            .week {
-                display: none;
-            }
+            // .week {
+            //     display: none;
+            // }
         }
-        .week-mob {
-            display: block !important;
-        }
+        // .week-mob {
+        //     display: block !important;
+        // }
         .dish-mobile {
             display: flex;
             .swipeout-action {
