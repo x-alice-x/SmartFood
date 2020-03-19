@@ -173,7 +173,7 @@
                 this.dishes.dishes[index].swipe = 'middle'
             },
             blackList() {
-
+                event.stopPropagation();    
                 if (this.button.text == "Добавить в черный список") {
                   this.button.text = "Убрать из черного списка";
                   }
