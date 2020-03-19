@@ -1,37 +1,144 @@
+/* eslint-disable vue/valid-v-on */
 <template>
     <div class="dishes">
         <div class="container">
             <Weekdays class="week"></Weekdays>
-            <div class="dish-main">
-                <div class="dish" v-for="(dish, index) in dishes.dishes" :key="index"
-                     @click="buyDish(dishes.id, dish.id, index)">
-                    <div class="dish-top">
-                        <div class="dish-img" :style="{'background-image': `url(${dish.image})`}"></div>
-                    </div>
-                    <div class="dish-middle">
-                        <div class="dish-name">
-                            {{ dish.name }}
-                        </div>
-                        <div v-if="dish.inEmployeeBasket === 0" class="dish-descr">{{dish.description}}</div>
-                        <div class="dish-add" v-if="dish.inEmployeeBasket > 0">
-                            <button>
-                                <img src="../assets/img/minus.svg" @click="deleteDish(dishes.id, dish.id, index)">
-                            </button>
-                            <div class="dish-amount">
-                                <div class="dish-amount-color">
-                                    {{dish.inEmployeeBasket}}
+            <div class="dish-category" v-for="(categories, categoryIndex) in todayMenu.categories" :key="categoryIndex">
+                <h3 class="category-name">{{categories.name}}</h3>
+                <div class="dish-main" id="blacklisted">
+                    <div class="dish" :class="{ active: index === activeItem}"
+                         v-for="(dish, index) in categories.dishes" :key="index"
+                         @click="buyDish(todayMenu.id, dish.id, index, categoryIndex)">
+                        <div class="dish-top">
+                            <div class="dish-img" :style="{'background-image': `url(${dish.image})`}">
+                                <div class="black-list-container">
+                                    <img class="black-list" src="../assets/img/dots.svg"/>
+                                </div>
+                                <div id="black-list-content">
+                                    <button v-if="!dish.in_blacklist"
+                                            @click="blackListChange(todayMenu.id, dish.id, index, categoryIndex)">
+                                        Добавить в черный список
+                                    </button>
+                                    <button v-if="dish.in_blacklist"
+                                            @click="blackListChange(todayMenu.id, dish.id, index, categoryIndex)">
+                                        Удалить из черного списка
+                                    </button>
                                 </div>
                             </div>
-                            <button>
-                                <img src="../assets/img/plus.svg" @click="buyDishOnPlus(dishes.id, dish.id, index)">
-                            </button>
+                        </div>
+                        <div class="dish-middle">
+                            <div class="dish-name">
+                                {{ dish.name }}
+                            </div>
+                            <div v-if="dish.in_basket_count === 0" class="dish-descr">{{dish.description}}</div>
+                            <div class="dish-add" v-if="dish.in_basket_count > 0">
+                                <button>
+                                    <img src="../assets/img/minus.svg"
+                                         @click="deleteDish(todayMenu.id, dish.id, index, categoryIndex)">
+                                </button>
+                                <div class="dish-amount">
+                                    <div class="dish-amount-color">
+                                        {{dish.in_basket_count}}
+                                    </div>
+                                </div>
+                                <button>
+                                    <img src="../assets/img/plus.svg"
+                                         @click="buyDishOnPlus(todayMenu.id, dish.id, index, categoryIndex)">
+                                </button>
+                            </div>
+                        </div>
+                        <div class="dish-bottom">
+                            <div class="dish-typ">
+                                <a>{{ dish.price.replace(/.00/, '') }} Р</a>
+                                <a>{{ dish.weight }} г.</a>
+                            </div>
                         </div>
                     </div>
-                    <div class="dish-bottom">
-                        <div class="dish-typ">
-                            <a>{{ dish.price.replace(/.00/, '') }} Р</a>
-                            <a>{{ dish.weight }} г.</a>
-                        </div>
+                    <swipe-list
+                            ref="list"
+                            class="dish-mobile"
+                            :items="categories.dishes"
+                    >
+                        <template v-slot="{item, index, revealed}">
+                            <!-- item is the corresponding object from the array -->
+                            <!-- index is clearly the index -->
+                            <!-- revealLeft is method which toggles the left side -->
+                            <!-- revealRight is method which toggles the right side -->
+                            <!-- close is method which closes an opened side -->
+                            <div ref="content" class="card-content" :data-categoryIndex="categoryIndex" :data-revealed="revealed"
+                                 @click="closeContent(categoryIndex)">
+                                <div class="dish-mobile-img">
+                                    <img :src="item.image">
+                                </div>
+                                <div class="dish-mobile-text">
+                                    <div class="dish-mobile-text-disc">
+                                        {{ item.name }}
+                                    </div>
+                                    <div class="dish-mobile-text-prelude">
+                                        {{ item.description}}
+                                    </div>
+                                </div>
+                                <div class="dish-mobile-price">
+                                    <div class="dish-mobile-price-grams">
+                                        {{ item.weight }} г.
+                                    </div>
+                                    <div class="dish-mobile-price-price">
+                                        {{ item.price }} ₽
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                        <template v-slot:left="{ item, close, index }">
+                            <div class="swipeout-action dish-mobile-add" @click="delDish(index)">
+                                <div class="dish-mobile-add-dish">
+                                    <img src="../assets/img/cartMobile.svg">
+                                    <div>ДОБАВИТЬ</div>
+                                </div>
+                            </div>
+                            <div class="swipeout-action dish-mobile-black-add" @click="delDish(index)"
+                                 v-if="black_list">
+                                <div class="dish-mobile-black-add-dish">
+                                    <img src="../assets/img/blackListAdd.svg">
+                                    <div>ЧЕРНЫЙ СПИСОК</div>
+                                </div>
+                            </div>
+                        </template>
+                        <template v-slot:right="{ item, close, index }">
+                            <div class="swipeout-action dish-mobile-black-delete" @click="delDish(index)"
+                                 v-if="black_list">
+                                <div class="dish-mobile-black-delete-dish">
+                                    <img src="../assets/img/blackListDelete.svg">
+                                    <div>ЧЕРНЫЙ СПИСОК</div>
+                                </div>
+                            </div>
+                            <div class="swipeout-action dish-mobile-delete" @click="addDish(index)">
+                                <div class="dish-mobile-delete-dish">
+                                    <img src="../assets/img/delete.svg">
+                                    <div>УДАЛИТЬ</div>
+                                </div>
+                            </div>
+                        </template>
+                        <template v-slot:empty>
+                            <div>
+                                list is empty ( filtered or just empty )
+                            </div>
+                        </template>
+                    </swipe-list>
+                </div>
+            </div>
+            <div class="total-sum-container">
+                <div class="total-sum">
+                    <div class="total-container">
+                        <p class="money-spent">{{todayMenu.basket_summ}}р</p>
+                        <img class="cart-icon" src="../assets/img/cart_white.svg"/>
+                        <p class="money-left">{{todayMenu.basket_summ - todayMenu.basket_summ_limit}}p</p>
+                    </div>
+                    <div class="show-black-listed">
+                        <label class="switch">
+                            <input type="checkbox" @click="blackListMenuChange">
+                            <span class="slider round"></span>
+                        </label>
+                        <p>Черный список</p>
                     </div>
                 </div>
             </div>
@@ -39,80 +146,83 @@
 
         <div>              <!-- Mobile version -->
             <Weekdays class="week-mob"></Weekdays>
-            <swipe-list
-                    ref="list"
-                    class="dish-mobile"
-                    :items="dishes.dishes"
-                    :revealed.sync="revealed"
-            >
-                <template v-slot="{item, index}">
-                    <!-- item is the corresponding object from the array -->
-                    <!-- index is clearly the index -->
-                    <!-- revealLeft is method which toggles the left side -->
-                    <!-- revealRight is method which toggles the right side -->
-                    <!-- close is method which closes an opened side -->
-                    <div ref="content" class="card-content" :data-indexItem="index" @click="closeContent">
-                        <div class="dish-mobile-img">
-                            <img :src="item.image">
-                        </div>
-                        <div class="dish-mobile-text">
-                            <div class="dish-mobile-text-disc">
-                                {{ item.name }}
-                            </div>
-                            <div class="dish-mobile-text-prelude">
-                                {{ item.description}}
-                            </div>
-                        </div>
-                        <div class="dish-mobile-price">
-                            <div class="dish-mobile-price-grams">
-                                {{ item.weight }} г.
-                            </div>
-                            <div class="dish-mobile-price-price">
-                                {{ item.price }} ₽
-                            </div>
-                        </div>
-                    </div>
-                </template>
-                <template v-slot:left="{ item, close, index }" class="disableZIndex">
-                    <div class="swipeout-action dish-mobile-add" @click="delDish(index)">
-                        <div class="dish-mobile-add-dish">
-                            <img src="../assets/img/cartMobile.svg">
-                            <div>ДОБАВИТЬ</div>
-                        </div>
-                    </div>
-                    <div class="swipeout-action dish-mobile-black-add" @click="delDish(index)" v-if="blackList">
-                        <div class="dish-mobile-black-add-dish">
-                            <img src="../assets/img/blackListAdd.svg">
-                            <div>ЧЕРНЫЙ СПИСОК</div>
-                        </div>
-                    </div>
-                </template>
-                <template v-slot:right="{ item, close, index }">
-                    <div class="swipeout-action dish-mobile-black-delete" @click="delDish(index)" v-if="blackList">
-                        <div class="dish-mobile-black-delete-dish">
-                            <img src="../assets/img/blackListDelete.svg">
-                            <div>ЧЕРНЫЙ СПИСОК</div>
-                        </div>
-                    </div>
-                    <div class="swipeout-action dish-mobile-delete" @click="addDish(index)">
-                        <div class="dish-mobile-delete-dish">
-                            <img src="../assets/img/delete.svg">
-                            <div>УДАЛИТЬ</div>
-                        </div>
-                    </div>
-                </template>
-                <template v-slot:empty>
-                    <div>
-                        list is empty ( filtered or just empty )
-                    </div>
-                </template>
-            </swipe-list>
+            <!--            <div class="dish-category" v-for="(categories, categoryIndex) in todayMenu.categories" :key="categoryIndex">-->
+            <!--                <h3 class="category-name">{{categories.name}}</h3>-->
+            <!--                <swipe-list-->
+            <!--                        ref="list"-->
+            <!--                        class="dish-mobile"-->
+            <!--                        :items="categories.dishes"-->
+            <!--                        :revealed.sync="revealed"-->
+            <!--                >-->
+            <!--                    <template v-slot="{item, index}">-->
+            <!--                        &lt;!&ndash; item is the corresponding object from the array &ndash;&gt;-->
+            <!--                        &lt;!&ndash; index is clearly the index &ndash;&gt;-->
+            <!--                        &lt;!&ndash; revealLeft is method which toggles the left side &ndash;&gt;-->
+            <!--                        &lt;!&ndash; revealRight is method which toggles the right side &ndash;&gt;-->
+            <!--                        &lt;!&ndash; close is method which closes an opened side &ndash;&gt;-->
+            <!--                        <div ref="content" class="card-content" :data-indexItem="index" @click="closeContent(categoryIndex)">-->
+            <!--                            <div class="dish-mobile-img">-->
+            <!--                                <img :src="item.image">-->
+            <!--                            </div>-->
+            <!--                            <div class="dish-mobile-text">-->
+            <!--                                <div class="dish-mobile-text-disc">-->
+            <!--                                    {{ item.name }}-->
+            <!--                                </div>-->
+            <!--                                <div class="dish-mobile-text-prelude">-->
+            <!--                                    {{ item.description}}-->
+            <!--                                </div>-->
+            <!--                            </div>-->
+            <!--                            <div class="dish-mobile-price">-->
+            <!--                                <div class="dish-mobile-price-grams">-->
+            <!--                                    {{ item.weight }} г.-->
+            <!--                                </div>-->
+            <!--                                <div class="dish-mobile-price-price">-->
+            <!--                                    {{ item.price }} ₽-->
+            <!--                                </div>-->
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                    </template>-->
+            <!--                    <template v-slot:left="{ item, close, index }" class="disableZIndex">-->
+            <!--                        <div class="swipeout-action dish-mobile-add" @click="delDish(index)">-->
+            <!--                            <div class="dish-mobile-add-dish">-->
+            <!--                                <img src="../assets/img/cartMobile.svg">-->
+            <!--                                <div>ДОБАВИТЬ</div>-->
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                        <div class="swipeout-action dish-mobile-black-add" @click="delDish(index)" v-if="black_list">-->
+            <!--                            <div class="dish-mobile-black-add-dish">-->
+            <!--                                <img src="../assets/img/blackListAdd.svg">-->
+            <!--                                <div>ЧЕРНЫЙ СПИСОК</div>-->
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                    </template>-->
+            <!--                    <template v-slot:right="{ item, close, index }">-->
+            <!--                        <div class="swipeout-action dish-mobile-black-delete" @click="delDish(index)" v-if="black_list">-->
+            <!--                            <div class="dish-mobile-black-delete-dish">-->
+            <!--                                <img src="../assets/img/blackListDelete.svg">-->
+            <!--                                <div>ЧЕРНЫЙ СПИСОК</div>-->
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                        <div class="swipeout-action dish-mobile-delete" @click="addDish(index)">-->
+            <!--                            <div class="dish-mobile-delete-dish">-->
+            <!--                                <img src="../assets/img/delete.svg">-->
+            <!--                                <div>УДАЛИТЬ</div>-->
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                    </template>-->
+            <!--                    <template v-slot:empty>-->
+            <!--                        <div>-->
+            <!--                            list is empty ( filtered or just empty )-->
+            <!--                        </div>-->
+            <!--                    </template>-->
+            <!--                </swipe-list>-->
+            <!--            </div>-->
+            <!--            </div>-->
         </div>
     </div>
 </template>
 
 <script>
-
     import {SwipeList} from 'vue-swipe-actions';
     import 'vue-swipe-actions/dist/vue-swipe-actions.css';
     import Weekdays from './Weekdays'
@@ -121,12 +231,17 @@
     export default {
         data() {
             return {
-                revealed: {},
+                activeItem: null,
+                button: {
+                    text: 'Добавить в черный список'
+                },
+                revealed: '',
                 zak: 0,
                 currentIndex: 0,
                 downX: 0,
                 upX: 0,
-                blackList: false
+                black_list: false,
+                blackListShow: 0
             };
         },
         components: {
@@ -135,39 +250,38 @@
         },
         methods: {
             // Добавление блюда
-            buyDish(menu_id, dish_id, index) {
-                if (this.dishes.dishes[index].inEmployeeBasket === 0) {
+            buyDish(menu_id, dish_id, index, categoryIndex) {
+                if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count === 0) {
                     this.$store.dispatch("OrderDish", {menu_id, dish_id});
-                    this.dishes.dishes[index].inEmployeeBasket++
+                    this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++
+                    this.todayMenu.basket_summ = this.todayMenu.basket_summ
+                        + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
                 }
                 event.stopPropagation()
             },
-            buyDishOnPlus(menu_id, dish_id, index) {
+            buyDishOnPlus(menu_id, dish_id, index, categoryIndex) {
                 this.$store.dispatch("OrderDish", {menu_id, dish_id});
-                this.dishes.dishes[index].inEmployeeBasket++
+                this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++
+                this.todayMenu.basket_summ = this.todayMenu.basket_summ
+                    + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
                 event.stopPropagation()
             },
             // Удаление блюда
-            deleteDish(menu_id, dish_id, index) {
+            deleteDish(menu_id, dish_id, index, categoryIndex) {
                 this.$store.dispatch("DeleteDish", {menu_id, dish_id});
-                this.dishes.dishes[index].inEmployeeBasket--
+                if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count != 0) {
+                    this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count--
+                    this.todayMenu.basket_summ = this.todayMenu.basket_summ
+                        - parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
+                }
                 event.stopPropagation()
             },
-            // Удаление блюда по свайпу
-            onSwipeLeft(index, menu_id, dish_id) {
-                this.$store.dispatch("DeleteDish", {menu_id, dish_id});
-                if (this.dishes.dishes[index].inEmployeeBasket > 0) {
-                    this.dishes.dishes[index].inEmployeeBasket--
+            blackList() {
+                if (this.button.text == "Добавить в черный список") {
+                    this.button.text = "Убрать из черного списка";
+                } else if (this.button.text == "Убрать из черного списка") {
+                    this.button.text = "Добавить в черный список";
                 }
-                this.dishes.dishes[index].swipe = 'left'
-                setTimeout(this.setSwipeMiddle, 200, index)
-            },
-            // Добавление блюда по свайпу
-            onSwipeRight(index, menu_id, dish_id) {
-                this.$store.dispatch("OrderDish", {menu_id, dish_id});
-                this.dishes.dishes[index].inEmployeeBasket++
-                this.dishes.dishes[index].swipe = 'right'
-                setTimeout(this.setSwipeMiddle, 200, index)
             },
             addDish(index) {
                 console.log(index)
@@ -180,16 +294,29 @@
                 this.zak--;
                 console.log('У вас блюд: ' + this.zak)
             },
-            closeContent() {
-                this.$refs.list.close()
-                this.blackList = false
+            closeContent(index) {
+                this.$refs.list[index].close()
+                this.black_list = false
+            },
+            blackListChange(menu_id, dish_id, index, categoryIndex) {
+                let whichFunc = this.todayMenu.categories[categoryIndex].dishes[index].in_blacklist
+                this.$store.dispatch("BlackListChange", {menu_id, dish_id, whichFunc});
+                this.todayMenu.categories[categoryIndex].dishes[index].in_blacklist = !whichFunc
+                if (!whichFunc) {
+                    this.todayMenu.categories[categoryIndex].dishes.splice(index, 1)
+                }
+                event.stopPropagation()
+            },
+            blackListMenuChange() {
+                this.blackListShow = !this.blackListShow
+                this.blackListShow ? this.$store.dispatch("fetchMenu", 0) : this.$store.dispatch("fetchMenu", 1)
             }
+
         },
         computed: {
-            dishes() {
-                if (this.$store.getters.currentDishes) {
-                    console.log(this.$store.getters.currentDishes)
-                    return this.$store.getters.currentDishes
+            todayMenu() {
+                if (this.$store.getters.todayMenu) {
+                    return this.$store.getters.todayMenu
                 } else {
                     return []
                 }
@@ -201,36 +328,37 @@
             if (this.$store.getters.getError) {
                 await this.$store.dispatch("SetNotAuth");
                 await this.$store.dispatch("ClearCookies");
-                this.$router.push('/signin');
+                this.$router.push('/');
             }
             $(document).on("touchstart  mousedown", ".card-content", function (event) {
-                self.currentIndex = event.currentTarget.dataset.indexitem;
+                self.currentIndex = event.currentTarget.dataset.categoryindex;
                 self.downX = event.changedTouches[0].clientX;
-                this.blackList = false;
+                this.black_list = false;
             });
             $(document).on("touchend  mouseup", ".card-content", function (event) {
                 self.upX = event.changedTouches[0].clientX;
+                self.revealed = event.currentTarget.dataset.revealed;
             })
         },
         watch: {
             upX: function () {
                 /* Это отработка уже на эвенты, тут логика длинных и коротких свайпов */
-                this.blackList = false; // убирает иконки черного листа
+                this.black_list = false; // убирает иконки черного листа
 
                 /* Длинный свайп */
                 if (Math.abs(this.upX - this.downX) >= 3 * window.screen.width / 4) {
-                    if (this.revealed[this.currentIndex] === 'right') {
+                    if (this.revealed === 'right') {
                         // в revealed пишется с какой стороны свайп ( структура такая " 'индекс item': left или right " )
-                        this.blackList = false;
+                        this.black_list = false;
                         console.log('right'); // ну и тут ставишь сам диспатч "справа удаление"
-                        this.$refs.list.close() // эвент закрывающий окна
-                    } else if (this.revealed[this.currentIndex] === 'left') {
-                        this.blackList = false;
+                        this.$refs.list[this.currentIndex].close() // эвент закрывающий окна
+                    } else if (this.revealed === 'left') {
+                        this.black_list = false;
                         console.log('left'); // тут ставишь диспатч "слева добавление"
-                        this.$refs.list.close()
+                        this.$refs.list[this.currentIndex].close()
                     }
                 } /* Короткий свайп */ else {
-                    this.blackList = true // добавляет иконки черного листа
+                    this.black_list = true
                 }
             }
         },
@@ -241,8 +369,195 @@
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
 
+    // категории
+
+    .category-name {
+        font-size: 36px;
+        color: #000;
+        margin-left: 2%;
+        margin-bottom: 2%;
+    }
+
+    /* контейнер для кнопочки открывающей кнопку чс */
+    .black-list-container {
+        width: 100%;
+        height: auto;
+        padding: 10px 20px 10px 0;
+        background: transparent;
+        display: flex;
+        justify-content: flex-end;
+
+        .black-list {
+            width: 60px;
+            height: 20px;
+            cursor: pointer;
+        }
+    }
+
+    /* сама кнопка чс */
+    #black-list-content {
+        display: none;
+        position: absolute;
+        width: 100%;
+        z-index: 1;
+    }
+
+    #black-list-content button {
+        width: 90%;
+        cursor: pointer;
+        outline: none;
+        border: none;
+        background: #fff;
+        color: #460B79;
+        opacity: .8;
+        margin: 0 5%;
+        min-height: 45px;
+        transition: 0.3s;
+        font-weight: 700;
+        font-size: 16px;
+        z-index: 2;
+    }
+
+    .black-list-container:hover + #black-list-content, #black-list-content:hover {
+        display: block;
+        z-index: 1;
+    }
+
+    #black-list-content button:hover {
+        opacity: 1;
+    }
+
+    /* класс, который делает карточки черно-белыми */
+
+    .is_blacklisted {
+        transition: .3s;
+        filter: grayscale(100%);
+    }
+
+    /* плашка внизу страницы */
+
+    .total-sum {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        height: 50px;
+        background: rgba(255, 255, 255, 0.5);
+        width: 100%;
+    }
+
+    .total-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        width: 300px;
+        background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
+        color: #fff;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        height: 50px;
+        padding: 0 20px;
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+
+        p {
+            font-size: 24px;
+        }
+    }
+
+    .cart-icon {
+        width: 30px;
+        height: 30px;
+    }
+
+    /* контейнер слайдера чс */
+
+    .show-black-listed {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        position: fixed;
+        right: 15%;
+        // transform: translateX(-50%);
+        z-index: 2;
+
+        p {
+            margin-left: 15px;
+            color: #000;
+            font-size: 18px;
+            font-weight: 700;
+        }
+    }
+
+    /* слайдер */
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        margin-left: 20px;
+        justify-content: center;
+        z-index: 2;
+    }
+
+    /* убрать дефолтный чекбокс */
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    /* слайдер для включения чс*/
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .3s;
+
+        &:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+        }
+    }
+
+    input:checked + .slider {
+        background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
+    }
+
+    input:checked + .slider:before {
+        transform: translateX(26px);
+    }
+
+    .slider.round {
+        border-radius: 30px;
+
+        &:before {
+            border-radius: 50%;
+        }
+    }
+
+
     .dishes {
         height: 600px;
+
     }
 
     .week-mob {
@@ -254,6 +569,7 @@
         flex-direction: column;
         justify-content: center;
         color: $font-color;
+        margin-bottom: 60px;
     }
 
     .dish-main {
@@ -332,6 +648,7 @@
             display: flex;
             justify-content: center;
 
+            alex
             button {
                 background: none;
                 border: none;
@@ -358,10 +675,6 @@
             background-repeat: no-repeat;
             background-position: center;
             background-size: cover;
-        }
-
-        &-bottom {
-
         }
 
         &-typ {
@@ -392,8 +705,43 @@
         }
     }
 
+
     .dish-mobile {
         display: none;
+    }
+
+    @media (max-width: 1110px) {
+        /* плашка внизу страницы */
+        .total-container {
+            width: 250px;
+        }
+
+        /* контейнер слайдера чс */
+        .show-black-listed {
+            right: 7%;
+        }
+    }
+
+    @media (max-width: 839px) {
+        /* плашка внизу страницы */
+
+        .total-sum {
+            flex-direction: column;
+        }
+        .container {
+            margin-bottom: 90px;
+        }
+
+        /* контейнер слайдера чс */
+
+        .show-black-listed {
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 60px;
+        }
+        .mobile-container {
+            margin-bottom: 90px;
+        }
     }
 
     @media (max-width: 790px) {
@@ -404,11 +752,16 @@
             margin-top: 10px;
 
             .week {
-                display: none;
+                /*display: none;*/
             }
         }
+
+        .dish-main {
+            justify-content: flex-start;
+        }
+
         .week-mob {
-            display: block !important;
+            /*display: block !important;*/
         }
 
         .dish-mobile {
@@ -568,7 +921,6 @@
                         font-weight: 200;
                         font-size: 18px;
                         line-height: 21px;
-
                         color: #000000;
                     }
                 }
@@ -579,7 +931,6 @@
 
                     .dish-mobile-price-grams {
                         height: 34px;
-
                         font-family: Roboto, sans-serif;
                         font-style: normal;
                         font-weight: 300;
@@ -588,13 +939,11 @@
                         display: flex;
                         align-items: center;
                         text-align: right;
-
                         color: #000000;
                     }
 
                     .dish-mobile-price-price {
                         height: 34px;
-
                         font-family: Roboto, sans-serif;
                         font-style: normal;
                         font-weight: bold;
@@ -603,7 +952,6 @@
                         display: flex;
                         align-items: center;
                         text-align: right;
-
                         color: #000000;
                     }
                 }
@@ -697,6 +1045,56 @@
     }
 
     @media (max-width: 360px) {
+        /* плашка внизу страницы */
+
+        .total-sum {
+            flex-direction: column;
+        }
+
+        .total-container {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            z-index: 2;
+        }
+
+        .cart-icon {
+            width: 30px;
+            height: 30px;
+        }
+
+        /* контейнер слайдера чс */
+
+        .show-black-listed {
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            z-index: 2;
+
+            p {
+                font-size: 16px;
+            }
+        }
+
+        /* слайдер */
+        .switch {
+            width: 50px;
+            height: 28px;
+        }
+
+        /* слайдер для включения чс*/
+        .slider {
+            &:before {
+                height: 22px;
+                width: 22px;
+                left: 3px;
+                bottom: 3px;
+            }
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(22px);
+        }
         .dish-mobile {
             &-middle {
                 &-about {
@@ -711,11 +1109,23 @@
                         padding-top: 5px;
                         font-size: 12px;
                     }
+
+                    // &-name{
+                    //     font-size: 16px;
+                    // }
+                    // &-desc{
+                    //     padding-top: 5px;
+                    //     font-size: 12px;
+                    // }
                 }
 
                 &-typ {
                     padding: 5px 10px 5px 0;
                 }
+
+                // &-typ{
+                //     padding: 5px 10px 5px 0;
+                // }
             }
         }
     }
