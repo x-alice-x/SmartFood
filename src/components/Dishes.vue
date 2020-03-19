@@ -172,7 +172,9 @@
                 this.dishes.dishes[index].swipe = 'middle'
             },
             blackList(index) {
+                event.stopPropagation()
                 if (this.activeItem == index){
+                  
                   document.getElementById('blacklisted').classList.toggle("is_blacklisted");
                 }
                 console.log(index)
@@ -183,6 +185,7 @@
                 else if (this.button.text == "Убрать из черного списка") {
                   this.button.text = "Добавить в черный список";
                   }
+                  
             }
         },
         computed: {
