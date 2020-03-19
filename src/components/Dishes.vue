@@ -2,73 +2,78 @@
 <template>
     <div class="dishes">
         <div class="container">
-           <Weekdays class="week"></Weekdays>
-           <div class="dish-category">
-               <h3 class="category-name" >название категории</h3>
-            <div class="dish-main" id="blacklisted" >
-            <div class="dish" :class="{highlight:dish.selected}" v-for="(dish, index) in dishes.dishes" :key="index" @click="buyDish(dishes.id, dish.id, index)" >
-                <div class="dish-top"> 
-                    <div class="dish-img" :style="{'background-image': `url(${dish.image})`}">
-                        <div class="black-list-container">
-                             <img class="black-list" src="../assets/img/dots.svg" />
-                        </div>
-                        <div id="black-list-content">
-                            <button id="add-to-list" @click="blackList(); $set(dish, 'selected', !dish.selected)">{{button.text}}</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="dish-middle">
-                    <div class="dish-name">
-                        {{ dish.name }}
-                    </div>
-                    <div v-if="dish.in_basket_count === 0" class="dish-descr">{{dish.description}}</div>
-                    <div class="dish-add" v-if="dish.in_basket_count > 0">
-                        <button>
-                            <img src="../assets/img/minus.svg" @click="deleteDish(dishes.id, dish.id, index)">
-                        </button>
-                        <div class="dish-amount">
-                            <div class="dish-amount-color">
-                                {{dish.in_basket_count}}
+            <Weekdays class="week"></Weekdays>
+            <div class="dish-category" v-for="(categories, categoryIndex) in todayMenu.categories" :key="categoryIndex">
+                <h3 class="category-name">{{categories.name}}</h3>
+                <div class="dish-main" id="blacklisted">
+                    <div class="dish" :class="{ active: index === activeItem}"
+                         v-for="(dish, index) in categories.dishes" :key="index"
+                         @click="buyDish(todayMenu.id, dish.id, index, categoryIndex)">
+                        <div class="dish-top">
+                            <div class="dish-img" :style="{'background-image': `url(${dish.image})`}">
+                                <div class="black-list-container">
+                                    <img class="black-list" src="../assets/img/dots.svg"/>
+                                </div>
+                                <div id="black-list-content">
+                                    <button v-if="!dish.in_blacklist" @click="blackListChange(todayMenu.id, dish.id, index, categoryIndex)">Добавить в черный список</button>
+                                    <button v-if="dish.in_blacklist" @click="blackListChange(todayMenu.id, dish.id, index, categoryIndex)">Удалить из черного списка</button>
+                                </div>
                             </div>
                         </div>
-                        <button>
-                            <img src="../assets/img/plus.svg" @click="buyDishOnPlus(dishes.id, dish.id, index)">
-                        </button>
-                    </div>
-                </div>
-                <div class="dish-bottom">
-                    <div class="dish-typ">
-                        <a>{{ dish.price.replace(/.00/, '') }} Р</a>
-                        <a>{{ dish.weight }} г.</a>
+                        <div class="dish-middle">
+                            <div class="dish-name">
+                                {{ dish.name }}
+                            </div>
+                            <div v-if="dish.in_basket_count === 0" class="dish-descr">{{dish.description}}</div>
+                            <div class="dish-add" v-if="dish.in_basket_count > 0">
+                                <button>
+                                    <img src="../assets/img/minus.svg"
+                                         @click="deleteDish(todayMenu.id, dish.id, index, categoryIndex)">
+                                </button>
+                                <div class="dish-amount">
+                                    <div class="dish-amount-color">
+                                        {{dish.in_basket_count}}
+                                    </div>
+                                </div>
+                                <button>
+                                    <img src="../assets/img/plus.svg"
+                                         @click="buyDishOnPlus(todayMenu.id, dish.id, index, categoryIndex)">
+                                </button>
+                            </div>
+                        </div>
+                        <div class="dish-bottom">
+                            <div class="dish-typ">
+                                <a>{{ dish.price.replace(/.00/, '') }} Р</a>
+                                <a>{{ dish.weight }} г.</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+            <div class="total-sum-container">
+                <div class="total-sum">
+                    <div class="total-container">
+                        <p class="money-spent">{{todayMenu.basket_summ}}р</p>
+                        <img class="cart-icon" src="../assets/img/cart_white.svg"/>
+                        <p class="money-left">{{todayMenu.basket_summ - todayMenu.basket_summ_limit}}p</p>
+                    </div>
+                    <div class="show-black-listed">
+                        <label class="switch">
+                            <input type="checkbox" @click="blackListMenuChange">
+                            <span class="slider round"></span>
+                        </label>
+                        <p>Черный список</p>
+                    </div>
+                </div>
             </div>
         </div>
-    <div class="total-sum-container">
-        <div class="total-sum">
-            <div class="total-container">
-                <p class="money-spent">150p</p>
-                <img class="cart-icon" src="../assets/img/cart_white.svg" />
-                <p class="money-left">50p</p>
-            </div>
-            <div class="show-black-listed">
-                <label class="switch">
-                  <input type="checkbox">
-                  <span class="slider round"></span>
-                </label>
-                <p>Черный список</p>
-            </div>
-      </div>
-    </div>
-      </div>
 
         <div>              <!-- Mobile version -->
             <Weekdays class="week-mob"></Weekdays>
             <swipe-list
                     ref="list"
                     class="dish-mobile"
-                    :items="dishes.dishes"
+                    :items="todayMenu.categories.dishes"
                     :revealed.sync="revealed"
             >
                 <template v-slot="{item, index}">
@@ -133,12 +138,12 @@
                     </div>
                 </template>
             </swipe-list>
+
         </div>
     </div>
 </template>
 
 <script>
-
     import {SwipeList} from 'vue-swipe-actions';
     import 'vue-swipe-actions/dist/vue-swipe-actions.css';
     import Weekdays from './Weekdays'
@@ -156,7 +161,8 @@
                 currentIndex: 0,
                 downX: 0,
                 upX: 0,
-                black_list: false
+                black_list: false,
+                blackListShow: 0
             };
         },
         components: {
@@ -165,43 +171,31 @@
         },
         methods: {
             // Добавление блюда
-            buyDish(menu_id, dish_id, index) {
-                if (this.dishes.dishes[index].in_basket_count === 0) {
+            buyDish(menu_id, dish_id, index, categoryIndex) {
+                if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count === 0) {
                     this.$store.dispatch("OrderDish", {menu_id, dish_id});
-                    this.dishes.dishes[index].in_basket_count++
+                    this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++
+                    this.todayMenu.basket_summ = this.todayMenu.basket_summ
+                        + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
                 }
                 event.stopPropagation()
             },
-            buyDishOnPlus(menu_id, dish_id, index) {
-                    this.$store.dispatch("OrderDish", {menu_id, dish_id});
-                this.dishes.dishes[index].in_basket_count++
+            buyDishOnPlus(menu_id, dish_id, index, categoryIndex) {
+                this.$store.dispatch("OrderDish", {menu_id, dish_id});
+                this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++
+                this.todayMenu.basket_summ = this.todayMenu.basket_summ
+                    + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
                 event.stopPropagation()
             },
             // Удаление блюда
-            deleteDish(menu_id, dish_id, index) {
+            deleteDish(menu_id, dish_id, index, categoryIndex) {
                 this.$store.dispatch("DeleteDish", {menu_id, dish_id});
-                this.dishes.dishes[index].in_basket_count--
-                event.stopPropagation()
-            },
-            // Удаление блюда по свайпу
-            onSwipeLeft(index, menu_id, dish_id) {
-                this.$store.dispatch("DeleteDish", {menu_id, dish_id});
-                if (this.dishes.dishes[index].in_basket_count > 0){
-                    this.dishes.dishes[index].in_basket_count--
+                if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count != 0) {
+                    this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count--
+                    this.todayMenu.basket_summ = this.todayMenu.basket_summ
+                        - parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
                 }
-                this.dishes.dishes[index].swipe = 'left'
-                setTimeout(this.setSwipeMiddle, 200, index)
-            },
-            // Добавление блюда по свайпу
-            onSwipeRight(index, menu_id, dish_id) {
-                this.$store.dispatch("OrderDish", {menu_id, dish_id});
-                this.dishes.dishes[index].in_basket_count++
-                this.dishes.dishes[index].swipe = 'right'
-                setTimeout(this.setSwipeMiddle, 200, index)
-            },
-            // Это нужно для свайпа обратно
-            setSwipeMiddle(index) {
-                this.dishes.dishes[index].swipe = 'middle'
+                event.stopPropagation()
             },
             blackList() {
 
@@ -226,13 +220,26 @@
             closeContent() {
                 this.$refs.list.close()
                 this.black_list = false
+            },                
+            blackListChange(menu_id, dish_id, index, categoryIndex) {
+                let whichFunc = this.todayMenu.categories[categoryIndex].dishes[index].in_blacklist
+                this.$store.dispatch("BlackListChange", {menu_id, dish_id, whichFunc});
+                this.todayMenu.categories[categoryIndex].dishes[index].in_blacklist = !whichFunc
+                if (!whichFunc){
+                    this.todayMenu.categories[categoryIndex].dishes.splice(index, 1)
+                }
+                event.stopPropagation()
+            },
+            blackListMenuChange() {
+                this.blackListShow = !this.blackListShow
+                this.blackListShow ? this.$store.dispatch("fetchMenu", 0) : this.$store.dispatch("fetchMenu", 1)
             }
             
         },
         computed: {
-            dishes() {
-                if (this.$store.getters.currentDishes){
-                    return this.$store.getters.currentDishes
+            todayMenu() {
+                if (this.$store.getters.todayMenu) {
+                    return this.$store.getters.todayMenu
                 } else {
                     return []
                 }
@@ -279,192 +286,195 @@
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
 
-// категории
+    // категории
 
-.category-name {
-    font-size: 36px;
-    color: #000;
-    margin-left: 2%;
-    margin-bottom: 2%;
-}
-
-/* контейнер для кнопочки открывающей кнопку чс */
-.black-list-container {
- width: 100%;
- height: auto;
- padding: 10px 20px 10px 0;
- background: transparent;
- display: flex;
- justify-content: flex-end;
-
-         .black-list {
-        width: 60px;
-        height: 20px;
-        cursor: pointer;
-         }
-}
-
-/* сама кнопка чс */    
-#black-list-content {
-  display: none;
-  position: absolute;
-  width: 100%;
-  z-index: 1;
-}
-
-#black-list-content button {
-width: 90%;
-cursor: pointer;
-outline: none;
-border: none;
-background:#fff;
-color: #460B79;
-opacity: .8;
-margin: 0 5%;
-min-height: 45px;
-transition: 0.3s;
-font-weight: 700;
-font-size: 16px;
-z-index: 2;
-}
-
-.black-list-container:hover + #black-list-content, #black-list-content:hover {
-  display: block;
-  z-index: 1;
-}
-
-#black-list-content button:hover {
-opacity: 1;
-}
-.highlight {
-    filter: grayscale(100%);
-    transition: .3s;
-}
-
-/* плашка внизу страницы */
-
-.total-sum {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    position: fixed;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    height: 50px; 
-    background: rgba(255, 255, 255, 0.5);
-    width: 100%;
-    z-index: 20;
-}
-
-.total-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    width: 300px;
-    background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
-    color: #fff;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    height: 50px; 
-    padding: 0 20px;
-    position: fixed;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-
-    p {
-        font-size: 24px;
-    }
-}
-
-.cart-icon {
-    width: 30px;
-    height: 30px;
-}
-
-/* контейнер слайдера чс */
-
-.show-black-listed {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    position: fixed;
-    right: 15%;
-    // transform: translateX(-50%);
-    z-index: 2;
-
-    p {
-        margin-left: 15px;
+    .category-name {
+        font-size: 36px;
         color: #000;
-        font-size: 18px;
-        font-weight: 700;
+        margin-left: 2%;
+        margin-bottom: 2%;
     }
-}
 
-/* слайдер */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  margin-left: 20px;
-  justify-content: center;
-  z-index: 2;
-}
-/* убрать дефолтный чекбокс */
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
+    /* контейнер для кнопочки открывающей кнопку чс */
+    .black-list-container {
+        width: 100%;
+        height: auto;
+        padding: 10px 20px 10px 0;
+        background: transparent;
+        display: flex;
+        justify-content: flex-end;
 
-/* слайдер для включения чс*/
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: .3s;
+        .black-list {
+            width: 60px;
+            height: 20px;
+            cursor: pointer;
+        }
+    }
 
-   &:before {
-      position: absolute;
-      content: "";
-      height: 26px;
-      width: 26px;
-      left: 3px;
-      bottom: 3px;
-      background-color: white;
-      transition: .3s;
-   }
-}
+    /* сама кнопка чс */
+    #black-list-content {
+        display: none;
+        position: absolute;
+        width: 100%;
+        z-index: 1;
+    }
 
-input:checked + .slider {
-  background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
-}
+    #black-list-content button {
+        width: 90%;
+        cursor: pointer;
+        outline: none;
+        border: none;
+        background: #fff;
+        color: #460B79;
+        opacity: .8;
+        margin: 0 5%;
+        min-height: 45px;
+        transition: 0.3s;
+        font-weight: 700;
+        font-size: 16px;
+        z-index: 2;
+    }
 
-input:checked + .slider:before {
-  transform: translateX(26px);
-}
+    .black-list-container:hover + #black-list-content, #black-list-content:hover {
+        display: block;
+        z-index: 1;
+    }
 
-.slider.round {
-  border-radius: 30px;
+    #black-list-content button:hover {
+        opacity: 1;
+    }
 
-  &:before {
-    border-radius: 50%;
-  }
-}
+    /* класс, который делает карточки черно-белыми */
+
+    .is_blacklisted {
+        transition: .3s;
+        filter: grayscale(100%);
+    }
+
+    /* плашка внизу страницы */
+
+    .total-sum {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        height: 50px;
+        background: rgba(255, 255, 255, 0.5);
+        width: 100%;
+    }
+
+    .total-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        width: 300px;
+        background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
+        color: #fff;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        height: 50px;
+        padding: 0 20px;
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+
+        p {
+            font-size: 24px;
+        }
+    }
+
+    .cart-icon {
+        width: 30px;
+        height: 30px;
+    }
+
+    /* контейнер слайдера чс */
+
+    .show-black-listed {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        position: fixed;
+        right: 15%;
+        // transform: translateX(-50%);
+        z-index: 2;
+
+        p {
+            margin-left: 15px;
+            color: #000;
+            font-size: 18px;
+            font-weight: 700;
+        }
+    }
+
+    /* слайдер */
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        margin-left: 20px;
+        justify-content: center;
+        z-index: 2;
+    }
+
+    /* убрать дефолтный чекбокс */
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    /* слайдер для включения чс*/
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .3s;
+
+        &:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+        }
+    }
+
+    input:checked + .slider {
+        background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
+    }
+
+    input:checked + .slider:before {
+        transform: translateX(26px);
+    }
+
+    .slider.round {
+        border-radius: 30px;
+
+        &:before {
+            border-radius: 50%;
+        }
+    }
 
 
-    .dishes{
+    .dishes {
         height: 600px;
-        
+
     }
 
     .week-mob {
@@ -483,6 +493,7 @@ input:checked + .slider:before {
         flex-wrap: wrap;
         justify-content: center;
     }
+
     .dish {
         width: 350px;
         display: flex;
@@ -498,6 +509,7 @@ input:checked + .slider:before {
         &:hover {
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
         }
+
         &-amount {
             width: 82px;
             height: 30px;
@@ -505,6 +517,7 @@ input:checked + .slider:before {
             border: 1px solid $font-color;
             border-radius: 10px;
             color: $font-color;
+
             &-color {
                 font-weight: 700;
                 font-size: 18px;
@@ -513,6 +526,7 @@ input:checked + .slider:before {
                 padding-top: 5px;
             }
         }
+
         &-middle {
             width: 100%;
             background: white;
@@ -522,6 +536,7 @@ input:checked + .slider:before {
             flex-direction: column;
             justify-content: space-between;
         }
+
         &-name {
             font-weight: 700;
             font-size: 22px;
@@ -531,6 +546,7 @@ input:checked + .slider:before {
             margin-right: auto;
             margin-left: auto;
         }
+
         &-descr {
             width: 90%;
             font-weight: 300;
@@ -541,15 +557,17 @@ input:checked + .slider:before {
             margin-top: 20px;
             padding-bottom: 20px;
         }
+
         &-add {
             padding-bottom: 20px;
             display: flex;
-            justify-content: center;
+            justify-content: center;alex
             button {
                 background: none;
                 border: none;
                 outline: none;
                 cursor: pointer;
+
                 img {
                     outline: none;
                     margin: 0 10px;
@@ -558,11 +576,13 @@ input:checked + .slider:before {
                 }
             }
         }
+
         &-top {
             height: 250px;
             position: relative;
             text-align: right;
         }
+
         &-img {
             height: 250px;
             background-repeat: no-repeat;
@@ -575,17 +595,20 @@ input:checked + .slider:before {
             align-items: center;
             background: $c-main;
             height: 60px;
+
             a {
                 z-index: 10;
                 font-weight: bold;
                 font-size: 30px;
                 line-height: 35px;
             }
+
             a:nth-child(2n) {
                 font-weight: 300;
                 font-size: 24px;
                 line-height: 28px;
             }
+
             /*&-background {*/
             /*    top: 0;*/
             /*    right: 0;*/
@@ -593,41 +616,46 @@ input:checked + .slider:before {
             /*}*/
         }
     }
-    .dish-mobile{display: none;}
+
+
+    .dish-mobile {
+        display: none;
+    }
 
     @media (max-width: 1110px) {
-/* плашка внизу страницы */
-       .total-container {
-         width: 250px;
+        /* плашка внизу страницы */
+        .total-container {
+            width: 250px;
         }
 
-/* контейнер слайдера чс */
-       .show-black-listed {
-         right: 7%;
+        /* контейнер слайдера чс */
+        .show-black-listed {
+            right: 7%;
         }
     }
-    
+
     @media (max-width: 839px) {
-/* плашка внизу страницы */
+        /* плашка внизу страницы */
 
-.total-sum {
-    flex-direction: column;
-}
-    .container {
-        margin-bottom: 90px;
+        .total-sum {
+            flex-direction: column;
+        }
+        .container {
+            margin-bottom: 90px;
+        }
+
+        /* контейнер слайдера чс */
+
+        .show-black-listed {
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 60px;
+        }
+        .mobile-container {
+            margin-bottom: 90px;
+        }
     }
 
-/* контейнер слайдера чс */
-
-.show-black-listed {
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 60px;
-  }
-  .mobile-container {
-      margin-bottom: 90px;
-  }
-}
     @media (max-width: 790px) {
         .dish {
             display: none;
@@ -856,6 +884,7 @@ input:checked + .slider:before {
             }
         }
     }
+
     @media (max-width: 420px) {
         .dish-mobile {
             &-middle {
@@ -940,8 +969,15 @@ input:checked + .slider:before {
                         padding-top: 5px;
                         font-size: 12px;
                     }
-                }
 
+                    // &-name{
+                    //     font-size: 16px;
+                    // }
+                    // &-desc{
+                    //     padding-top: 5px;
+                    //     font-size: 12px;
+                    // }
+                }
                 &-typ {
                     padding: 5px 10px 5px 0;
                 }
