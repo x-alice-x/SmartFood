@@ -128,7 +128,8 @@
                     <div class="total-container">
                         <p class="money-spent">{{todayMenu.basket_summ}}р</p>
                         <img class="cart-icon" src="../assets/img/cart_white.svg"/>
-                        <p class="money-left">{{moneyLeft}}p</p>
+                        <!-- Юля добавила ви байнд в р тэг ниже, не удалять -->
+                        <p class="money-left" v-bind:style="{'color' : (this.todayMenu.basket_summ >= this.todayMenu.basket_summ_limit ? '#ED2736':'#42D547')}">{{moneyLeft}}p</p>
                     </div>
                     <div class="show-black-listed">
                         <label class="switch">
@@ -247,6 +248,7 @@
 
             // Юля добавила moneyLeft
             moneyLeft() {
+
                 return this.todayMenu.basket_summ >= this.todayMenu.basket_summ_limit ?
                 this.todayMenu.basket_summ - this.todayMenu.basket_summ_limit :
                 this.todayMenu.basket_summ_limit - this.todayMenu.basket_summ
@@ -870,6 +872,10 @@
     font-size: 36px;
     font-weight: 700;
 }
+
+.money-left {
+    color: #42D547;
+}
 /* контейнер слайдера чс */
 
 .show-black-listed {
@@ -1122,7 +1128,7 @@ input:checked + .slider:before {
             }
         }
     }
-    
+
 @media (max-width: 360px) {
         /* плашка внизу страницы */
 
