@@ -23,7 +23,7 @@ export default {
             commit("CLEAR_ERROR");
             let requestParams = {}
             let dishes = []
-            const url = '/api/v2/food/menu'
+            const url = '/api/v1/food/menu'
             requestParams = {
                 url: url,
                 method: 'GET',

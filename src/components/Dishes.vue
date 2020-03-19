@@ -1,66 +1,67 @@
+/* eslint-disable vue/valid-v-on */
 <template>
     <div class="dishes">
         <div class="container">
            <Weekdays class="week"></Weekdays>
            <div class="dish-category">
                <h3 class="category-name" >название категории</h3>
-           </div>
-            <div class="dish-main" id="blacklisted">
-                <div class="dish" :class="{ active: index === activeItem}" v-for="(dish, index) in dishes.dishes" :key="index" @click="buyDish(dishes.id, dish.id, index)" >
-                    <div class="dish-top"> 
-                        <div class="dish-img" :style="{'background-image': `url(${dish.image})`}">
-                            <div class="black-list-container">
-                                <img class="black-list" src="../assets/img/dots.svg" />
-                            </div>
-                            <div id="black-list-content">
-                                <button id="add-to-list" @click="blackList(index)">{{button.text}}</button>
-                            </div>
+            <div class="dish-main" id="blacklisted" >
+            <div class="dish" :class="{highlight:dish.selected}" v-for="(dish, index) in dishes.dishes" :key="index" @click="buyDish(dishes.id, dish.id, index)" >
+                <div class="dish-top"> 
+                    <div class="dish-img" :style="{'background-image': `url(${dish.image})`}">
+                        <div class="black-list-container">
+                             <img class="black-list" src="../assets/img/dots.svg" />
                         </div>
-                    </div>
-                    <div class="dish-middle">
-                        <div class="dish-name">
-                            {{ dish.name }}
-                        </div>
-                        <div v-if="dish.in_basket_count === 0" class="dish-descr">{{dish.description}}</div>
-                        <div class="dish-add" v-if="dish.in_basket_count > 0">
-                            <button>
-                                <img src="../assets/img/minus.svg" @click="deleteDish(dishes.id, dish.id, index)">
-                            </button>
-                            <div class="dish-amount">
-                                <div class="dish-amount-color">
-                                    {{dish.in_basket_count}}
-                                </div>
-                                <button>
-                                    <img src="../assets/img/plus.svg" @click="buyDishOnPlus(dishes.id, dish.id, index)">
-                                </button>
-                            </div>
-                        </div>
-                        <div class="dish-bottom">
-                            <div class="dish-typ">
-                                <a>{{ dish.price.replace(/.00/, '') }} Р</a>
-                                <a>{{ dish.weight }} г.</a>
-                            </div>
+                        <div id="black-list-content">
+                            <button id="add-to-list" @click="blackList(); $set(dish, 'selected', !dish.selected)">{{button.text}}</button>
                         </div>
                     </div>
                 </div>
+                <div class="dish-middle">
+                    <div class="dish-name">
+                        {{ dish.name }}
+                    </div>
+                    <div v-if="dish.in_basket_count === 0" class="dish-descr">{{dish.description}}</div>
+                    <div class="dish-add" v-if="dish.in_basket_count > 0">
+                        <button>
+                            <img src="../assets/img/minus.svg" @click="deleteDish(dishes.id, dish.id, index)">
+                        </button>
+                        <div class="dish-amount">
+                            <div class="dish-amount-color">
+                                {{dish.in_basket_count}}
+                            </div>
+                        </div>
+                        <button>
+                            <img src="../assets/img/plus.svg" @click="buyDishOnPlus(dishes.id, dish.id, index)">
+                        </button>
+                    </div>
+                </div>
+                <div class="dish-bottom">
+                    <div class="dish-typ">
+                        <a>{{ dish.price.replace(/.00/, '') }} Р</a>
+                        <a>{{ dish.weight }} г.</a>
+                    </div>
+                </div>
+            </div>
             </div>
         </div>
-        <div class="total-sum-container">
-            <div class="total-sum">
-                <div class="total-container">
-                    <p class="money-spent">150p</p>
-                    <img class="cart-icon" src="../assets/img/cart_white.svg" />
-                    <p class="money-left">50p</p>
-                </div>
-                <div class="show-black-listed">
-                    <label class="switch">
-                    <input type="checkbox">
-                    <span class="slider round"></span>
-                    </label>
-                    <p>Черный список</p>
-                </div>
+    <div class="total-sum-container">
+        <div class="total-sum">
+            <div class="total-container">
+                <p class="money-spent">150p</p>
+                <img class="cart-icon" src="../assets/img/cart_white.svg" />
+                <p class="money-left">50p</p>
             </div>
-        </div>
+            <div class="show-black-listed">
+                <label class="switch">
+                  <input type="checkbox">
+                  <span class="slider round"></span>
+                </label>
+                <p>Черный список</p>
+            </div>
+      </div>
+    </div>
+      </div>
 
         <div>              <!-- Mobile version -->
             <Weekdays class="week-mob"></Weekdays>
@@ -202,12 +203,8 @@
             setSwipeMiddle(index) {
                 this.dishes.dishes[index].swipe = 'middle'
             },
-            blackList(index) {
-                if (this.activeItem == index){
-                  document.getElementById('blacklisted').classList.toggle("is_blacklisted");
-                }
-                console.log(index)
-                // document.getElementById('blacklisted').classList.toggle("is-blacklisted");
+            blackList() {
+
                 if (this.button.text == "Добавить в черный список") {
                   this.button.text = "Убрать из черного списка";
                   }
@@ -230,6 +227,7 @@
                 this.$refs.list.close()
                 this.black_list = false
             }
+            
         },
         computed: {
             dishes() {
@@ -338,12 +336,9 @@ z-index: 2;
 #black-list-content button:hover {
 opacity: 1;
 }
-
-/* класс, который делает карточки черно-белыми */
-
-.is_blacklisted {
-    transition: .3s;
+.highlight {
     filter: grayscale(100%);
+    transition: .3s;
 }
 
 /* плашка внизу страницы */
@@ -359,6 +354,7 @@ opacity: 1;
     height: 50px; 
     background: rgba(255, 255, 255, 0.5);
     width: 100%;
+    z-index: 20;
 }
 
 .total-container {
@@ -482,13 +478,11 @@ input:checked + .slider:before {
         color: $font-color;
         margin-bottom: 60px;
     }
-
     .dish-main {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
     }
-
     .dish {
         width: 350px;
         display: flex;
@@ -501,11 +495,9 @@ input:checked + .slider:before {
         overflow: hidden;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         transition: 0.3s;
-
         &:hover {
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
         }
-
         &-amount {
             width: 82px;
             height: 30px;
@@ -513,7 +505,6 @@ input:checked + .slider:before {
             border: 1px solid $font-color;
             border-radius: 10px;
             color: $font-color;
-
             &-color {
                 font-weight: 700;
                 font-size: 18px;
@@ -522,7 +513,6 @@ input:checked + .slider:before {
                 padding-top: 5px;
             }
         }
-
         &-middle {
             width: 100%;
             background: white;
@@ -532,7 +522,6 @@ input:checked + .slider:before {
             flex-direction: column;
             justify-content: space-between;
         }
-
         &-name {
             font-weight: 700;
             font-size: 22px;
@@ -542,7 +531,6 @@ input:checked + .slider:before {
             margin-right: auto;
             margin-left: auto;
         }
-
         &-descr {
             width: 90%;
             font-weight: 300;
@@ -553,18 +541,15 @@ input:checked + .slider:before {
             margin-top: 20px;
             padding-bottom: 20px;
         }
-
         &-add {
             padding-bottom: 20px;
             display: flex;
             justify-content: center;
-
             button {
                 background: none;
                 border: none;
                 outline: none;
                 cursor: pointer;
-
                 img {
                     outline: none;
                     margin: 0 10px;
@@ -573,13 +558,11 @@ input:checked + .slider:before {
                 }
             }
         }
-
         &-top {
             height: 250px;
             position: relative;
             text-align: right;
         }
-
         &-img {
             height: 250px;
             background-repeat: no-repeat;
@@ -592,20 +575,17 @@ input:checked + .slider:before {
             align-items: center;
             background: $c-main;
             height: 60px;
-
             a {
                 z-index: 10;
                 font-weight: bold;
                 font-size: 30px;
                 line-height: 35px;
             }
-
             a:nth-child(2n) {
                 font-weight: 300;
                 font-size: 24px;
                 line-height: 28px;
             }
-
             /*&-background {*/
             /*    top: 0;*/
             /*    right: 0;*/
@@ -654,32 +634,15 @@ input:checked + .slider:before {
         }
         .container {
             margin-top: 10px;
-
             .week {
                 display: none;
             }
         }
         .week-mob {
             display: block !important;
-            margin-bottom: 30px;
         }
         .dish-mobile {
-            position: relative;
-            position: relative;
-            color: $font-color;
-            display: grid;
-            // display: flex;
-            grid-template-columns: 15% 100% 15%;
-            overflow: hidden;
-            section {
-                height: 100px;
-            }
-            &-basket{
-                transition: 0.2s;
-                background: $c-main;
-                width: 100%;
-            }
-
+            display: flex;
             .swipeout-action {
                 display: flex;
                 align-items: center;
@@ -687,22 +650,18 @@ input:checked + .slider:before {
                 cursor: pointer;
                 left: 0;
             }
-
             .swipeout-action.dish-mobile-delete {
                 width: 220px;
                 height: 150px;
                 background: linear-gradient(90deg, #A60000 0%, #CE0000 100%), #FFFFFF;
-
                 .dish-mobile-delete-dish {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
                     width: 60px;
-
                     img {
                         width: 70px;
                     }
-
                     div {
                         margin-top: 5px;
                         font-family: Roboto, sans-serif;
@@ -713,24 +672,20 @@ input:checked + .slider:before {
                     }
                 }
             }
-
             .swipeout-action.dish-mobile-add {
                 display: flex;
                 justify-content: flex-end;
                 width: 220px;
                 height: 150px;
                 background: linear-gradient(90deg, #460B79 0%, #88267F 100%), #FFFFFF;
-
                 .dish-mobile-add-dish {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
                     width: 60px;
-
                     img {
                         width: 70px;
                     }
-
                     div {
                         margin-top: 5px;
                         font-family: Roboto, sans-serif;
@@ -741,67 +696,40 @@ input:checked + .slider:before {
                     }
                 }
             }
-
             .swipeout-action.dish-mobile-black-add {
                 width: 60px;
                 height: 150px;
                 background: linear-gradient(0deg, #F2EDF6, #F2EDF6), #FFFFFF;
-
                 .dish-mobile-black-add-dish {
                     display: flex;
-                    max-width: 80%;
-                    &-img {
-                        height: 100px;
-                        width: 125px;
-                        background-size: 125px; 
-                        background-position: center;
+                    flex-direction: column;
+                    align-items: center;
+                    width: 60px;
+                    img {
+                        width: 70px;
                     }
-                    &-text {
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: center;
-                        margin-left: 20px;
-                        max-width: 70%;
-                        &-name{
-                            font-weight: 700;
-                            font-size: 20px;
-                            line-height: 1;
-                        }
-                        &-desc{
-                            padding-top: 10px;
-                            font-weight: 300;
-                            font-size: 14px;
-                            line-height: 1;
-                        }
+                    div {
+                        margin-top: 5px;
+                        font-family: Roboto, sans-serif;
+                        font-style: normal;
+                        font-weight: 900;
+                        font-size: 18px;
+                        color: #460B79;
                     }
                 }
             }
-
             .swipeout-action.dish-mobile-black-delete {
                 width: 60px;
                 height: 150px;
                 background: linear-gradient(90deg, #000000 0%, rgba(0, 0, 0, 0.81) 100%), #FFFFFF;
-
                 .dish-mobile-black-delete-dish {
                     display: flex;
                     flex-direction: column;
-                    justify-content: space-between;
-                    // igor
                     align-items: center;
                     width: 60px;
-                    &-PW{
-                        display: flex;
-                        flex-direction: column;
-                        align-items: flex-end;
-                        font-size: 24px;
-                        a:nth-child(2){
-                            font-weight: 600;
-                        }
-                    // igor
                     img {
                         width: 70px;
                     }
-
                     div {
                         margin-top: 5px;
                         font-family: Roboto, sans-serif;
@@ -812,32 +740,23 @@ input:checked + .slider:before {
                     }
                 }
             }
-
-            .swipeout-list-item {
-                flex: 1;
-            }
-
             .card-content {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 height: 150px;
                 background: #FFFFFF;
-
                 .dish-mobile-img {
                     border-radius: 50%;
-
                     img {
                         width: 190px;
                         border-radius: 50%;
                         margin-left: 10px;
                     }
                 }
-
                 .dish-mobile-text {
                     width: 465px;
                     height: 125px;
-
                     .dish-mobile-text-disc {
                         display: flex;
                         flex-wrap: wrap;
@@ -848,7 +767,6 @@ input:checked + .slider:before {
                         line-height: 30px;
                         color: rgba(0, 0, 0, 0.75);
                     }
-
                     .dish-mobile-text-prelude {
                         margin-top: 10px;
                         height: 77px;
@@ -857,18 +775,14 @@ input:checked + .slider:before {
                         font-weight: 200;
                         font-size: 18px;
                         line-height: 21px;
-
                         color: #000000;
                     }
                 }
-
                 .dish-mobile-price {
                     width: 100px;
                     margin-top: 70px;
-
                     .dish-mobile-price-grams {
                         height: 34px;
-
                         font-family: Roboto, sans-serif;
                         font-style: normal;
                         font-weight: 300;
@@ -877,13 +791,10 @@ input:checked + .slider:before {
                         display: flex;
                         align-items: center;
                         text-align: right;
-
                         color: #000000;
                     }
-
                     .dish-mobile-price-price {
                         height: 34px;
-
                         font-family: Roboto, sans-serif;
                         font-style: normal;
                         font-weight: bold;
@@ -892,101 +803,73 @@ input:checked + .slider:before {
                         display: flex;
                         align-items: center;
                         text-align: right;
-
                         color: #000000;
                     }
                 }
             }
-
             .transition-right {
                 transform: translate3d(100%, 0, 0) !important;
             }
-
             .transition-left {
                 transform: translate3d(-500%, 0, 0) !important;
             }
-
             .toolbar {
                 display: flex;
                 align-items: center;
             }
-
             .toolbar .toolbar-section {
                 flex: 0 0 auto;
             }
-
             .toolbar .toolbar-section--center {
                 flex: 1000 1 0%;
             }
         }
     }
-
     @media (max-width: 600px) {
         .dish-mobile {
             grid-template-columns: 25% 100% 25%;
-
             &-middle {
                 transform: translateX(-25%);
-
                 &-to-right {
                     transform: translateX(0%);
                 }
-
                 &-to-left {
                     transform: translateX(-50%);
                 }
-
                 &-to-middle {
                     transform: translateX(-25%);
                 }
-                &-about{
-                    width: 82%;
-                    &-text {
-                        max-width: 60%;
-                        line-height: 1;
-                        &-name{
-                            font-weight: 700;
-                            font-size: 14px;
-                        }
-                        &-desc {
-                            font-size: 12px;
-                            padding-top: 0;
-                        }
-                    }
-                    &-img {
-                        width: 100px;
+                &-about {
+                    padding-left: 60px;
+                    width: 60%;
+                    &-name {
+                        font-weight: 700;
+                        font-size: 20px;
                     }
                 }
-
                 &-typ {
                     padding: 10px 5px 10px 0;
-                    &-counter {
-                        font-size: 12px;
-                    }
-                    &-PW{
-                        font-size: 16px;
+                    &-PW {
+                        font-size: 20px;
                     }
                 }
             }
         }
     }
-
     @media (max-width: 420px) {
         .dish-mobile {
-            &-middle{
-                &-about{
-                    width: 75%;
-                    &-text {
-                        max-width: 55%;
-                        &-name{
-                            font-size: 12px;
-                        }
-                        &-desc{
-                            font-size: 10px;
-                        }
+            &-middle {
+                &-about {
+                    padding-left: 10px;
+                    width: 65%;
+                    &-name {
+                        font-size: 18px;
+                    }
+                    &-desc {
+                        padding-top: 5px;
+                        font-size: 13px;
                     }
                 }
-
                 &-typ {
                     padding: 5px 10px 5px 0;
                 }
@@ -1068,5 +951,19 @@ input:checked + .slider:before {
             }
         }
     }
-}  
+
+</style>
+<style>
+    .swipeout {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        margin-top: 5px;
+    }
+    .swipeout .swipeout-left, .swipeout .swipeout-right {
+        position: absolute;
+        height: 100%;
+        display: flex;
+        z-index: 0;
+    }
 </style>
