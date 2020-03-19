@@ -73,7 +73,7 @@
                         </div>
                     </div>
                 </template>
-                <template v-slot:left="{ item, close, index }">
+                <template v-slot:left="{ item, close, index }" class="disableZIndex">
                     <div class="swipeout-action dish-mobile-add" @click="delDish(index)">
                         <div class="dish-mobile-add-dish">
                             <img src="../assets/img/cartMobile.svg">
@@ -214,18 +214,23 @@
         },
         watch: {
             upX: function () {
+                /* Это отработка уже на эвенты, тут логика длинных и коротких свайпов */
+                this.blackList = false; // убирает иконки черного листа
+
+                /* Длинный свайп */
                 if (Math.abs(this.upX - this.downX) >= 3 * window.screen.width / 4) {
                     if (this.revealed[this.currentIndex] === 'right') {
+                        // в revealed пишется с какой стороны свайп ( структура такая " 'индекс item': left или right " )
                         this.blackList = false;
-                        console.log('right');
-                        this.$refs.list.close()
+                        console.log('right'); // ну и тут ставишь сам диспатч "справа удаление"
+                        this.$refs.list.close() // эвент закрывающий окна
                     } else if (this.revealed[this.currentIndex] === 'left') {
                         this.blackList = false;
-                        console.log('left');
+                        console.log('left'); // тут ставишь диспатч "слева добавление"
                         this.$refs.list.close()
                     }
-                } else {
-                    this.blackList = true
+                } /* Короткий свайп */ else {
+                    this.blackList = true // добавляет иконки черного листа
                 }
             }
         },
@@ -405,6 +410,7 @@
         .week-mob {
             display: block !important;
         }
+
         .dish-mobile {
             display: flex;
 
@@ -520,10 +526,6 @@
                         color: #FFFFFF;
                     }
                 }
-            }
-
-            .swipeout-list-item {
-                flex: 1;
             }
 
             .card-content {
@@ -716,5 +718,20 @@
                 }
             }
         }
+    }
+</style>
+<style>
+    .swipeout {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        margin-top: 5px;
+    }
+
+    .swipeout .swipeout-left, .swipeout .swipeout-right {
+        position: absolute;
+        height: 100%;
+        display: flex;
+        z-index: 0;
     }
 </style>
