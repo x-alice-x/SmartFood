@@ -486,7 +486,7 @@
         flex-direction: column;
         justify-content: center;
         color: $font-color;
-        margin-bottom: 60px;
+        margin-bottom: 10px;
     }
     .dish-main {
         display: flex;
@@ -622,7 +622,7 @@
         display: none;
     }
 
-    @media (max-width: 1110px) {
+@media (max-width: 1110px) {
         /* плашка внизу страницы */
         .total-container {
             width: 250px;
@@ -634,14 +634,14 @@
         }
     }
 
-    @media (max-width: 839px) {
+@media (max-width: 839px) {
         /* плашка внизу страницы */
 
         .total-sum {
             flex-direction: column;
         }
         .container {
-            margin-bottom: 90px;
+            margin-bottom: 10px;
         }
 
         /* контейнер слайдера чс */
@@ -657,6 +657,10 @@
     }
 
     @media (max-width: 790px) {
+        .category-name {
+            width: 85%;
+            margin: 10px auto 20px auto;
+        }
         .dish {
             display: none;
         }
@@ -671,6 +675,7 @@
         // }
         .dish-mobile {
             display: flex;
+            width: 100%;
             .swipeout-action {
                 display: flex;
                 align-items: center;
@@ -692,9 +697,7 @@
                     }
                     div {
                         margin-top: 5px;
-                        font-family: Roboto, sans-serif;
-                        font-style: normal;
-                        font-weight: 900;
+                        font-weight: 700;
                         font-size: 18px;
                         color: #FFFFFF;
                     }
@@ -716,9 +719,7 @@
                     }
                     div {
                         margin-top: 5px;
-                        font-family: Roboto, sans-serif;
-                        font-style: normal;
-                        font-weight: 900;
+                        font-weight: 700;
                         font-size: 18px;
                         color: #FFFFFF;
                     }
@@ -738,9 +739,7 @@
                     }
                     div {
                         margin-top: 5px;
-                        font-family: Roboto, sans-serif;
-                        font-style: normal;
-                        font-weight: 900;
+                        font-weight: 700;
                         font-size: 18px;
                         color: #460B79;
                     }
@@ -760,9 +759,7 @@
                     }
                     div {
                         margin-top: 5px;
-                        font-family: Roboto, sans-serif;
-                        font-style: normal;
-                        font-weight: 900;
+                        font-weight: 700;
                         font-size: 18px;
                         color: #FFFFFF;
                     }
@@ -770,68 +767,54 @@
             }
             .card-content {
                 display: flex;
-                justify-content: space-between;
+                justify-content: center;
                 align-items: center;
                 height: 150px;
                 background: #FFFFFF;
+                width: 100%;
+                border-top: 1px solid #F2EDF6;
                 .dish-mobile-img {
-                    border-radius: 50%;
                     img {
                         width: 190px;
-                        border-radius: 50%;
-                        margin-left: 10px;
+                        height: auto;
+                        clip-path: circle(60px at center);
                     }
                 }
                 .dish-mobile-text {
-                    width: 465px;
+                    width: 60%;
                     height: 125px;
+                    display: flex;
+                    align-items: flex-start;
+                    justify-content: center;
+                    flex-direction: column;
                     .dish-mobile-text-disc {
                         display: flex;
                         flex-wrap: wrap;
-                        font-family: Roboto, sans-serif;
-                        font-style: normal;
-                        font-weight: 900;
-                        font-size: 30px;
-                        line-height: 30px;
-                        color: rgba(0, 0, 0, 0.75);
+                        font-weight: 700;
+                        font-size: 22px;
+                        text-transform: uppercase;
+                        color: #460B79;
                     }
                     .dish-mobile-text-prelude {
                         margin-top: 10px;
-                        height: 77px;
-                        font-family: Roboto, sans-serif;
-                        font-style: normal;
-                        font-weight: 200;
-                        font-size: 18px;
-                        line-height: 21px;
-                        color: #000000;
+                        height: auto;
+                        font-weight: 400;
+                        font-size: 16px;
+                        color: #460B79;
                     }
                 }
                 .dish-mobile-price {
-                    width: 100px;
-                    margin-top: 70px;
-                    .dish-mobile-price-grams {
-                        height: 34px;
-                        font-family: Roboto, sans-serif;
-                        font-style: normal;
-                        font-weight: 300;
-                        font-size: 24px;
-                        line-height: 28px;
+                    width: 25%;
+                    .dish-mobile-price-grams, .dish-mobile-price-price {
+                        font-weight: 400;
+                        font-size: 28px;
                         display: flex;
                         align-items: center;
                         text-align: right;
-                        color: #000000;
+                        color: #460B79;
                     }
                     .dish-mobile-price-price {
-                        height: 34px;
-                        font-family: Roboto, sans-serif;
-                        font-style: normal;
-                        font-weight: bold;
-                        font-size: 25px;
-                        line-height: 35px;
-                        display: flex;
-                        align-items: center;
-                        text-align: right;
-                        color: #000000;
+                        font-weight: 700;
                     }
                 }
             }
@@ -852,8 +835,149 @@
                 flex: 1000 1 0%;
             }
         }
+        
+.total-sum {
+    flex-direction: column;
+}
+
+.total-container {
+    display: flex;
+    flex-direction: row;
+    height: 70px;
+    width: 100%;
+    z-index: 2;
+    justify-content: center;
+    align-items: center;
+    p {
+    font-size: 36px;
     }
-    @media (max-width: 600px) {
+}
+
+.cart-icon {
+    width: 50px;
+    height: 50px;
+    margin: 0 40px;
+}
+.money-spent, .money-left {
+    font-size: 36px;
+    font-weight: 700;
+}
+/* контейнер слайдера чс */
+
+.show-black-listed {
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    bottom: 90px;
+    z-index: 2;
+    p {
+        font-size: 30px;
+    }
+}
+
+/* слайдер */
+.switch {
+  width: 90px;
+  height: 44px;
+}
+
+/* слайдер для включения чс*/
+.slider {
+   &:before {
+      height: 35px;
+      width: 35px;
+      left: 5px;
+      bottom: 5px;
+   }
+}
+
+input:checked + .slider:before {
+        transform: translateX(45px);
+    }
+}
+
+
+
+@media (max-width: 620px) {
+    .container .week {
+        margin-bottom: 0;
+    }
+        .container  {
+            margin-bottom: 150px;
+        }
+        .category-name {
+            width: 85%;
+            font-size: 24px;
+        }
+        .dish-mobile {
+            display: flex;
+            width: 100%;
+            .swipeout-action {
+                display: flex;
+                align-items: center;
+                padding: 0 3rem;
+                cursor: pointer;
+                left: 0;
+            }
+            .card-content {
+                .dish-mobile-img {
+                    img {
+                        width: 150px;
+                        clip-path: circle(50px at center);
+                    }
+                }
+                .dish-mobile-text {
+                    width: 60%;
+                    height: 125px;
+                    .dish-mobile-text-disc {
+                        font-size: 18px;
+                    }
+                    .dish-mobile-text-prelude {
+                        font-size: 14px;
+                    }
+                }
+                .dish-mobile-price {
+                    width: 25%;
+                    .dish-mobile-price-grams, .dish-mobile-price-price {
+                        font-size: 20px;
+                    }
+                }
+            }
+        }
+
+    .total-sum {
+        height: 140px;
+    }
+
+.money-spent, .money-left {
+    font-size: 36px;
+    font-weight: 700;
+}
+.show-black-listed {
+    p {
+        font-size: 22px;
+    }
+}
+/* слайдер */
+.switch {
+  width: 70px;
+  height: 35px;
+}
+
+/* слайдер для включения чс*/
+.slider {
+   &:before {
+      height: 27px;
+      width: 27px;
+      left: 5px;
+      bottom: 5px;
+   }
+}
+    input:checked + .slider:before {
+        transform: translateX(35px);
+    }
+
+}
         .dish-mobile {
             grid-template-columns: 25% 100% 25%;
             &-middle {
@@ -883,9 +1007,94 @@
                 }
             }
         }
+
+    @media (max-width: 440px) {
+        .container .week {
+            margin-bottom: 0;
+        }
+        .dish-mobile {
+            display: flex;
+            width: 100%;
+            .swipeout-action.dish-mobile-delete {
+                .dish-mobile-delete-dish {
+                    img {
+                        width: 50px;
+                    }
+                }
+            }
+            .swipeout-action.dish-mobile-add {
+                .dish-mobile-add-dish {
+                    img {
+                        width: 50px;
+                    }
+                }
+            }
+            .swipeout-action.dish-mobile-black-add {
+                .dish-mobile-black-add-dish {
+                    img {
+                        width: 50px;
+                    }
+                }
+            }
+            .swipeout-action.dish-mobile-black-delete {
+                .dish-mobile-black-delete-dish {
+                    img {
+                        width: 50px;
+                    }
+                }
+            }
+            .card-content {
+                .dish-mobile-text {
+                    width: 50%;
+                    height: 125px;
+                    margin-right: 2%;
+                    .dish-mobile-text-disc {
+                        font-size: 16px;
+                    }
+                    .dish-mobile-text-prelude {
+                        font-size: 12px;
+                    }
+                }
+                .dish-mobile-price {
+                    width: 30%;
+                    .dish-mobile-price-grams, .dish-mobile-price-price {
+                        font-size: 18px;
+                    }
+                }
+            }
+        }
+
+    .total-sum {
+        height: 140px;
     }
 
-    @media (max-width: 420px) {
+.money-spent, .money-left {
+    font-size: 36px;
+    font-weight: 700;
+}
+.show-black-listed {
+    p {
+        font-size: 22px;
+    }
+}
+/* слайдер */
+.switch {
+  width: 70px;
+  height: 35px;
+}
+
+/* слайдер для включения чс*/
+.slider {
+   &:before {
+      height: 27px;
+      width: 27px;
+      left: 5px;
+      bottom: 5px;
+   }
+}
+    input:checked + .slider:before {
+        transform: translateX(35px);
+    }
         .dish-mobile {
             &-middle {
                 &-about {
