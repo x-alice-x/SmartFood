@@ -1,18 +1,19 @@
+/* eslint-disable vue/valid-v-on */
 <template>
     <div class="dishes">
         <div class="container">
            <Weekdays class="week"></Weekdays>
            <div class="dish-category">
                <h3 class="category-name" >название категории</h3>
-            <div class="dish-main" id="blacklisted">
-            <div class="dish" :class="{ active: index === activeItem}" v-for="(dish, index) in dishes.dishes" :key="index" @click="buyDish(dishes.id, dish.id, index)" >
+            <div class="dish-main" id="blacklisted" >
+            <div class="dish" :class="{highlight:dish.selected}" v-for="(dish, index) in dishes.dishes" :key="index" @click="buyDish(dishes.id, dish.id, index)" >
                 <div class="dish-top"> 
                     <div class="dish-img" :style="{'background-image': `url(${dish.image})`}">
                         <div class="black-list-container">
                              <img class="black-list" src="../assets/img/dots.svg" />
                         </div>
                         <div id="black-list-content">
-                            <button id="add-to-list" @click="blackList(index)">{{button.text}}</button>
+                            <button id="add-to-list" @click="blackList(); $set(dish, 'selected', !dish.selected)">{{button.text}}</button>
                         </div>
                     </div>
                 </div>
@@ -125,7 +126,7 @@
         components: {Weekdays},
         data () {
             return {
-            activeItem: null,
+            selected: undefined,
             button: {
                 text: 'Добавить в черный список'
             }
@@ -171,22 +172,16 @@
             setSwipeMiddle(index) {
                 this.dishes.dishes[index].swipe = 'middle'
             },
-            blackList(index) {
-                event.stopPropagation()
-                if (this.activeItem == index){
-                  
-                  document.getElementById('blacklisted').classList.toggle("is_blacklisted");
-                }
-                console.log(index)
-                // document.getElementById('blacklisted').classList.toggle("is-blacklisted");
+            blackList() {
+
                 if (this.button.text == "Добавить в черный список") {
                   this.button.text = "Убрать из черного списка";
                   }
                 else if (this.button.text == "Убрать из черного списка") {
                   this.button.text = "Добавить в черный список";
                   }
-                  
             }
+            
         },
         computed: {
             dishes() {
@@ -270,12 +265,9 @@ z-index: 2;
 #black-list-content button:hover {
 opacity: 1;
 }
-
-/* класс, который делает карточки черно-белыми */
-
-.is_blacklisted {
-    transition: .3s;
+.highlight {
     filter: grayscale(100%);
+    transition: .3s;
 }
 
 /* плашка внизу страницы */
@@ -291,6 +283,7 @@ opacity: 1;
     height: 50px; 
     background: rgba(255, 255, 255, 0.5);
     width: 100%;
+    z-index: 20;
 }
 
 .total-container {
