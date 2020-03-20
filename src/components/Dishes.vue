@@ -54,6 +54,7 @@
                             </div>
                         </div>
                     </div>
+                    <!-- <Weekdays class="week-mob"></Weekdays> -->
                     <swipe-list
                             ref="list"
                             class="dish-mobile"
@@ -65,7 +66,9 @@
                             <!-- revealLeft is method which toggles the left side -->
                             <!-- revealRight is method which toggles the right side -->
                             <!-- close is method which closes an opened side -->
-                            <div ref="content" class="card-content" :data-categoryIndex="categoryIndex" :data-revealed="revealed"
+                            <div ref="content" class="card-content"
+                                 :data-categoryIndex="categoryIndex"
+                                 :data-revealed="revealed"
                                  @click="closeContent(categoryIndex)">
                                 <div class="dish-mobile-img">
                                     <img :src="item.image">
@@ -143,82 +146,6 @@
                 </div>
             </div>
         </div>
-
-        <div>              <!-- Mobile version -->
-            <Weekdays class="week-mob"></Weekdays>
-            <!--            <div class="dish-category" v-for="(categories, categoryIndex) in todayMenu.categories" :key="categoryIndex">-->
-            <!--                <h3 class="category-name">{{categories.name}}</h3>-->
-            <!--                <swipe-list-->
-            <!--                        ref="list"-->
-            <!--                        class="dish-mobile"-->
-            <!--                        :items="categories.dishes"-->
-            <!--                        :revealed.sync="revealed"-->
-            <!--                >-->
-            <!--                    <template v-slot="{item, index}">-->
-            <!--                        &lt;!&ndash; item is the corresponding object from the array &ndash;&gt;-->
-            <!--                        &lt;!&ndash; index is clearly the index &ndash;&gt;-->
-            <!--                        &lt;!&ndash; revealLeft is method which toggles the left side &ndash;&gt;-->
-            <!--                        &lt;!&ndash; revealRight is method which toggles the right side &ndash;&gt;-->
-            <!--                        &lt;!&ndash; close is method which closes an opened side &ndash;&gt;-->
-            <!--                        <div ref="content" class="card-content" :data-indexItem="index" @click="closeContent(categoryIndex)">-->
-            <!--                            <div class="dish-mobile-img">-->
-            <!--                                <img :src="item.image">-->
-            <!--                            </div>-->
-            <!--                            <div class="dish-mobile-text">-->
-            <!--                                <div class="dish-mobile-text-disc">-->
-            <!--                                    {{ item.name }}-->
-            <!--                                </div>-->
-            <!--                                <div class="dish-mobile-text-prelude">-->
-            <!--                                    {{ item.description}}-->
-            <!--                                </div>-->
-            <!--                            </div>-->
-            <!--                            <div class="dish-mobile-price">-->
-            <!--                                <div class="dish-mobile-price-grams">-->
-            <!--                                    {{ item.weight }} г.-->
-            <!--                                </div>-->
-            <!--                                <div class="dish-mobile-price-price">-->
-            <!--                                    {{ item.price }} ₽-->
-            <!--                                </div>-->
-            <!--                            </div>-->
-            <!--                        </div>-->
-            <!--                    </template>-->
-            <!--                    <template v-slot:left="{ item, close, index }" class="disableZIndex">-->
-            <!--                        <div class="swipeout-action dish-mobile-add" @click="delDish(index)">-->
-            <!--                            <div class="dish-mobile-add-dish">-->
-            <!--                                <img src="../assets/img/cartMobile.svg">-->
-            <!--                                <div>ДОБАВИТЬ</div>-->
-            <!--                            </div>-->
-            <!--                        </div>-->
-            <!--                        <div class="swipeout-action dish-mobile-black-add" @click="delDish(index)" v-if="black_list">-->
-            <!--                            <div class="dish-mobile-black-add-dish">-->
-            <!--                                <img src="../assets/img/blackListAdd.svg">-->
-            <!--                                <div>ЧЕРНЫЙ СПИСОК</div>-->
-            <!--                            </div>-->
-            <!--                        </div>-->
-            <!--                    </template>-->
-            <!--                    <template v-slot:right="{ item, close, index }">-->
-            <!--                        <div class="swipeout-action dish-mobile-black-delete" @click="delDish(index)" v-if="black_list">-->
-            <!--                            <div class="dish-mobile-black-delete-dish">-->
-            <!--                                <img src="../assets/img/blackListDelete.svg">-->
-            <!--                                <div>ЧЕРНЫЙ СПИСОК</div>-->
-            <!--                            </div>-->
-            <!--                        </div>-->
-            <!--                        <div class="swipeout-action dish-mobile-delete" @click="addDish(index)">-->
-            <!--                            <div class="dish-mobile-delete-dish">-->
-            <!--                                <img src="../assets/img/delete.svg">-->
-            <!--                                <div>УДАЛИТЬ</div>-->
-            <!--                            </div>-->
-            <!--                        </div>-->
-            <!--                    </template>-->
-            <!--                    <template v-slot:empty>-->
-            <!--                        <div>-->
-            <!--                            list is empty ( filtered or just empty )-->
-            <!--                        </div>-->
-            <!--                    </template>-->
-            <!--                </swipe-list>-->
-            <!--            </div>-->
-            <!--            </div>-->
-        </div>
     </div>
 </template>
 
@@ -235,7 +162,7 @@
                 button: {
                     text: 'Добавить в черный список'
                 },
-                revealed: '',
+                revealed: {},
                 zak: 0,
                 currentIndex: 0,
                 downX: 0,
@@ -294,8 +221,8 @@
                 this.zak--;
                 console.log('У вас блюд: ' + this.zak)
             },
-            closeContent(index) {
-                this.$refs.list[index].close()
+            closeContent() {
+                this.$refs.list.close()
                 this.black_list = false
             },
             blackListChange(menu_id, dish_id, index, categoryIndex) {
@@ -331,33 +258,27 @@
                 this.$router.push('/');
             }
             $(document).on("touchstart  mousedown", ".card-content", function (event) {
-                self.currentIndex = event.currentTarget.dataset.categoryindex;
+                self.currentIndex = event.currentTarget.dataset.indexitem;
                 self.downX = event.changedTouches[0].clientX;
                 this.black_list = false;
             });
             $(document).on("touchend  mouseup", ".card-content", function (event) {
                 self.upX = event.changedTouches[0].clientX;
-                self.revealed = event.currentTarget.dataset.revealed;
             })
         },
         watch: {
             upX: function () {
-                /* Это отработка уже на эвенты, тут логика длинных и коротких свайпов */
-                this.black_list = false; // убирает иконки черного листа
-
-                /* Длинный свайп */
                 if (Math.abs(this.upX - this.downX) >= 3 * window.screen.width / 4) {
-                    if (this.revealed === 'right') {
-                        // в revealed пишется с какой стороны свайп ( структура такая " 'индекс item': left или right " )
+                    if (this.revealed[this.currentIndex] === 'right') {
                         this.black_list = false;
-                        console.log('right'); // ну и тут ставишь сам диспатч "справа удаление"
-                        this.$refs.list[this.currentIndex].close() // эвент закрывающий окна
-                    } else if (this.revealed === 'left') {
+                        console.log('right');
+                        this.$refs.list.close()
+                    } else if (this.revealed[this.currentIndex] === 'left') {
                         this.black_list = false;
-                        console.log('left'); // тут ставишь диспатч "слева добавление"
-                        this.$refs.list[this.currentIndex].close()
+                        console.log('left');
+                        this.$refs.list.close()
                     }
-                } /* Короткий свайп */ else {
+                } else {
                     this.black_list = true
                 }
             }
@@ -368,9 +289,7 @@
 <style scoped lang="scss">
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
-
     // категории
-
     .category-name {
         font-size: 36px;
         color: #000;
@@ -428,14 +347,12 @@
     }
 
     /* класс, который делает карточки черно-белыми */
-
     .is_blacklisted {
         transition: .3s;
         filter: grayscale(100%);
     }
 
     /* плашка внизу страницы */
-
     .total-sum {
         display: flex;
         flex-direction: row;
@@ -477,7 +394,6 @@
     }
 
     /* контейнер слайдера чс */
-
     .show-black-listed {
         display: flex;
         flex-direction: row;
@@ -554,16 +470,13 @@
         }
     }
 
-
     .dishes {
         height: 600px;
-
     }
 
-    .week-mob {
-        display: none !important;
-    }
-
+    // .week-mob {
+    //     display: none !important;
+    // }
     .container {
         display: flex;
         flex-direction: column;
@@ -705,7 +618,6 @@
         }
     }
 
-
     .dish-mobile {
         display: none;
     }
@@ -715,7 +627,6 @@
         .total-container {
             width: 250px;
         }
-
         /* контейнер слайдера чс */
         .show-black-listed {
             right: 7%;
@@ -724,16 +635,13 @@
 
     @media (max-width: 839px) {
         /* плашка внизу страницы */
-
         .total-sum {
             flex-direction: column;
         }
         .container {
             margin-bottom: 90px;
         }
-
         /* контейнер слайдера чс */
-
         .show-black-listed {
             left: 50%;
             transform: translateX(-50%);
@@ -750,20 +658,13 @@
         }
         .container {
             margin-top: 10px;
-
-            .week {
-                /*display: none;*/
-            }
+            // .week {
+            //     display: none;
+            // }
         }
-
-        .dish-main {
-            justify-content: flex-start;
-        }
-
-        .week-mob {
-            /*display: block !important;*/
-        }
-
+        // .week-mob {
+        //     display: block !important;
+        // }
         .dish-mobile {
             display: flex;
 
@@ -1046,25 +947,20 @@
 
     @media (max-width: 360px) {
         /* плашка внизу страницы */
-
         .total-sum {
             flex-direction: column;
         }
-
         .total-container {
             display: flex;
             flex-direction: row;
             width: 100%;
             z-index: 2;
         }
-
         .cart-icon {
             width: 30px;
             height: 30px;
         }
-
         /* контейнер слайдера чс */
-
         .show-black-listed {
             align-items: center;
             justify-content: center;
@@ -1075,13 +971,11 @@
                 font-size: 16px;
             }
         }
-
         /* слайдер */
         .switch {
             width: 50px;
             height: 28px;
         }
-
         /* слайдер для включения чс*/
         .slider {
             &:before {
@@ -1091,7 +985,6 @@
                 bottom: 3px;
             }
         }
-
         input:checked + .slider:before {
             transform: translateX(22px);
         }
