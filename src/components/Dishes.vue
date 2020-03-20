@@ -88,7 +88,7 @@
                                         {{ item.weight }} г.
                                     </div>
                                     <div class="dish-mobile-price-price">
-                                        {{ item.price }} Р
+                                        {{ item.price.replace(/.00/, '') }} Р
                                     </div>
                                 </div>
                             </div>
