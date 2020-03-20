@@ -67,9 +67,9 @@
                             <!-- close is method which closes an opened side -->
                             <div ref="content" class="card-content"
                                  :data-categoryIndex="categoryIndex"
-                                 :data-disheIndex="index"
+                                 :data-dishIndex="index"
                                  :data-todayMenuId="todayMenu.id"
-                                 :data-disheId="item.id"
+                                 :data-dishId="item.id"
                                  :data-revealed="revealed"
                                  :id="item.in_blacklist ? 'blacklisted' : index"
                                  @click="closeContent(categoryIndex)">
@@ -271,10 +271,10 @@
             }
             $(document).on("touchstart  mousedown", ".card-content", function (event) {
                 self.categoryIndex = event.currentTarget.dataset.categoryindex;
-                self.dishIndex = event.currentTarget.dataset.disheindex;
+                self.dishIndex = event.currentTarget.dataset.dishindex;
                 self.todayMenuId = event.currentTarget.dataset.todaymenuid;
                 self.dishId = event.currentTarget.dataset.dishid;
-                self.buttonId = event.currentTarget.dataset.buttonId
+                self.buttonId = event.currentTarget.dataset.buttonId;
                 self.downX = event.changedTouches[0].clientX;
                 self.$store.commit('showBlackList', {
                     indexCategory: self.categoryIndex,
@@ -307,6 +307,7 @@
                             indexDishes: this.dishIndex,
                             bool: false
                         });
+                        console.log('delete',this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex)
                         this.deleteDish(this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex)
                         this.$refs.list[this.categoryIndex].close()
                     } else if (this.revealed === 'left') {
@@ -315,6 +316,7 @@
                             indexDishes: this.dishIndex,
                             bool: false
                         });
+                        console.log('buy',this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex, this.buttonId)
                         this.buyDish(this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex, this.buttonId);
                         this.$refs.list[this.categoryIndex].close()
                     }
