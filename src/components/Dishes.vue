@@ -864,12 +864,10 @@
                         flex-wrap: wrap;
                         font-weight: 700;
                         font-size: 22px;
-                        text-transform: uppercase;
                         color: #460B79;
                     }
 
                     .dish-mobile-text-prelude {
-                        margin-top: 10px;
                         height: auto;
                         font-weight: 400;
                         font-size: 16px;
@@ -922,23 +920,23 @@
         .total-container {
             display: flex;
             flex-direction: row;
-            height: 70px;
+            height: 50px;
             width: 100%;
             z-index: 2;
             justify-content: center;
             align-items: center;
 
             p {
-                font-size: 36px;
+                font-size: 24px;
             }
         }
         .cart-icon {
-            width: 50px;
-            height: 50px;
+            width: 35px;
+            height: 35px;
             margin: 0 40px;
         }
         .money-spent, .money-left {
-            font-size: 36px;
+            font-size: 26px;
             font-weight: 700;
         }
         .money-left {
@@ -949,29 +947,28 @@
             align-items: center;
             justify-content: center;
             width: 100%;
-            bottom: 90px;
             z-index: 2;
 
             p {
-                font-size: 30px;
+                font-size: 18px;
             }
         }
         /* слайдер */
         .switch {
-            width: 90px;
-            height: 44px;
+            width: 45px;
+            height: 22px;
         }
         /* слайдер для включения чс*/
         .slider {
             &:before {
-                height: 35px;
-                width: 35px;
-                left: 5px;
-                bottom: 5px;
+                height: 25px;
+                width: 25px;
+                left: -1px;
+                bottom: -1px;
             }
         }
         input:checked + .slider:before {
-            transform: translateX(45px);
+            transform: translateX(25px);
         }
     }
 
@@ -1033,31 +1030,31 @@
             height: 140px;
         }
         .money-spent, .money-left {
-            font-size: 36px;
+            font-size: 24px;
             font-weight: 700;
         }
         .show-black-listed {
             p {
-                font-size: 22px;
+                font-size: 18px;
             }
         }
         /* слайдер */
-        .switch {
-            width: 70px;
-            height: 35px;
-        }
-        /* слайдер для включения чс*/
-        .slider {
-            &:before {
-                height: 27px;
-                width: 27px;
-                left: 5px;
-                bottom: 5px;
-            }
-        }
-        input:checked + .slider:before {
-            transform: translateX(35px);
-        }
+        // .switch {
+        //     width: 70px;
+        //     height: 35px;
+        // }
+        // /* слайдер для включения чс*/
+        // .slider {
+        //     &:before {
+        //         height: 27px;
+        //         width: 27px;
+        //         left: 5px;
+        //         bottom: 5px;
+        //     }
+        // }
+        // input:checked + .slider:before {
+        //     transform: translateX(35px);
+        // }
     }
 
     .dish-mobile {
@@ -1099,7 +1096,7 @@
     }
 
     // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
-    @media (max-width: 440px) {
+    @media (max-width: 475px) {
         .container .week {
             margin-bottom: 0;
         }
@@ -1170,31 +1167,31 @@
             height: 140px;
         }
         .money-spent, .money-left {
-            font-size: 36px;
+            font-size: 24px;
             font-weight: 700;
         }
         .show-black-listed {
             p {
-                font-size: 22px;
+                font-size: 18px;
             }
         }
         /* слайдер */
-        .switch {
-            width: 70px;
-            height: 35px;
-        }
-        /* слайдер для включения чс*/
-        .slider {
-            &:before {
-                height: 27px;
-                width: 27px;
-                left: 5px;
-                bottom: 5px;
-            }
-        }
-        input:checked + .slider:before {
-            transform: translateX(35px);
-        }
+        // .switch {
+        //     width: 70px;
+        //     height: 35px;
+        // }
+        // /* слайдер для включения чс*/
+        // .slider {
+        //     &:before {
+        //         height: 27px;
+        //         width: 27px;
+        //         left: 5px;
+        //         bottom: 5px;
+        //     }
+        // }
+        // input:checked + .slider:before {
+        //     transform: translateX(35px);
+        // }
         .dish-mobile {
             &-middle {
                 &-about {
@@ -1219,54 +1216,71 @@
     }
 
     // вот этот квери полностью новый обяз добавить
-    @media (max-width: 380px) {
+    @media (max-width: 400px) {
         .category-name {
             width: 85%;
             margin: 10px auto 20px auto;
         }
         .dish-mobile {
             .swipeout-action.dish-mobile-delete {
+                max-height: 100px;
                 .dish-mobile-delete-dish {
                     width: 50px;
 
                     img {
-                        width: 40px;
+                        width: 30px;
+                    }
+                    div {
+                        font-size: 12px;
                     }
                 }
             }
 
             .swipeout-action.dish-mobile-add {
+                max-height: 100px;
+                width: 100px;
                 .dish-mobile-add-dish {
                     width: 50px;
 
                     img {
-                        width: 40px;
+                        width: 30px;
+                    }
+                    div {
+                        font-size: 10px;
                     }
                 }
             }
 
             .swipeout-action.dish-mobile-black-add {
+                max-height: 100px;
                 .dish-mobile-black-add-dish {
                     width: 50px;
 
                     img {
-                        width: 40px;
+                        width: 30px;
+                    }
+                    div {
+                        font-size: 12px;
                     }
                 }
             }
 
             .swipeout-action.dish-mobile-black-delete {
+                max-height: 100px;
                 .dish-mobile-black-delete-dish {
                     width: 50px;
 
                     img {
-                        width: 40px;
+                        width: 30px;
+                    }
+                    div {
+                        font-size: 12px;
                     }
                 }
             }
 
             .card-content {
-                min-height: 150px;
+                max-height: 70px;
                 height: auto;
                 padding: 2% 0 2% 0;
 
@@ -1280,19 +1294,18 @@
 
                 .dish-mobile-text {
                     width: 70%;
-
                     .dish-mobile-text-disc {
                         font-size: 12px;
                     }
 
                     .dish-mobile-text-prelude {
-                        font-size: 14px;
+                        font-size: 10px;
                     }
                 }
 
                 .dish-mobile-price {
                     &-amount {
-                        width: 15%;
+                        font-size: 10px;
                     }
                     .dish-mobile-price-grams, .dish-mobile-price-price {
                         font-size: 14px;
@@ -1310,7 +1323,7 @@
             }
 
             .show-black-listed p {
-                font-size: 24px;
+                font-size: 18px;
             }
 
             .money-spent, .money-left {
@@ -1325,6 +1338,44 @@
             /* плашка внизу страницы */
             .total-sum {
                 flex-direction: column;
+
+            }
+            .dish-mobile {
+                .swipeout-action.dish-mobile-add {
+                    width: 160px;
+                    padding: 0 10px;
+                    div {
+                        font-size: 8px;
+                    }
+                }
+                .swipeout-action.dish-mobile-black-add {
+                    padding: 0 10px;
+                    .dish-mobile-black-add-dish {
+                        div {
+                            font-size: 8px;
+                        }
+                    }
+                }
+                .swipeout-action.dish-mobile-delete {
+                    width: 160px;
+                    padding: 0 10px;
+                    .dish-mobile-delete-dish {
+                        div {
+                            font-size: 8px;
+                        }
+                    }
+                }
+                .swipeout-action.dish-mobile-black-delete {
+                    // width: 60px;
+                    display: flex;
+                    padding: 0 10px;
+                    justify-content: center;
+                    .dish-mobile-black-delete-dish {
+                        div {
+                            font-size: 8px;
+                        }
+                    }
+                }
             }
             .total-container {
                 display: flex;
@@ -1348,22 +1399,22 @@
                 }
             }
             /* слайдер */
-            .switch {
-                width: 50px;
-                height: 28px;
-            }
-            /* слайдер для включения чс*/
-            .slider {
-                &:before {
-                    height: 22px;
-                    width: 22px;
-                    left: 3px;
-                    bottom: 3px;
-                }
-            }
-            input:checked + .slider:before {
-                transform: translateX(22px);
-            }
+            // .switch {
+            //     width: 50px;
+            //     height: 28px;
+            // }
+            // /* слайдер для включения чс*/
+            // .slider {
+            //     &:before {
+            //         height: 22px;
+            //         width: 22px;
+            //         left: 3px;
+            //         bottom: 3px;
+            //     }
+            // }
+            // input:checked + .slider:before {
+            //     transform: translateX(22px);
+            // }
             .dish-mobile {
                 &-middle {
                     &-about {
@@ -1371,12 +1422,11 @@
                         width: 65%;
 
                         &-name {
-                            font-size: 16px;
+                            font-size: 9px;
                         }
 
                         &-desc {
-                            padding-top: 5px;
-                            font-size: 12px;
+                            font-size: 0px;
                         }
 
                         // &-name{
@@ -1405,7 +1455,7 @@
         position: relative;
         overflow: hidden;
         display: flex;
-        margin-top: 5px;
+        /* margin-top: 5px; */
     }
 
     .swipeout .swipeout-left, .swipeout .swipeout-right {
