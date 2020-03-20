@@ -193,7 +193,7 @@
         methods: {
             // Добавление блюда
             buyDish(menu_id, dish_id, index, categoryIndex, buttonId) {
-                if (buttonId === 'card'){
+                if (buttonId === 'card') {
                     if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count === 0) {
                         this.$store.dispatch("OrderDish", {menu_id, dish_id});
                         this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++
@@ -201,8 +201,7 @@
                             + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
                     }
                     event.stopPropagation()
-                }
-                else {
+                } else {
                     this.$store.dispatch("OrderDish", {menu_id, dish_id});
                     this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++
                     this.todayMenu.basket_summ = this.todayMenu.basket_summ
@@ -222,7 +221,11 @@
             },
             closeContent() {
                 this.$refs.list[this.categoryIndex].close()
-                this.black_list = false
+                this.$store.commit('showBlackList', {
+                    indexCategory: this.categoryIndex,
+                    indexDishes: this.dishIndex,
+                    bool: false
+                });
             },
             blackListChange(menu_id, dish_id, index, categoryIndex) {
                 let whichFunc = this.todayMenu.categories[categoryIndex].dishes[index].in_blacklist
@@ -268,11 +271,13 @@
                 self.dishId = event.currentTarget.dataset.dishid;
                 self.buttonId = event.currentTarget.dataset.buttonId;
                 self.downX = event.changedTouches[0].clientX;
-                self.$store.commit('showBlackList', {
-                    indexCategory: self.categoryIndex,
-                    indexDishes: self.dishIndex,
-                    bool: false
-                });
+                if (!self.revealed) {
+                    self.$store.commit('showBlackList', {
+                        indexCategory: self.categoryIndex,
+                        indexDishes: self.dishIndex,
+                        bool: false
+                    });
+                }
                 event.stopPropagation();
             });
             $(document).on("touchend  mouseup", ".card-content", function (event) {
@@ -299,7 +304,6 @@
                             indexDishes: this.dishIndex,
                             bool: false
                         });
-                        console.log('delete',this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex)
                         this.deleteDish(this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex)
                         this.$refs.list[this.categoryIndex].close()
                     } else if (this.revealed === 'left') {
@@ -308,7 +312,6 @@
                             indexDishes: this.dishIndex,
                             bool: false
                         });
-                        console.log('buy',this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex, this.buttonId)
                         this.buyDish(this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex, this.buttonId);
                         this.$refs.list[this.categoryIndex].close()
                     }
@@ -327,10 +330,12 @@
 <style scoped lang="scss">
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
+
     .dishes {
         max-width: 1500px;
         margin: auto;
     }
+
     // категории
     .category-name {
         font-size: 40px;
@@ -394,6 +399,7 @@
         transition: .3s;
         filter: grayscale(100%);
     }
+
     #blacklisted {
         transition: .3s;
         filter: grayscale(100%);
@@ -614,6 +620,7 @@
             padding-bottom: 20px;
             display: flex;
             justify-content: center;
+
             button {
                 background: none;
                 border: none;
@@ -879,6 +886,7 @@
 
                 .dish-mobile-price {
                     width: 25%;
+
                     .dish-mobile-price-grams, .dish-mobile-price-price {
                         font-weight: 400;
                         font-size: 28px;
@@ -1160,6 +1168,7 @@
                     &-amount {
                         font-size: 12px;;
                     }
+
                     .dish-mobile-price-grams, .dish-mobile-price-price {
                         font-size: 18px;
                     }
@@ -1294,6 +1303,7 @@
                     &-amount {
                         width: 15%;
                     }
+
                     .dish-mobile-price-grams, .dish-mobile-price-price {
                         font-size: 14px;
                         margin-right: 1%;
@@ -1414,8 +1424,8 @@
         display: flex;
         z-index: 0;
     }
-    button
-    {
+
+    button {
         background: none;
         border: none;
         outline: none;
