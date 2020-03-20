@@ -1156,7 +1156,7 @@
 
                 .dish-mobile-price {
                     width: 30%;
-                    
+
                     &-amount {
                         font-size: 12px;;
                     }
@@ -1414,7 +1414,7 @@
         display: flex;
         z-index: 0;
     }
-    button 
+    button
     {
         background: none;
         border: none;
