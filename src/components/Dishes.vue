@@ -7,7 +7,7 @@
                 <div class="dish-main">
                     <div class="dish" :class="{ active: index === activeItem}"
                          v-for="(dish, index) in categories.dishes" :key="index"
-                         @click="buyDish(todayMenu.id, dish.id, index, categoryIndex)"
+                         @click="buyDish(todayMenu.id, dish.id, index, categoryIndex, buttonId = 'card')"
                          :id="dish.in_blacklist ? 'blacklisted' : index">
                         <div class="dish-top">
                             <div class="dish-img" :style="{'background-image': `url(${dish.image})`}">
@@ -21,7 +21,7 @@
                                     </button>
                                     <button v-if="dish.in_blacklist"
                                             @click="blackListChange(todayMenu.id, dish.id, index, categoryIndex)">
-                                        Удалить из черного списка
+                                        Вернуть из черного списка
                                     </button>
                                 </div>
                             </div>
@@ -43,7 +43,7 @@
                                 </div>
                                 <button>
                                     <img src="../assets/img/plus.svg"
-                                         @click="buyDishOnPlus(todayMenu.id, dish.id, index, categoryIndex)">
+                                         @click="buyDish(todayMenu.id, dish.id, index, categoryIndex, buttonId = 'plus')">
                                 </button>
                             </div>
                         </div>
@@ -54,7 +54,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <Weekdays class="week-mob"></Weekdays> -->
                     <swipe-list
                             ref="list"
                             class="dish-mobile"
@@ -68,9 +67,9 @@
                             <!-- close is method which closes an opened side -->
                             <div ref="content" class="card-content"
                                  :data-categoryIndex="categoryIndex"
-                                 :data-disheIndex="index"
+                                 :data-dishIndex="index"
                                  :data-todayMenuId="todayMenu.id"
-                                 :data-disheId="item.id"
+                                 :data-dishId="item.id"
                                  :data-revealed="revealed"
                                  :id="item.in_blacklist ? 'blacklisted' : index"
                                  @click="closeContent(categoryIndex)">
@@ -100,7 +99,7 @@
                         </template>
                         <template v-slot:left="{ item, close, index }">
                             <div class="swipeout-action dish-mobile-add"
-                                 @click="buyDish(todayMenu.id, item.id, index, categoryIndex)">
+                                 @click="buyDish(todayMenu.id, item.id, index, categoryIndex, buttonId = 'plus')">
                                 <div class="dish-mobile-add-dish">
                                     <img src="../assets/img/cartMobile.svg">
                                     <div>ДОБАВИТЬ</div>
@@ -193,39 +192,33 @@
         },
         methods: {
             // Добавление блюда
-            buyDish(menu_id, dish_id, index, categoryIndex) {
-                if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count === 0) {
+            buyDish(menu_id, dish_id, index, categoryIndex, buttonId) {
+                if (buttonId === 'card'){
+                    if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count === 0) {
+                        this.$store.dispatch("OrderDish", {menu_id, dish_id});
+                        this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++
+                        this.todayMenu.basket_summ = this.todayMenu.basket_summ
+                            + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
+                    }
+                    event.stopPropagation()
+                }
+                else {
                     this.$store.dispatch("OrderDish", {menu_id, dish_id});
                     this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++
                     this.todayMenu.basket_summ = this.todayMenu.basket_summ
                         + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
+                    event.stopPropagation()
                 }
-                event.stopPropagation()
-            },
-            buyDishOnPlus(menu_id, dish_id, index, categoryIndex) {
-                this.$store.dispatch("OrderDish", {menu_id, dish_id});
-                this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++
-                this.todayMenu.basket_summ = this.todayMenu.basket_summ
-                    + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
-                event.stopPropagation()
             },
             // Удаление блюда
             deleteDish(menu_id, dish_id, index, categoryIndex) {
-                this.$store.dispatch("DeleteDish", {menu_id, dish_id});
                 if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count != 0) {
+                    this.$store.dispatch("DeleteDish", {menu_id, dish_id});
                     this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count--
                     this.todayMenu.basket_summ = this.todayMenu.basket_summ
                         - parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
                 }
                 event.stopPropagation()
-            },
-            blackList() {
-                event.stopPropagation();
-                if (this.button.text == "Добавить в черный список") {
-                    this.button.text = "Убрать из черного списка";
-                } else if (this.button.text == "Убрать из черного списка") {
-                    this.button.text = "Добавить в черный список";
-                }
             },
             closeContent() {
                 this.$refs.list[this.categoryIndex].close()
@@ -235,7 +228,7 @@
                 let whichFunc = this.todayMenu.categories[categoryIndex].dishes[index].in_blacklist
                 this.$store.dispatch("BlackListChange", {menu_id, dish_id, whichFunc});
                 this.todayMenu.categories[categoryIndex].dishes[index].in_blacklist = !whichFunc
-                if (!whichFunc) {
+                if (!whichFunc && this.blackListShow === 0) {
                     this.todayMenu.categories[categoryIndex].dishes.splice(index, 1)
                 }
                 event.stopPropagation()
@@ -243,8 +236,7 @@
             blackListMenuChange() {
                 this.blackListShow = !this.blackListShow
                 this.blackListShow ? this.$store.dispatch("fetchMenu", 0) : this.$store.dispatch("fetchMenu", 1)
-            }
-
+            },
         },
         computed: {
             todayMenu() {
@@ -271,9 +263,10 @@
             }
             $(document).on("touchstart  mousedown", ".card-content", function (event) {
                 self.categoryIndex = event.currentTarget.dataset.categoryindex;
-                self.dishIndex = event.currentTarget.dataset.disheindex;
+                self.dishIndex = event.currentTarget.dataset.dishindex;
                 self.todayMenuId = event.currentTarget.dataset.todaymenuid;
                 self.dishId = event.currentTarget.dataset.dishid;
+                self.buttonId = event.currentTarget.dataset.buttonId;
                 self.downX = event.changedTouches[0].clientX;
                 self.$store.commit('showBlackList', {
                     indexCategory: self.categoryIndex,
@@ -306,6 +299,7 @@
                             indexDishes: this.dishIndex,
                             bool: false
                         });
+                        console.log('delete',this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex)
                         this.deleteDish(this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex)
                         this.$refs.list[this.categoryIndex].close()
                     } else if (this.revealed === 'left') {
@@ -314,7 +308,8 @@
                             indexDishes: this.dishIndex,
                             bool: false
                         });
-                        this.buyDish(this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex);
+                        console.log('buy',this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex, this.buttonId)
+                        this.buyDish(this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex, this.buttonId);
                         this.$refs.list[this.categoryIndex].close()
                     }
                 } else {
