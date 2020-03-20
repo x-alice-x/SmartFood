@@ -332,12 +332,17 @@
 <style scoped lang="scss">
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
+    .dishes {
+        max-width: 1500px;
+        margin: auto;
+    }
     // категории
     .category-name {
-        font-size: 36px;
+        font-size: 40px;
         color: #000;
-        margin-left: 2%;
+        margin-left: 150px;
         margin-bottom: 2%;
+        font-weight: 400;
     }
 
     /* контейнер для кнопочки открывающей кнопку чс */
@@ -556,6 +561,10 @@
 
         &:hover {
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+        }
+
+        &-category {
+            margin-bottom: 50px;
         }
 
         &-amount {
