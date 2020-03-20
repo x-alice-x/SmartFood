@@ -600,8 +600,6 @@
             padding-bottom: 20px;
             display: flex;
             justify-content: center;
-
-            alex
             button {
                 background: none;
                 border: none;
@@ -1394,5 +1392,12 @@
         height: 100%;
         display: flex;
         z-index: 0;
+    }
+    button 
+    {
+        background: none;
+        border: none;
+        outline: none;
+        cursor: pointer;
     }
 </style>
