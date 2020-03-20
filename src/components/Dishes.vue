@@ -4,10 +4,11 @@
             <Weekdays class="week"></Weekdays>
             <div class="dish-category" v-for="(categories, categoryIndex) in todayMenu.categories" :key="categoryIndex">
                 <h3 class="category-name">{{categories.name}}</h3>
-                <div class="dish-main" id="blacklisted">
+                <div class="dish-main">
                     <div class="dish" :class="{ active: index === activeItem}"
                          v-for="(dish, index) in categories.dishes" :key="index"
-                         @click="buyDish(todayMenu.id, dish.id, index, categoryIndex)">
+                         @click="buyDish(todayMenu.id, dish.id, index, categoryIndex)"
+                         :id="dish.in_blacklist ? 'blacklisted' : index">
                         <div class="dish-top">
                             <div class="dish-img" :style="{'background-image': `url(${dish.image})`}">
                                 <div class="black-list-container">
@@ -71,6 +72,7 @@
                                  :data-todayMenuId="todayMenu.id"
                                  :data-disheId="item.id"
                                  :data-revealed="revealed"
+                                 :id="item.in_blacklist ? 'blacklisted' : index"
                                  @click="closeContent(categoryIndex)">
                                 <div class="dish-mobile-img">
                                     <img :src="item.image">
@@ -84,6 +86,9 @@
                                     </div>
                                 </div>
                                 <div class="dish-mobile-price">
+                                    <div class="dish-mobile-price-amount">
+                                        В корзине: {{item.in_basket_count}}
+                                    </div>
                                     <div class="dish-mobile-price-grams">
                                         {{ item.weight }} г.
                                     </div>
@@ -103,20 +108,20 @@
                             </div>
                             <div class="swipeout-action dish-mobile-black-add"
                                  @click="blackListChange(todayMenu.id, item.id, index, categoryIndex)"
-                                 v-if="!item.in_blacklist && item.showBlackList">
+                                 v-if="item.in_blacklist && item.showBlackList">
                                 <div class="dish-mobile-black-add-dish">
                                     <img src="../assets/img/blackListAdd.svg">
-                                    <div>ЧЕРНЫЙ СПИСОК</div>
+                                    <div>ВЕРНУТЬ ИЗ ЧЕРНОГО СПИСКА</div>
                                 </div>
                             </div>
                         </template>
                         <template v-slot:right="{ item, close, index }">
                             <div class="swipeout-action dish-mobile-black-delete"
                                  @click="blackListChange(todayMenu.id, item.id, index, categoryIndex)"
-                                 v-if="item.in_blacklist && item.showBlackList">
+                                 v-if="!item.in_blacklist && item.showBlackList">
                                 <div class="dish-mobile-black-delete-dish">
                                     <img src="../assets/img/blackListDelete.svg">
-                                    <div>ЧЕРНЫЙ СПИСОК</div>
+                                    <div>ДОБАВИТЬ В ЧЕРНЫЙ СПИСОК</div>
                                 </div>
                             </div>
                             <div class="swipeout-action dish-mobile-delete"
@@ -138,12 +143,12 @@
             <div class="total-sum-container">
                 <div class="total-sum">
                     <div class="total-container">
-                        <p class="money-spent">{{todayMenu.basket_summ}}р</p>
+                        <p class="money-spent">{{todayMenu.basket_summ}} Р</p>
                         <img class="cart-icon" src="../assets/img/cart_white.svg"/>
                         <!-- Юля добавила ви байнд в р тэг ниже, не удалять -->
                         <p class="money-left"
                            v-bind:style="{'color' : (this.todayMenu.basket_summ >= this.todayMenu.basket_summ_limit ? '#ED2736':'#42D547')}">
-                            {{moneyLeft}}Р</p>
+                            {{moneyLeft}} Р</p>
                     </div>
                     <div class="show-black-listed">
                         <label class="switch">
@@ -389,6 +394,10 @@
         transition: .3s;
         filter: grayscale(100%);
     }
+    #blacklisted {
+        transition: .3s;
+        filter: grayscale(100%);
+    }
 
     /* плашка внизу страницы */
     .total-sum {
@@ -425,6 +434,7 @@
 
         p {
             font-size: 24px;
+            font-weight: bold;
         }
     }
 
@@ -780,6 +790,7 @@
                     flex-direction: column;
                     align-items: center;
                     width: 60px;
+                    text-align: center;
 
                     img {
                         width: 70px;
@@ -788,7 +799,7 @@
                     div {
                         margin-top: 5px;
                         font-weight: 700;
-                        font-size: 18px;
+                        font-size: 16px;
                         color: #460B79;
                     }
                 }
@@ -804,6 +815,7 @@
                     flex-direction: column;
                     align-items: center;
                     width: 60px;
+                    text-align: center;
 
                     img {
                         width: 70px;
@@ -812,7 +824,7 @@
                     div {
                         margin-top: 5px;
                         font-weight: 700;
-                        font-size: 18px;
+                        font-size: 16px;
                         color: #FFFFFF;
                     }
                 }
@@ -863,7 +875,6 @@
 
                 .dish-mobile-price {
                     width: 25%;
-
                     .dish-mobile-price-grams, .dish-mobile-price-price {
                         font-weight: 400;
                         font-size: 28px;
@@ -1131,7 +1142,7 @@
                     margin-right: 2%;
 
                     .dish-mobile-text-disc {
-                        font-size: 16px;
+                        font-size: 13px;
                     }
 
                     .dish-mobile-text-prelude {
@@ -1141,7 +1152,10 @@
 
                 .dish-mobile-price {
                     width: 30%;
-
+                    
+                    &-amount {
+                        font-size: 12px;;
+                    }
                     .dish-mobile-price-grams, .dish-mobile-price-price {
                         font-size: 18px;
                     }
@@ -1264,7 +1278,7 @@
                     width: 70%;
 
                     .dish-mobile-text-disc {
-                        font-size: 16px;
+                        font-size: 12px;
                     }
 
                     .dish-mobile-text-prelude {
@@ -1273,6 +1287,9 @@
                 }
 
                 .dish-mobile-price {
+                    &-amount {
+                        width: 15%;
+                    }
                     .dish-mobile-price-grams, .dish-mobile-price-price {
                         font-size: 14px;
                         margin-right: 1%;
