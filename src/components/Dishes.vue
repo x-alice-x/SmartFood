@@ -162,7 +162,7 @@
                 button: {
                     text: 'Добавить в черный список'
                 },
-                revealed: {},
+                revealed: '',
                 zak: 0,
                 currentIndex: 0,
                 downX: 0,
@@ -222,7 +222,7 @@
                 console.log('У вас блюд: ' + this.zak)
             },
             closeContent() {
-                this.$refs.list.close()
+                this.$refs.list[this.currentIndex].close()
                 this.black_list = false
             },
             blackListChange(menu_id, dish_id, index, categoryIndex) {
@@ -258,25 +258,27 @@
                 this.$router.push('/');
             }
             $(document).on("touchstart  mousedown", ".card-content", function (event) {
-                self.currentIndex = event.currentTarget.dataset.indexitem;
+                self.currentIndex = event.currentTarget.dataset.categoryindex;
                 self.downX = event.changedTouches[0].clientX;
                 this.black_list = false;
             });
             $(document).on("touchend  mouseup", ".card-content", function (event) {
                 self.upX = event.changedTouches[0].clientX;
+                self.revealed = event.currentTarget.dataset.revealed;
             })
         },
         watch: {
             upX: function () {
+                this.black_list = false;
                 if (Math.abs(this.upX - this.downX) >= 3 * window.screen.width / 4) {
-                    if (this.revealed[this.currentIndex] === 'right') {
+                    if (this.revealed === 'right') {
                         this.black_list = false;
                         console.log('right');
-                        this.$refs.list.close()
-                    } else if (this.revealed[this.currentIndex] === 'left') {
+                        this.$refs.list[this.currentIndex].close()
+                    } else if (this.revealed === 'left') {
                         this.black_list = false;
                         console.log('left');
-                        this.$refs.list.close()
+                        this.$refs.list[this.currentIndex].close()
                     }
                 } else {
                     this.black_list = true
