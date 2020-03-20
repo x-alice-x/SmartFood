@@ -1,4 +1,4 @@
-/* eslint-disable vue/valid-v-on */
+
 <template>
     <div class="dishes">
         <div class="container">
@@ -80,7 +80,7 @@
                                         {{ item.weight }} г.
                                     </div>
                                     <div class="dish-mobile-price-price">
-                                        {{ item.price }} ₽
+                                        {{ item.price }} Р
                                     </div>
                                 </div>
                             </div>
@@ -129,7 +129,7 @@
                         <p class="money-spent">{{todayMenu.basket_summ}}р</p>
                         <img class="cart-icon" src="../assets/img/cart_white.svg"/>
                         <!-- Юля добавила ви байнд в р тэг ниже, не удалять -->
-                        <p class="money-left" v-bind:style="{'color' : (this.todayMenu.basket_summ >= this.todayMenu.basket_summ_limit ? '#ED2736':'#42D547')}">{{moneyLeft}}p</p>
+                        <p class="money-left" v-bind:style="{'color' : (this.todayMenu.basket_summ >= this.todayMenu.basket_summ_limit ? '#ED2736':'#42D547')}">{{moneyLeft}}Р</p>
                     </div>
                     <div class="show-black-listed">
                         <label class="switch">
@@ -373,6 +373,7 @@
         height: 50px;
         background: rgba(255, 255, 255, 0.5);
         width: 100%;
+        z-index: 20;
     }
 
     .total-container {
@@ -391,6 +392,7 @@
         bottom: 0;
         left: 50%;
         transform: translateX(-50%);
+        z-index: 20;
 
         p {
             font-size: 24px;
@@ -1022,7 +1024,7 @@ input:checked + .slider:before {
             }
         }
 // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
-    @media (max-width: 440px) {
+@media (max-width: 440px) {
         .container .week {
             margin-bottom: 0;
         }
@@ -1128,7 +1130,90 @@ input:checked + .slider:before {
             }
         }
     }
+    // вот этот квери полностью новый обяз добавить
+@media (max-width: 380px) {
+       .category-name {
+            width: 85%;
+            margin: 10px auto 20px auto;
+        }
+        .dish-mobile {
+            .swipeout-action.dish-mobile-delete {
+                .dish-mobile-delete-dish {
+                    width: 50px;
+                    img {
+                        width: 40px;
+                    }
+                }
+            }
+            .swipeout-action.dish-mobile-add {
+                .dish-mobile-add-dish {
+                    width: 50px;
+                    img {
+                        width: 40px;
+                    }
+                }
+            }
+            .swipeout-action.dish-mobile-black-add {
+                .dish-mobile-black-add-dish {
+                    width: 50px;
+                    img {
+                        width: 40px;
+                    }
+                }
+            }
+            .swipeout-action.dish-mobile-black-delete {
+                .dish-mobile-black-delete-dish {
+                    width: 50px;
+                    img {
+                        width: 40px;
+                    }
+                }
+            }
+            .card-content {
+                min-height: 150px;
+                height:auto;
+                padding: 2% 0 2% 0;
+                .dish-mobile-img {
+                    img {
+                        width: 120px;
+                        height: auto;
+                        clip-path: circle(40px at center);
+                    }
+                }
+                .dish-mobile-text {
+                    width: 70%;
+                    .dish-mobile-text-disc {
+                        font-size: 16px;
+                    }
+                    .dish-mobile-text-prelude {
+                        font-size: 14px;
+                    }
+                }
+                .dish-mobile-price {
+                    .dish-mobile-price-grams, .dish-mobile-price-price {
+                        font-size: 14px;
+                        margin-right: 1%;
+                    }
+                }
+            }
+.total-sum {
+    flex-direction: column;
+}
 
+.total-container p{
+    font-size: 20px;
+}
+.show-black-listed p{
+    font-size:24px;
+}
+.money-spent, .money-left {
+    font-size: 20px;
+}
+
+.money-left {
+    color: #42D547;
+}
+}
 @media (max-width: 360px) {
         /* плашка внизу страницы */
 
@@ -1211,7 +1296,7 @@ input:checked + .slider:before {
             }
         }
     }
-
+}
 </style>
 <style>
     .swipeout {
@@ -1226,4 +1311,5 @@ input:checked + .slider:before {
         display: flex;
         z-index: 0;
     }
+
 </style>
