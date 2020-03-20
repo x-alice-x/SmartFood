@@ -1,4 +1,3 @@
-/* eslint-disable vue/valid-v-on */
 <template>
     <div class="dishes">
         <div class="container">
@@ -68,6 +67,9 @@
                             <!-- close is method which closes an opened side -->
                             <div ref="content" class="card-content"
                                  :data-categoryIndex="categoryIndex"
+                                 :data-disheIndex="index"
+                                 :data-todayMenuId="todayMenu.id"
+                                 :data-disheId="item.id"
                                  :data-revealed="revealed"
                                  @click="closeContent(categoryIndex)">
                                 <div class="dish-mobile-img">
@@ -86,20 +88,22 @@
                                         {{ item.weight }} г.
                                     </div>
                                     <div class="dish-mobile-price-price">
-                                        {{ item.price }} ₽
+                                        {{ item.price }} Р
                                     </div>
                                 </div>
                             </div>
                         </template>
                         <template v-slot:left="{ item, close, index }">
-                            <div class="swipeout-action dish-mobile-add" @click="delDish(index)">
+                            <div class="swipeout-action dish-mobile-add"
+                                 @click="buyDish(todayMenu.id, item.id, index, categoryIndex)">
                                 <div class="dish-mobile-add-dish">
                                     <img src="../assets/img/cartMobile.svg">
                                     <div>ДОБАВИТЬ</div>
                                 </div>
                             </div>
-                            <div class="swipeout-action dish-mobile-black-add" @click="delDish(index)"
-                                 v-if="black_list">
+                            <div class="swipeout-action dish-mobile-black-add"
+                                 @click="blackListChange(todayMenu.id, item.id, index, categoryIndex)"
+                                 v-if="!item.in_blacklist && item.showBlackList">
                                 <div class="dish-mobile-black-add-dish">
                                     <img src="../assets/img/blackListAdd.svg">
                                     <div>ЧЕРНЫЙ СПИСОК</div>
@@ -107,14 +111,16 @@
                             </div>
                         </template>
                         <template v-slot:right="{ item, close, index }">
-                            <div class="swipeout-action dish-mobile-black-delete" @click="delDish(index)"
-                                 v-if="black_list">
+                            <div class="swipeout-action dish-mobile-black-delete"
+                                 @click="blackListChange(todayMenu.id, item.id, index, categoryIndex)"
+                                 v-if="item.in_blacklist && item.showBlackList">
                                 <div class="dish-mobile-black-delete-dish">
                                     <img src="../assets/img/blackListDelete.svg">
                                     <div>ЧЕРНЫЙ СПИСОК</div>
                                 </div>
                             </div>
-                            <div class="swipeout-action dish-mobile-delete" @click="addDish(index)">
+                            <div class="swipeout-action dish-mobile-delete"
+                                 @click="deleteDish(todayMenu.id, item.id, index, categoryIndex)">
                                 <div class="dish-mobile-delete-dish">
                                     <img src="../assets/img/delete.svg">
                                     <div>УДАЛИТЬ</div>
@@ -134,7 +140,10 @@
                     <div class="total-container">
                         <p class="money-spent">{{todayMenu.basket_summ}}р</p>
                         <img class="cart-icon" src="../assets/img/cart_white.svg"/>
-                        <p class="money-left">{{todayMenu.basket_summ - todayMenu.basket_summ_limit}}p</p>
+                        <!-- Юля добавила ви байнд в р тэг ниже, не удалять -->
+                        <p class="money-left"
+                           v-bind:style="{'color' : (this.todayMenu.basket_summ >= this.todayMenu.basket_summ_limit ? '#ED2736':'#42D547')}">
+                            {{moneyLeft}}Р</p>
                     </div>
                     <div class="show-black-listed">
                         <label class="switch">
@@ -164,10 +173,12 @@
                 },
                 revealed: '',
                 zak: 0,
-                currentIndex: 0,
+                categoryIndex: 0,
+                dishIndex: 0,
+                todayMenuId: 0,
+                dishId: 0,
                 downX: 0,
                 upX: 0,
-                black_list: false,
                 blackListShow: 0
             };
         },
@@ -204,25 +215,15 @@
                 event.stopPropagation()
             },
             blackList() {
+                event.stopPropagation();
                 if (this.button.text == "Добавить в черный список") {
                     this.button.text = "Убрать из черного списка";
                 } else if (this.button.text == "Убрать из черного списка") {
                     this.button.text = "Добавить в черный список";
                 }
             },
-            addDish(index) {
-                console.log(index)
-                this.zak++;
-                console.log('У вас блюд: ' + this.zak)
-                this.$refs.list.close()
-            },
-            delDish(index) {
-                console.log(index)
-                this.zak--;
-                console.log('У вас блюд: ' + this.zak)
-            },
             closeContent() {
-                this.$refs.list[this.currentIndex].close()
+                this.$refs.list[this.categoryIndex].close()
                 this.black_list = false
             },
             blackListChange(menu_id, dish_id, index, categoryIndex) {
@@ -248,6 +249,12 @@
                     return []
                 }
             },
+            // Юля добавила moneyLeft
+            moneyLeft() {
+                return this.todayMenu.basket_summ >= this.todayMenu.basket_summ_limit ?
+                    this.todayMenu.basket_summ - this.todayMenu.basket_summ_limit :
+                    this.todayMenu.basket_summ_limit - this.todayMenu.basket_summ
+            },
         },
         async mounted() {
             let self = this;
@@ -258,30 +265,59 @@
                 this.$router.push('/');
             }
             $(document).on("touchstart  mousedown", ".card-content", function (event) {
-                self.currentIndex = event.currentTarget.dataset.categoryindex;
+                self.categoryIndex = event.currentTarget.dataset.categoryindex;
+                self.dishIndex = event.currentTarget.dataset.disheindex;
+                self.todayMenuId = event.currentTarget.dataset.todaymenuid;
+                self.dishId = event.currentTarget.dataset.dishid;
                 self.downX = event.changedTouches[0].clientX;
-                this.black_list = false;
+                self.$store.commit('showBlackList', {
+                    indexCategory: self.categoryIndex,
+                    indexDishes: self.dishIndex,
+                    bool: false
+                });
+                event.stopPropagation();
             });
             $(document).on("touchend  mouseup", ".card-content", function (event) {
                 self.upX = event.changedTouches[0].clientX;
                 self.revealed = event.currentTarget.dataset.revealed;
+                // self.$store.commit('showBlackList', {
+                //     indexCategory: self.categoryIndex,
+                //     indexDishes: self.dishIndex,
+                //     bool: false
+                // });
             })
         },
         watch: {
             upX: function () {
-                this.black_list = false;
+                this.$store.commit('showBlackList', {
+                    indexCategory: this.categoryIndex,
+                    indexDishes: this.dishIndex,
+                    bool: false
+                })
                 if (Math.abs(this.upX - this.downX) >= 3 * window.screen.width / 4) {
                     if (this.revealed === 'right') {
-                        this.black_list = false;
-                        console.log('right');
-                        this.$refs.list[this.currentIndex].close()
+                        this.$store.commit('showBlackList', {
+                            indexCategory: this.categoryIndex,
+                            indexDishes: this.dishIndex,
+                            bool: false
+                        });
+                        this.deleteDish(this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex)
+                        this.$refs.list[this.categoryIndex].close()
                     } else if (this.revealed === 'left') {
-                        this.black_list = false;
-                        console.log('left');
-                        this.$refs.list[this.currentIndex].close()
+                        this.$store.commit('showBlackList', {
+                            indexCategory: this.categoryIndex,
+                            indexDishes: this.dishIndex,
+                            bool: false
+                        });
+                        this.buyDish(this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex);
+                        this.$refs.list[this.categoryIndex].close()
                     }
                 } else {
-                    this.black_list = true
+                    this.$store.commit('showBlackList', {
+                        indexCategory: this.categoryIndex,
+                        indexDishes: this.dishIndex,
+                        bool: true
+                    })
                 }
             }
         },
@@ -366,6 +402,7 @@
         height: 50px;
         background: rgba(255, 255, 255, 0.5);
         width: 100%;
+        z-index: 20;
     }
 
     .total-container {
@@ -384,6 +421,7 @@
         bottom: 0;
         left: 50%;
         transform: translateX(-50%);
+        z-index: 20;
 
         p {
             font-size: 24px;
@@ -484,7 +522,7 @@
         flex-direction: column;
         justify-content: center;
         color: $font-color;
-        margin-bottom: 60px;
+        margin-bottom: 10px;
     }
 
     .dish-main {
@@ -641,7 +679,7 @@
             flex-direction: column;
         }
         .container {
-            margin-bottom: 90px;
+            margin-bottom: 10px;
         }
         /* контейнер слайдера чс */
         .show-black-listed {
@@ -654,7 +692,12 @@
         }
     }
 
+    // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
     @media (max-width: 790px) {
+        .category-name {
+            width: 85%;
+            margin: 10px auto 20px auto;
+        }
         .dish {
             display: none;
         }
@@ -669,6 +712,7 @@
         // }
         .dish-mobile {
             display: flex;
+            width: 100%;
 
             .swipeout-action {
                 display: flex;
@@ -695,9 +739,7 @@
 
                     div {
                         margin-top: 5px;
-                        font-family: Roboto, sans-serif;
-                        font-style: normal;
-                        font-weight: 900;
+                        font-weight: 700;
                         font-size: 18px;
                         color: #FFFFFF;
                     }
@@ -723,9 +765,7 @@
 
                     div {
                         margin-top: 5px;
-                        font-family: Roboto, sans-serif;
-                        font-style: normal;
-                        font-weight: 900;
+                        font-weight: 700;
                         font-size: 18px;
                         color: #FFFFFF;
                     }
@@ -749,9 +789,7 @@
 
                     div {
                         margin-top: 5px;
-                        font-family: Roboto, sans-serif;
-                        font-style: normal;
-                        font-weight: 900;
+                        font-weight: 700;
                         font-size: 18px;
                         color: #460B79;
                     }
@@ -775,9 +813,7 @@
 
                     div {
                         margin-top: 5px;
-                        font-family: Roboto, sans-serif;
-                        font-style: normal;
-                        font-weight: 900;
+                        font-weight: 700;
                         font-size: 18px;
                         color: #FFFFFF;
                     }
@@ -786,76 +822,61 @@
 
             .card-content {
                 display: flex;
-                justify-content: space-between;
+                justify-content: center;
                 align-items: center;
                 height: 150px;
                 background: #FFFFFF;
+                width: 100%;
+                border-top: 1px solid #F2EDF6;
 
                 .dish-mobile-img {
-                    border-radius: 50%;
-
                     img {
                         width: 190px;
-                        border-radius: 50%;
-                        margin-left: 10px;
+                        height: auto;
+                        clip-path: circle(60px at center);
                     }
                 }
 
                 .dish-mobile-text {
-                    width: 465px;
+                    width: 60%;
                     height: 125px;
+                    display: flex;
+                    align-items: flex-start;
+                    justify-content: center;
+                    flex-direction: column;
 
                     .dish-mobile-text-disc {
                         display: flex;
                         flex-wrap: wrap;
-                        font-family: Roboto, sans-serif;
-                        font-style: normal;
-                        font-weight: 900;
-                        font-size: 30px;
-                        line-height: 30px;
-                        color: rgba(0, 0, 0, 0.75);
+                        font-weight: 700;
+                        font-size: 22px;
+                        text-transform: uppercase;
+                        color: #460B79;
                     }
 
                     .dish-mobile-text-prelude {
                         margin-top: 10px;
-                        height: 77px;
-                        font-family: Roboto, sans-serif;
-                        font-style: normal;
-                        font-weight: 200;
-                        font-size: 18px;
-                        line-height: 21px;
-                        color: #000000;
+                        height: auto;
+                        font-weight: 400;
+                        font-size: 16px;
+                        color: #460B79;
                     }
                 }
 
                 .dish-mobile-price {
-                    width: 100px;
-                    margin-top: 70px;
+                    width: 25%;
 
-                    .dish-mobile-price-grams {
-                        height: 34px;
-                        font-family: Roboto, sans-serif;
-                        font-style: normal;
-                        font-weight: 300;
-                        font-size: 24px;
-                        line-height: 28px;
+                    .dish-mobile-price-grams, .dish-mobile-price-price {
+                        font-weight: 400;
+                        font-size: 28px;
                         display: flex;
                         align-items: center;
                         text-align: right;
-                        color: #000000;
+                        color: #460B79;
                     }
 
                     .dish-mobile-price-price {
-                        height: 34px;
-                        font-family: Roboto, sans-serif;
-                        font-style: normal;
-                        font-weight: bold;
-                        font-size: 25px;
-                        line-height: 35px;
-                        display: flex;
-                        align-items: center;
-                        text-align: right;
-                        color: #000000;
+                        font-weight: 700;
                     }
                 }
             }
@@ -881,49 +902,283 @@
                 flex: 1000 1 0%;
             }
         }
+
+        .total-sum {
+            flex-direction: column;
+        }
+        .total-container {
+            display: flex;
+            flex-direction: row;
+            height: 70px;
+            width: 100%;
+            z-index: 2;
+            justify-content: center;
+            align-items: center;
+
+            p {
+                font-size: 36px;
+            }
+        }
+        .cart-icon {
+            width: 50px;
+            height: 50px;
+            margin: 0 40px;
+        }
+        .money-spent, .money-left {
+            font-size: 36px;
+            font-weight: 700;
+        }
+        .money-left {
+            color: #42D547;
+        }
+        /* контейнер слайдера чс */
+        .show-black-listed {
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            bottom: 90px;
+            z-index: 2;
+
+            p {
+                font-size: 30px;
+            }
+        }
+        /* слайдер */
+        .switch {
+            width: 90px;
+            height: 44px;
+        }
+        /* слайдер для включения чс*/
+        .slider {
+            &:before {
+                height: 35px;
+                width: 35px;
+                left: 5px;
+                bottom: 5px;
+            }
+        }
+        input:checked + .slider:before {
+            transform: translateX(45px);
+        }
     }
 
-    @media (max-width: 600px) {
+    // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
+    @media (max-width: 620px) {
+        .container .week {
+            margin-bottom: 0;
+        }
+        .container {
+            margin-bottom: 150px;
+        }
+        .category-name {
+            width: 85%;
+            font-size: 24px;
+        }
         .dish-mobile {
-            grid-template-columns: 25% 100% 25%;
+            display: flex;
+            width: 100%;
 
-            &-middle {
-                transform: translateX(-25%);
+            .swipeout-action {
+                display: flex;
+                align-items: center;
+                padding: 0 3rem;
+                cursor: pointer;
+                left: 0;
+            }
 
-                &-to-right {
-                    transform: translateX(0%);
-                }
-
-                &-to-left {
-                    transform: translateX(-50%);
-                }
-
-                &-to-middle {
-                    transform: translateX(-25%);
-                }
-
-                &-about {
-                    padding-left: 60px;
-                    width: 60%;
-
-                    &-name {
-                        font-weight: 700;
-                        font-size: 20px;
+            .card-content {
+                .dish-mobile-img {
+                    img {
+                        width: 150px;
+                        clip-path: circle(50px at center);
                     }
                 }
 
-                &-typ {
-                    padding: 10px 5px 10px 0;
+                .dish-mobile-text {
+                    width: 60%;
+                    height: 125px;
 
-                    &-PW {
+                    .dish-mobile-text-disc {
+                        font-size: 18px;
+                    }
+
+                    .dish-mobile-text-prelude {
+                        font-size: 14px;
+                    }
+                }
+
+                .dish-mobile-price {
+                    width: 25%;
+
+                    .dish-mobile-price-grams, .dish-mobile-price-price {
                         font-size: 20px;
                     }
                 }
             }
         }
+        .total-sum {
+            height: 140px;
+        }
+        .money-spent, .money-left {
+            font-size: 36px;
+            font-weight: 700;
+        }
+        .show-black-listed {
+            p {
+                font-size: 22px;
+            }
+        }
+        /* слайдер */
+        .switch {
+            width: 70px;
+            height: 35px;
+        }
+        /* слайдер для включения чс*/
+        .slider {
+            &:before {
+                height: 27px;
+                width: 27px;
+                left: 5px;
+                bottom: 5px;
+            }
+        }
+        input:checked + .slider:before {
+            transform: translateX(35px);
+        }
     }
 
-    @media (max-width: 420px) {
+    .dish-mobile {
+        grid-template-columns: 25% 100% 25%;
+
+        &-middle {
+            transform: translateX(-25%);
+
+            &-to-right {
+                transform: translateX(0%);
+            }
+
+            &-to-left {
+                transform: translateX(-50%);
+            }
+
+            &-to-middle {
+                transform: translateX(-25%);
+            }
+
+            &-about {
+                padding-left: 60px;
+                width: 60%;
+
+                &-name {
+                    font-weight: 700;
+                    font-size: 20px;
+                }
+            }
+
+            &-typ {
+                padding: 10px 5px 10px 0;
+
+                &-PW {
+                    font-size: 20px;
+                }
+            }
+        }
+    }
+
+    // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
+    @media (max-width: 440px) {
+        .container .week {
+            margin-bottom: 0;
+        }
+        .dish-mobile {
+            display: flex;
+            width: 100%;
+
+            .swipeout-action.dish-mobile-delete {
+                .dish-mobile-delete-dish {
+                    img {
+                        width: 50px;
+                    }
+                }
+            }
+
+            .swipeout-action.dish-mobile-add {
+                .dish-mobile-add-dish {
+                    img {
+                        width: 50px;
+                    }
+                }
+            }
+
+            .swipeout-action.dish-mobile-black-add {
+                .dish-mobile-black-add-dish {
+                    img {
+                        width: 50px;
+                    }
+                }
+            }
+
+            .swipeout-action.dish-mobile-black-delete {
+                .dish-mobile-black-delete-dish {
+                    img {
+                        width: 50px;
+                    }
+                }
+            }
+
+            .card-content {
+                .dish-mobile-text {
+                    width: 50%;
+                    height: 125px;
+                    margin-right: 2%;
+
+                    .dish-mobile-text-disc {
+                        font-size: 16px;
+                    }
+
+                    .dish-mobile-text-prelude {
+                        font-size: 12px;
+                    }
+                }
+
+                .dish-mobile-price {
+                    width: 30%;
+
+                    .dish-mobile-price-grams, .dish-mobile-price-price {
+                        font-size: 18px;
+                    }
+                }
+            }
+        }
+        .total-sum {
+            height: 140px;
+        }
+        .money-spent, .money-left {
+            font-size: 36px;
+            font-weight: 700;
+        }
+        .show-black-listed {
+            p {
+                font-size: 22px;
+            }
+        }
+        /* слайдер */
+        .switch {
+            width: 70px;
+            height: 35px;
+        }
+        /* слайдер для включения чс*/
+        .slider {
+            &:before {
+                height: 27px;
+                width: 27px;
+                left: 5px;
+                bottom: 5px;
+            }
+        }
+        input:checked + .slider:before {
+            transform: translateX(35px);
+        }
         .dish-mobile {
             &-middle {
                 &-about {
@@ -947,80 +1202,181 @@
         }
     }
 
-    @media (max-width: 360px) {
-        /* плашка внизу страницы */
-        .total-sum {
-            flex-direction: column;
-        }
-        .total-container {
-            display: flex;
-            flex-direction: row;
-            width: 100%;
-            z-index: 2;
-        }
-        .cart-icon {
-            width: 30px;
-            height: 30px;
-        }
-        /* контейнер слайдера чс */
-        .show-black-listed {
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            z-index: 2;
-
-            p {
-                font-size: 16px;
-            }
-        }
-        /* слайдер */
-        .switch {
-            width: 50px;
-            height: 28px;
-        }
-        /* слайдер для включения чс*/
-        .slider {
-            &:before {
-                height: 22px;
-                width: 22px;
-                left: 3px;
-                bottom: 3px;
-            }
-        }
-        input:checked + .slider:before {
-            transform: translateX(22px);
+    // вот этот квери полностью новый обяз добавить
+    @media (max-width: 380px) {
+        .category-name {
+            width: 85%;
+            margin: 10px auto 20px auto;
         }
         .dish-mobile {
-            &-middle {
-                &-about {
-                    padding-left: 10px;
-                    width: 65%;
+            .swipeout-action.dish-mobile-delete {
+                .dish-mobile-delete-dish {
+                    width: 50px;
 
-                    &-name {
+                    img {
+                        width: 40px;
+                    }
+                }
+            }
+
+            .swipeout-action.dish-mobile-add {
+                .dish-mobile-add-dish {
+                    width: 50px;
+
+                    img {
+                        width: 40px;
+                    }
+                }
+            }
+
+            .swipeout-action.dish-mobile-black-add {
+                .dish-mobile-black-add-dish {
+                    width: 50px;
+
+                    img {
+                        width: 40px;
+                    }
+                }
+            }
+
+            .swipeout-action.dish-mobile-black-delete {
+                .dish-mobile-black-delete-dish {
+                    width: 50px;
+
+                    img {
+                        width: 40px;
+                    }
+                }
+            }
+
+            .card-content {
+                min-height: 150px;
+                height: auto;
+                padding: 2% 0 2% 0;
+
+                .dish-mobile-img {
+                    img {
+                        width: 120px;
+                        height: auto;
+                        clip-path: circle(40px at center);
+                    }
+                }
+
+                .dish-mobile-text {
+                    width: 70%;
+
+                    .dish-mobile-text-disc {
                         font-size: 16px;
                     }
 
-                    &-desc {
-                        padding-top: 5px;
-                        font-size: 12px;
+                    .dish-mobile-text-prelude {
+                        font-size: 14px;
+                    }
+                }
+
+                .dish-mobile-price {
+                    .dish-mobile-price-grams, .dish-mobile-price-price {
+                        font-size: 14px;
+                        margin-right: 1%;
+                    }
+                }
+            }
+
+            .total-sum {
+                flex-direction: column;
+            }
+
+            .total-container p {
+                font-size: 20px;
+            }
+
+            .show-black-listed p {
+                font-size: 24px;
+            }
+
+            .money-spent, .money-left {
+                font-size: 20px;
+            }
+
+            .money-left {
+                color: #42D547;
+            }
+        }
+        @media (max-width: 360px) {
+            /* плашка внизу страницы */
+            .total-sum {
+                flex-direction: column;
+            }
+            .total-container {
+                display: flex;
+                flex-direction: row;
+                width: 100%;
+                z-index: 2;
+            }
+            .cart-icon {
+                width: 30px;
+                height: 30px;
+            }
+            /* контейнер слайдера чс */
+            .show-black-listed {
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                z-index: 2;
+
+                p {
+                    font-size: 16px;
+                }
+            }
+            /* слайдер */
+            .switch {
+                width: 50px;
+                height: 28px;
+            }
+            /* слайдер для включения чс*/
+            .slider {
+                &:before {
+                    height: 22px;
+                    width: 22px;
+                    left: 3px;
+                    bottom: 3px;
+                }
+            }
+            input:checked + .slider:before {
+                transform: translateX(22px);
+            }
+            .dish-mobile {
+                &-middle {
+                    &-about {
+                        padding-left: 10px;
+                        width: 65%;
+
+                        &-name {
+                            font-size: 16px;
+                        }
+
+                        &-desc {
+                            padding-top: 5px;
+                            font-size: 12px;
+                        }
+
+                        // &-name{
+                        //     font-size: 16px;
+                        // }
+                        // &-desc{
+                        //     padding-top: 5px;
+                        //     font-size: 12px;
+                        // }
                     }
 
-                    // &-name{
-                    //     font-size: 16px;
-                    // }
-                    // &-desc{
-                    //     padding-top: 5px;
-                    //     font-size: 12px;
+                    &-typ {
+                        padding: 5px 10px 5px 0;
+                    }
+
+                    // &-typ{
+                    //     padding: 5px 10px 5px 0;
                     // }
                 }
-
-                &-typ {
-                    padding: 5px 10px 5px 0;
-                }
-
-                // &-typ{
-                //     padding: 5px 10px 5px 0;
-                // }
             }
         }
     }

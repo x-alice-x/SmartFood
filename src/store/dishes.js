@@ -25,9 +25,7 @@ export default {
             }
         },
         showBlackList(state, payload) {
-            /*eslint-disable */
-            state.todayMenu[payload.indexDay].categories[payload.indexCategory].dishes[indexDishes].showBlackList = payload.bool
-            /*eslint-enable */
+            state.todayMenu.categories[payload.indexCategory].dishes[payload.indexDishes].showBlackList = payload.bool
         }
     },
     actions: {
