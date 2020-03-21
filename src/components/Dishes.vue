@@ -440,7 +440,7 @@
         p {
             font-size: 24px;
             font-weight: bold;
-            min-width: 90px;
+            min-width: 95px;
             text-align: center;
         }
     }
