@@ -184,7 +184,7 @@
                 dishId: 0,
                 downX: 0,
                 upX: 0,
-                blackListShow: 0
+                blackListShow: false
             };
         },
         components: {
@@ -232,7 +232,9 @@
                 let whichFunc = this.todayMenu.categories[categoryIndex].dishes[index].in_blacklist
                 this.$store.dispatch("BlackListChange", {menu_id, dish_id, whichFunc});
                 this.todayMenu.categories[categoryIndex].dishes[index].in_blacklist = !whichFunc
-                if (!whichFunc && this.blackListShow === 0) {
+                console.log(this.blackListShow)
+                console.log(whichFunc)
+                if (!whichFunc && !this.blackListShow) {
                     this.todayMenu.categories[categoryIndex].dishes.splice(index, 1)
                 }
                 event.stopPropagation()
