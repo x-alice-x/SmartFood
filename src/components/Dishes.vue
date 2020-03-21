@@ -21,7 +21,7 @@
                                     </button>
                                     <button v-if="dish.in_blacklist"
                                             @click="blackListChange(todayMenu.id, dish.id, index, categoryIndex)">
-                                        Удалить из черного списка
+                                        Вернуть из черного списка
                                     </button>
                                 </div>
                             </div>
@@ -183,7 +183,7 @@
                 dishId: 0,
                 downX: 0,
                 upX: 0,
-                blackListShow: 0
+                blackListShow: false
             };
         },
         components: {
@@ -193,7 +193,7 @@
         methods: {
             // Добавление блюда
             buyDish(menu_id, dish_id, index, categoryIndex, buttonId) {
-                if (buttonId === 'card'){
+                if (buttonId === 'card') {
                     if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count === 0) {
                         this.$store.dispatch("OrderDish", {menu_id, dish_id});
                         this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++
@@ -201,8 +201,7 @@
                             + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
                     }
                     event.stopPropagation()
-                }
-                else {
+                } else {
                     this.$store.dispatch("OrderDish", {menu_id, dish_id});
                     this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++
                     this.todayMenu.basket_summ = this.todayMenu.basket_summ
@@ -220,23 +219,21 @@
                 }
                 event.stopPropagation()
             },
-            blackList() {
-                event.stopPropagation();
-                if (this.button.text == "Добавить в черный список") {
-                    this.button.text = "Убрать из черного списка";
-                } else if (this.button.text == "Убрать из черного списка") {
-                    this.button.text = "Добавить в черный список";
-                }
-            },
             closeContent() {
                 this.$refs.list[this.categoryIndex].close()
-                this.black_list = false
+                this.$store.commit('showBlackList', {
+                    indexCategory: this.categoryIndex,
+                    indexDishes: this.dishIndex,
+                    bool: false
+                });
             },
             blackListChange(menu_id, dish_id, index, categoryIndex) {
                 let whichFunc = this.todayMenu.categories[categoryIndex].dishes[index].in_blacklist
                 this.$store.dispatch("BlackListChange", {menu_id, dish_id, whichFunc});
                 this.todayMenu.categories[categoryIndex].dishes[index].in_blacklist = !whichFunc
-                if (!whichFunc && this.blackListShow === 0) {
+                console.log(this.blackListShow)
+                console.log(whichFunc)
+                if (!whichFunc && !this.blackListShow) {
                     this.todayMenu.categories[categoryIndex].dishes.splice(index, 1)
                 }
                 event.stopPropagation()
@@ -244,7 +241,7 @@
             blackListMenuChange() {
                 this.blackListShow = !this.blackListShow
                 this.blackListShow ? this.$store.dispatch("fetchMenu", 0) : this.$store.dispatch("fetchMenu", 1)
-            }
+            },
         },
         computed: {
             todayMenu() {
@@ -276,11 +273,13 @@
                 self.dishId = event.currentTarget.dataset.dishid;
                 self.buttonId = event.currentTarget.dataset.buttonId;
                 self.downX = event.changedTouches[0].clientX;
-                self.$store.commit('showBlackList', {
-                    indexCategory: self.categoryIndex,
-                    indexDishes: self.dishIndex,
-                    bool: false
-                });
+                if (!self.revealed) {
+                    self.$store.commit('showBlackList', {
+                        indexCategory: self.categoryIndex,
+                        indexDishes: self.dishIndex,
+                        bool: false
+                    });
+                }
                 event.stopPropagation();
             });
             $(document).on("touchend  mouseup", ".card-content", function (event) {
@@ -307,7 +306,6 @@
                             indexDishes: this.dishIndex,
                             bool: false
                         });
-                        console.log('delete',this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex)
                         this.deleteDish(this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex)
                         this.$refs.list[this.categoryIndex].close()
                     } else if (this.revealed === 'left') {
@@ -316,7 +314,6 @@
                             indexDishes: this.dishIndex,
                             bool: false
                         });
-                        console.log('buy',this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex, this.buttonId)
                         this.buyDish(this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex, this.buttonId);
                         this.$refs.list[this.categoryIndex].close()
                     }
@@ -335,10 +332,12 @@
 <style scoped lang="scss">
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
+
     .dishes {
         max-width: 1500px;
         margin: auto;
     }
+
     // категории
     .category-name {
         font-size: 40px;
@@ -402,6 +401,7 @@
         transition: .3s;
         filter: grayscale(100%);
     }
+
     #blacklisted {
         transition: .3s;
         filter: grayscale(100%);
@@ -622,6 +622,7 @@
             padding-bottom: 20px;
             display: flex;
             justify-content: center;
+
             button {
                 background: none;
                 border: none;
@@ -754,13 +755,13 @@
                     width: 60px;
 
                     img {
-                        width: 70px;
+                        width: 60px;
                     }
 
                     div {
                         margin-top: 5px;
                         font-weight: 700;
-                        font-size: 18px;
+                        font-size: 14px;
                         color: #FFFFFF;
                     }
                 }
@@ -780,13 +781,13 @@
                     width: 60px;
 
                     img {
-                        width: 70px;
+                        width: 60px;
                     }
 
                     div {
                         margin-top: 5px;
                         font-weight: 700;
-                        font-size: 18px;
+                        font-size: 14px;
                         color: #FFFFFF;
                     }
                 }
@@ -805,13 +806,13 @@
                     text-align: center;
 
                     img {
-                        width: 70px;
+                        width: 50px;
                     }
 
                     div {
                         margin-top: 5px;
                         font-weight: 700;
-                        font-size: 16px;
+                        font-size: 14px;
                         color: #460B79;
                     }
                 }
@@ -830,13 +831,13 @@
                     text-align: center;
 
                     img {
-                        width: 70px;
+                        width: 60px;
                     }
 
                     div {
                         margin-top: 5px;
                         font-weight: 700;
-                        font-size: 16px;
+                        font-size: 14px;
                         color: #FFFFFF;
                     }
                 }
@@ -846,7 +847,7 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                height: 150px;
+                height: 130px;
                 background: #FFFFFF;
                 width: 100%;
                 border-top: 1px solid #F2EDF6;
@@ -872,12 +873,10 @@
                         flex-wrap: wrap;
                         font-weight: 700;
                         font-size: 22px;
-                        text-transform: uppercase;
                         color: #460B79;
                     }
 
                     .dish-mobile-text-prelude {
-                        margin-top: 10px;
                         height: auto;
                         font-weight: 400;
                         font-size: 16px;
@@ -887,6 +886,7 @@
 
                 .dish-mobile-price {
                     width: 25%;
+
                     .dish-mobile-price-grams, .dish-mobile-price-price {
                         font-weight: 400;
                         font-size: 28px;
@@ -930,23 +930,23 @@
         .total-container {
             display: flex;
             flex-direction: row;
-            height: 70px;
+            height: 50px;
             width: 100%;
             z-index: 2;
             justify-content: center;
             align-items: center;
 
             p {
-                font-size: 36px;
+                font-size: 24px;
             }
         }
         .cart-icon {
-            width: 50px;
-            height: 50px;
+            width: 35px;
+            height: 35px;
             margin: 0 40px;
         }
         .money-spent, .money-left {
-            font-size: 36px;
+            font-size: 26px;
             font-weight: 700;
         }
         .money-left {
@@ -957,29 +957,28 @@
             align-items: center;
             justify-content: center;
             width: 100%;
-            bottom: 90px;
             z-index: 2;
 
             p {
-                font-size: 30px;
+                font-size: 18px;
             }
         }
         /* слайдер */
         .switch {
-            width: 90px;
-            height: 44px;
+            width: 45px;
+            height: 22px;
         }
         /* слайдер для включения чс*/
         .slider {
             &:before {
-                height: 35px;
-                width: 35px;
-                left: 5px;
-                bottom: 5px;
+                height: 25px;
+                width: 25px;
+                left: -1px;
+                bottom: -1px;
             }
         }
         input:checked + .slider:before {
-            transform: translateX(45px);
+            transform: translateX(25px);
         }
     }
 
@@ -1007,7 +1006,65 @@
                 left: 0;
             }
 
+            .swipeout-action.dish-mobile-delete {
+                .dish-mobile-delete-dish {
+
+                    img {
+                        width: 40px;
+                    }
+
+                    div {
+                        font-size: 12px;
+                        margin-bottom: 20px;
+                    }
+                }
+            }
+
+            .swipeout-action.dish-mobile-add {
+
+                .dish-mobile-add-dish {
+
+                    img {
+                        width: 40px;
+                    }
+
+                    div {
+                        font-size: 12px;
+                        margin-bottom: 20px;
+                    }
+                }
+            }
+
+            .swipeout-action.dish-mobile-black-add {
+
+                .dish-mobile-black-add-dish {
+
+                    img {
+                        width: 30px;
+                    }
+
+                    div {
+                        font-size: 12px;
+                        margin-bottom: 30px;
+                    }
+                }
+            }
+
+            .swipeout-action.dish-mobile-black-delete {
+                .dish-mobile-black-delete-dish {
+                    img {
+                        width: 40px;
+                    }
+
+                    div {
+                        font-size: 12px;
+                        margin-bottom: 30px;
+                    }
+                }
+            }
+
             .card-content {
+                height: 105px;
                 .dish-mobile-img {
                     img {
                         width: 150px;
@@ -1038,34 +1095,34 @@
             }
         }
         .total-sum {
-            height: 140px;
+            height: 100px;
         }
         .money-spent, .money-left {
-            font-size: 36px;
+            font-size: 24px;
             font-weight: 700;
         }
         .show-black-listed {
             p {
-                font-size: 22px;
+                font-size: 18px;
             }
         }
         /* слайдер */
-        .switch {
-            width: 70px;
-            height: 35px;
-        }
-        /* слайдер для включения чс*/
-        .slider {
-            &:before {
-                height: 27px;
-                width: 27px;
-                left: 5px;
-                bottom: 5px;
-            }
-        }
-        input:checked + .slider:before {
-            transform: translateX(35px);
-        }
+        // .switch {
+        //     width: 70px;
+        //     height: 35px;
+        // }
+        // /* слайдер для включения чс*/
+        // .slider {
+        //     &:before {
+        //         height: 27px;
+        //         width: 27px;
+        //         left: 5px;
+        //         bottom: 5px;
+        //     }
+        // }
+        // input:checked + .slider:before {
+        //     transform: translateX(35px);
+        // }
     }
 
     .dish-mobile {
@@ -1107,7 +1164,7 @@
     }
 
     // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
-    @media (max-width: 440px) {
+    @media (max-width: 475px) {
         .container .week {
             margin-bottom: 0;
         }
@@ -1116,35 +1173,31 @@
             width: 100%;
 
             .swipeout-action.dish-mobile-delete {
-                .dish-mobile-delete-dish {
-                    img {
-                        width: 50px;
-                    }
-                }
+                width: 140px;
+                padding-left: 15px;
+                // .dish-mobile-delete-dish {
+                // }
             }
 
             .swipeout-action.dish-mobile-add {
-                .dish-mobile-add-dish {
-                    img {
-                        width: 50px;
-                    }
-                }
+                width: 140px;
+                padding-right: 15px;
+                // .dish-mobile-add-dish {
+                // }
             }
 
             .swipeout-action.dish-mobile-black-add {
-                .dish-mobile-black-add-dish {
-                    img {
-                        width: 50px;
-                    }
-                }
+                // width: 20px;
+                padding: 0 20px;
+                // .dish-mobile-black-add-dish {
+                // }
             }
 
             .swipeout-action.dish-mobile-black-delete {
-                .dish-mobile-black-delete-dish {
-                    img {
-                        width: 50px;
-                    }
-                }
+                // width: 30px;
+                padding: 0 20px;
+                // .dish-mobile-black-delete-dish {
+                // }
             }
 
             .card-content {
@@ -1164,10 +1217,11 @@
 
                 .dish-mobile-price {
                     width: 30%;
-                    
+
                     &-amount {
                         font-size: 12px;;
                     }
+
                     .dish-mobile-price-grams, .dish-mobile-price-price {
                         font-size: 18px;
                     }
@@ -1175,34 +1229,34 @@
             }
         }
         .total-sum {
-            height: 140px;
+            height: 100px;
         }
         .money-spent, .money-left {
-            font-size: 36px;
+            font-size: 24px;
             font-weight: 700;
         }
         .show-black-listed {
             p {
-                font-size: 22px;
+                font-size: 18px;
             }
         }
         /* слайдер */
-        .switch {
-            width: 70px;
-            height: 35px;
-        }
-        /* слайдер для включения чс*/
-        .slider {
-            &:before {
-                height: 27px;
-                width: 27px;
-                left: 5px;
-                bottom: 5px;
-            }
-        }
-        input:checked + .slider:before {
-            transform: translateX(35px);
-        }
+        // .switch {
+        //     width: 70px;
+        //     height: 35px;
+        // }
+        // /* слайдер для включения чс*/
+        // .slider {
+        //     &:before {
+        //         height: 27px;
+        //         width: 27px;
+        //         left: 5px;
+        //         bottom: 5px;
+        //     }
+        // }
+        // input:checked + .slider:before {
+        //     transform: translateX(35px);
+        // }
         .dish-mobile {
             &-middle {
                 &-about {
@@ -1227,54 +1281,75 @@
     }
 
     // вот этот квери полностью новый обяз добавить
-    @media (max-width: 380px) {
+    @media (max-width: 400px) {
         .category-name {
             width: 85%;
             margin: 10px auto 20px auto;
         }
         .dish-mobile {
             .swipeout-action.dish-mobile-delete {
+                max-height: 100px;
                 .dish-mobile-delete-dish {
                     width: 50px;
 
                     img {
-                        width: 40px;
+                        width: 30px;
+                    }
+                    div {
+                        font-size: 10px;
+                        margin-bottom: 10px;
                     }
                 }
             }
 
             .swipeout-action.dish-mobile-add {
+                max-height: 100px;
+                width: 100px;
                 .dish-mobile-add-dish {
                     width: 50px;
 
                     img {
-                        width: 40px;
+                        width: 30px;
+                    }
+                    div {
+                        font-size: 10px;
+                        margin-bottom: 10px;
                     }
                 }
             }
 
             .swipeout-action.dish-mobile-black-add {
+                max-height: 100px;
                 .dish-mobile-black-add-dish {
                     width: 50px;
 
                     img {
-                        width: 40px;
+                        width: 20px;
+                    }
+                    div {
+                        font-size: 10px;
+                        margin-bottom: 10px;
                     }
                 }
             }
 
             .swipeout-action.dish-mobile-black-delete {
+                max-height: 100px;
                 .dish-mobile-black-delete-dish {
                     width: 50px;
 
                     img {
-                        width: 40px;
+                        width: 30px;
+                    }
+                    div {
+                        font-size: 10px;
+                        margin-bottom: 10px;
                     }
                 }
             }
 
             .card-content {
-                min-height: 150px;
+                max-height: 70px;
                 height: auto;
                 padding: 2% 0 2% 0;
 
@@ -1288,20 +1363,20 @@
 
                 .dish-mobile-text {
                     width: 70%;
-
                     .dish-mobile-text-disc {
                         font-size: 12px;
                     }
 
                     .dish-mobile-text-prelude {
-                        font-size: 14px;
+                        font-size: 10px;
                     }
                 }
 
                 .dish-mobile-price {
                     &-amount {
-                        width: 15%;
+                        font-size: 10px;
                     }
+
                     .dish-mobile-price-grams, .dish-mobile-price-price {
                         font-size: 14px;
                         margin-right: 1%;
@@ -1318,7 +1393,7 @@
             }
 
             .show-black-listed p {
-                font-size: 24px;
+                font-size: 18px;
             }
 
             .money-spent, .money-left {
@@ -1333,6 +1408,44 @@
             /* плашка внизу страницы */
             .total-sum {
                 flex-direction: column;
+
+            }
+            .dish-mobile {
+                .swipeout-action.dish-mobile-add {
+                    width: 120px;
+                    padding: 0 10px;
+                    div {
+                        font-size: 8px;
+                    }
+                }
+                .swipeout-action.dish-mobile-black-add {
+                    padding: 0 10px;
+                    .dish-mobile-black-add-dish {
+                        div {
+                            font-size: 8px;
+                        }
+                    }
+                }
+                .swipeout-action.dish-mobile-delete {
+                    width: 120px;
+                    padding: 0 10px;
+                    .dish-mobile-delete-dish {
+                        div {
+                            font-size: 8px;
+                        }
+                    }
+                }
+                .swipeout-action.dish-mobile-black-delete {
+                    // width: 60px;
+                    display: flex;
+                    padding: 0 10px;
+                    justify-content: center;
+                    .dish-mobile-black-delete-dish {
+                        div {
+                            font-size: 8px;
+                        }
+                    }
+                }
             }
             .total-container {
                 display: flex;
@@ -1356,22 +1469,22 @@
                 }
             }
             /* слайдер */
-            .switch {
-                width: 50px;
-                height: 28px;
-            }
-            /* слайдер для включения чс*/
-            .slider {
-                &:before {
-                    height: 22px;
-                    width: 22px;
-                    left: 3px;
-                    bottom: 3px;
-                }
-            }
-            input:checked + .slider:before {
-                transform: translateX(22px);
-            }
+            // .switch {
+            //     width: 50px;
+            //     height: 28px;
+            // }
+            // /* слайдер для включения чс*/
+            // .slider {
+            //     &:before {
+            //         height: 22px;
+            //         width: 22px;
+            //         left: 3px;
+            //         bottom: 3px;
+            //     }
+            // }
+            // input:checked + .slider:before {
+            //     transform: translateX(22px);
+            // }
             .dish-mobile {
                 &-middle {
                     &-about {
@@ -1379,12 +1492,11 @@
                         width: 65%;
 
                         &-name {
-                            font-size: 16px;
+                            font-size: 9px;
                         }
 
                         &-desc {
-                            padding-top: 5px;
-                            font-size: 12px;
+                            font-size: 0px;
                         }
 
                         // &-name{
@@ -1413,7 +1525,7 @@
         position: relative;
         overflow: hidden;
         display: flex;
-        margin-top: 5px;
+        /* margin-top: 5px; */
     }
 
     .swipeout .swipeout-left, .swipeout .swipeout-right {
@@ -1422,8 +1534,8 @@
         display: flex;
         z-index: 0;
     }
-    button 
-    {
+
+    button {
         background: none;
         border: none;
         outline: none;
