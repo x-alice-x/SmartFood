@@ -335,8 +335,10 @@
 <style scoped lang="scss">
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
+.container:last-child {
+    margin-bottom: 60px;
 
-
+}
     .dishes {
         max-width: 1500px;
         margin: auto;
@@ -927,7 +929,7 @@
     }
     // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
     @media (max-width: 620px) {
-        .container .week {
+         .week {
             margin-bottom: 0;
         }
         .container {
@@ -1018,6 +1020,12 @@
                     }
                 }
             }
+        }
+        .card-content:last-child {
+            margin-bottom: 80px;
+        }
+               ::i-block-chrome, .container {
+            margin-bottom: 80px;
         }
         .total-sum {
             height: 100px;
