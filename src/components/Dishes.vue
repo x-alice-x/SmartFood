@@ -11,7 +11,7 @@
                          :id="dish.in_blacklist ? 'blacklisted' : index">
                         <div class="dish-top">
                             <div class="dish-img" :style="{'background-image': `url(${dish.image})`}">
-                                <div class="black-list-container">
+                                <div class="black-list-container" @click="manageBL" tabindex="-1">
                                     <img class="black-list" src="../assets/img/dots.svg"/>
                                 </div>
                                 <div id="black-list-content">
@@ -240,6 +240,9 @@
                 this.blackListShow = !this.blackListShow
                 this.blackListShow ? this.$store.dispatch("fetchMenu", 0) : this.$store.dispatch("fetchMenu", 1)
             },
+            manageBL() {
+                event.stopPropagation()
+            }
         },
         computed: {
             todayMenu() {
@@ -347,7 +350,7 @@
 
     /* контейнер для кнопочки открывающей кнопку чс */
     .black-list-container {
-        // width: 100%;
+        outline: none;
         height: auto;
         padding: 10px 15px 10px 0;
         background: transparent;
@@ -385,7 +388,7 @@
         z-index: 2;
     }
 
-    .black-list-container:hover + #black-list-content, #black-list-content:hover {
+    .black-list-container:focus + #black-list-content, #black-list-content:hover {
         display: block;
         z-index: 1;
     }
