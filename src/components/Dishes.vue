@@ -440,11 +440,17 @@
         p {
             font-size: 24px;
             font-weight: bold;
+            min-width: 90px;
+            text-align: center;
         }
     }
     .cart-icon {
         width: 30px;
         height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 2%;
     }
     /* контейнер слайдера чс */
     .show-black-listed {
