@@ -5,7 +5,7 @@
             <Weekdays class="week"></Weekdays>
             <div class="dish-category" v-for="(categories, categoryIndex) in todayMenu.categories" :key="categoryIndex">
                 <h3 class="category-name">{{categories.name}}</h3>
-                <div class="dish-main" id="blacklisted">
+                <div class="dish-main" >
                     <div class="dish" :class="{ active: index === activeItem}"
                          v-for="(dish, index) in categories.dishes" :key="index"
                          @click="buyDish(todayMenu.id, dish.id, index, categoryIndex)">
@@ -16,7 +16,7 @@
                                 </div>
                                 <div id="black-list-content">
                                     <button v-if="!dish.in_blacklist" @click="blackListChange(todayMenu.id, dish.id, index, categoryIndex)">Добавить в черный список</button>
-                                    <button v-if="dish.in_blacklist" @click="blackListChange(todayMenu.id, dish.id, index, categoryIndex)">Удалить из черного списка</button>
+                                    <button v-if="dish.in_blacklist" @click="blackListChange(todayMenu.id, dish.id, index, categoryIndex)" v-bind:style="{'filter': 'grayscale(100%)' }">Удалить из черного списка</button>
                                 </div>
                             </div>
                         </div>
@@ -154,9 +154,6 @@
         data() {
             return {
                 activeItem: null,
-                button: {
-                    text: 'Добавить в черный список'
-                },
                 revealed: {},
                 zak: 0,
                 currentIndex: 0,
@@ -198,15 +195,7 @@
                 }
                 event.stopPropagation()
             },
-            blackList() {
-                event.stopPropagation();    
-                if (this.button.text == "Добавить в черный список") {
-                  this.button.text = "Убрать из черного списка";
-                  }
-                else if (this.button.text == "Убрать из черного списка") {
-                  this.button.text = "Добавить в черный список";
-                  }
-            },
+
             addDish(index) {
                 console.log(index)
                 this.zak++;
@@ -296,7 +285,10 @@
     @import "../assets/scss/root.scss";
 
     // категории
-
+.highlight {
+    filter: grayscale(100%);
+    transition: .3s;
+}
     .category-name {
         font-size: 36px;
         color: #000;
@@ -1170,12 +1162,12 @@ input:checked + .slider:before {
                 }
             }
             .card-content {
-                min-height: 150px;
+                min-height: 100px;
                 height:auto;
                 padding: 2% 0 2% 0;
                 .dish-mobile-img {
                     img {
-                        width: 120px;
+                        width: 110px;
                         height: auto;
                         clip-path: circle(40px at center);
                     }
@@ -1183,15 +1175,16 @@ input:checked + .slider:before {
                 .dish-mobile-text {
                     width: 70%;
                     .dish-mobile-text-disc {
-                        font-size: 16px;
+                        font-size: 14px;
+                        text-transform: lowercase;
                     }
                     .dish-mobile-text-prelude {
-                        font-size: 14px;
+                        font-size: 12px;
                     }
                 }
                 .dish-mobile-price {
                     .dish-mobile-price-grams, .dish-mobile-price-price {
-                        font-size: 14px;
+                        font-size: 12px;
                         margin-right: 1%;
                     }
                 }
