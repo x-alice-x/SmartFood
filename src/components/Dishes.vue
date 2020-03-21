@@ -753,13 +753,13 @@
                     width: 60px;
 
                     img {
-                        width: 70px;
+                        width: 60px;
                     }
 
                     div {
                         margin-top: 5px;
                         font-weight: 700;
-                        font-size: 18px;
+                        font-size: 14px;
                         color: #FFFFFF;
                     }
                 }
@@ -779,13 +779,13 @@
                     width: 60px;
 
                     img {
-                        width: 70px;
+                        width: 60px;
                     }
 
                     div {
                         margin-top: 5px;
                         font-weight: 700;
-                        font-size: 18px;
+                        font-size: 14px;
                         color: #FFFFFF;
                     }
                 }
@@ -804,13 +804,13 @@
                     text-align: center;
 
                     img {
-                        width: 70px;
+                        width: 50px;
                     }
 
                     div {
                         margin-top: 5px;
                         font-weight: 700;
-                        font-size: 16px;
+                        font-size: 14px;
                         color: #460B79;
                     }
                 }
@@ -829,13 +829,13 @@
                     text-align: center;
 
                     img {
-                        width: 70px;
+                        width: 60px;
                     }
 
                     div {
                         margin-top: 5px;
                         font-weight: 700;
-                        font-size: 16px;
+                        font-size: 14px;
                         color: #FFFFFF;
                     }
                 }
@@ -845,7 +845,7 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                height: 150px;
+                height: 130px;
                 background: #FFFFFF;
                 width: 100%;
                 border-top: 1px solid #F2EDF6;
@@ -1004,7 +1004,65 @@
                 left: 0;
             }
 
+            .swipeout-action.dish-mobile-delete {
+                .dish-mobile-delete-dish {
+
+                    img {
+                        width: 40px;
+                    }
+
+                    div {
+                        font-size: 12px;
+                        margin-bottom: 20px;
+                    }
+                }
+            }
+
+            .swipeout-action.dish-mobile-add {
+
+                .dish-mobile-add-dish {
+
+                    img {
+                        width: 40px;
+                    }
+
+                    div {
+                        font-size: 12px;
+                        margin-bottom: 20px;
+                    }
+                }
+            }
+
+            .swipeout-action.dish-mobile-black-add {
+
+                .dish-mobile-black-add-dish {
+
+                    img {
+                        width: 30px;
+                    }
+
+                    div {
+                        font-size: 12px;
+                        margin-bottom: 30px;
+                    }
+                }
+            }
+
+            .swipeout-action.dish-mobile-black-delete {
+                .dish-mobile-black-delete-dish {
+                    img {
+                        width: 40px;
+                    }
+
+                    div {
+                        font-size: 12px;
+                        margin-bottom: 30px;
+                    }
+                }
+            }
+
             .card-content {
+                height: 105px;
                 .dish-mobile-img {
                     img {
                         width: 150px;
@@ -1035,7 +1093,7 @@
             }
         }
         .total-sum {
-            height: 140px;
+            height: 100px;
         }
         .money-spent, .money-left {
             font-size: 24px;
@@ -1113,35 +1171,31 @@
             width: 100%;
 
             .swipeout-action.dish-mobile-delete {
-                .dish-mobile-delete-dish {
-                    img {
-                        width: 50px;
-                    }
-                }
+                width: 140px;
+                padding-left: 15px;
+                // .dish-mobile-delete-dish {
+                // }
             }
 
             .swipeout-action.dish-mobile-add {
-                .dish-mobile-add-dish {
-                    img {
-                        width: 50px;
-                    }
-                }
+                width: 140px;
+                padding-right: 15px;
+                // .dish-mobile-add-dish {
+                // }
             }
 
             .swipeout-action.dish-mobile-black-add {
-                .dish-mobile-black-add-dish {
-                    img {
-                        width: 50px;
-                    }
-                }
+                // width: 20px;
+                padding: 0 20px;
+                // .dish-mobile-black-add-dish {
+                // }
             }
 
             .swipeout-action.dish-mobile-black-delete {
-                .dish-mobile-black-delete-dish {
-                    img {
-                        width: 50px;
-                    }
-                }
+                // width: 30px;
+                padding: 0 20px;
+                // .dish-mobile-black-delete-dish {
+                // }
             }
 
             .card-content {
@@ -1173,7 +1227,7 @@
             }
         }
         .total-sum {
-            height: 140px;
+            height: 100px;
         }
         .money-spent, .money-left {
             font-size: 24px;
@@ -1240,7 +1294,8 @@
                         width: 30px;
                     }
                     div {
-                        font-size: 12px;
+                        font-size: 10px;
+                        margin-bottom: 10px;
                     }
                 }
             }
@@ -1256,6 +1311,7 @@
                     }
                     div {
                         font-size: 10px;
+                        margin-bottom: 10px;
                     }
                 }
             }
@@ -1266,10 +1322,11 @@
                     width: 50px;
 
                     img {
-                        width: 30px;
+                        width: 20px;
                     }
                     div {
-                        font-size: 12px;
+                        font-size: 10px;
+                        margin-bottom: 10px;
                     }
                 }
             }
@@ -1283,7 +1340,8 @@
                         width: 30px;
                     }
                     div {
-                        font-size: 12px;
+                        font-size: 10px;
+                        margin-bottom: 10px;
                     }
                 }
             }
@@ -1352,7 +1410,7 @@
             }
             .dish-mobile {
                 .swipeout-action.dish-mobile-add {
-                    width: 160px;
+                    width: 120px;
                     padding: 0 10px;
                     div {
                         font-size: 8px;
@@ -1367,7 +1425,7 @@
                     }
                 }
                 .swipeout-action.dish-mobile-delete {
-                    width: 160px;
+                    width: 120px;
                     padding: 0 10px;
                     .dish-mobile-delete-dish {
                         div {

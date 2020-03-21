@@ -186,14 +186,14 @@ export default {
     color: #FF6D56;
   }
 @media(max-width: 768px) {
-  .from-submit {
+  /* .form-submit {
     width: 100%;
-  }
+  } */
   input {
     text-indent: 15% !important;
   }
   .signin-form label {
-    left: 40%;
+    left: 50%;
   }
   input:focus {
     /*text-align: left;*/
@@ -203,7 +203,12 @@ export default {
 
 @media(max-width: 666px) {
   input {
-    width: 100% !important;
+    width: 500px !important;
+    font-size: 24px !important;
+  }
+  .signin-form label {
+    font-size: 24px;
+    left: 57%;
   }
 }
 
@@ -218,6 +223,8 @@ export default {
     input {
       padding: 3px 0 10px 0 !important;
       font-size: 15px !important;
+      max-width: 400px !important;
+      text-indent: 30% !important;
     }
     .signin-form label {
       font-size: 15px;
@@ -229,6 +236,12 @@ export default {
       font-size: 16px;
       padding: 0;
     }
+}
+
+@media(max-width: 400px) {
+  input {
+    width: 300px !important;
+  }
 }
 
 </style>
