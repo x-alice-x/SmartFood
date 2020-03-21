@@ -78,7 +78,7 @@
             justify-content: center;
             align-items: center;
             width: 150px !important;
-            margin: 0 10px !important;
+            margin: 0 !important;
             height: 40px;
             background: white;
             color: $font-color;
