@@ -803,9 +803,11 @@
                 border-top: 1px solid #F2EDF6;
                 .dish-mobile-img {
                     img {
-                        width: 190px;
+                        width: 150px;
                         height: auto;
-                        clip-path: circle(60px at center);
+                        clip-path: circle(55px at center);
+                        margin-left: -12px;
+                        
                     }
                 }
                 .dish-mobile-text {
@@ -988,7 +990,9 @@
                 .dish-mobile-img {
                     img {
                         width: 150px;
-                        clip-path: circle(50px at center);
+                        height: auto;
+                        clip-path: circle(55px at center);
+                        margin-left: -12px;
                     }
                 }
                 .dish-mobile-text {
@@ -1237,9 +1241,10 @@
                 padding: 2% 0 2% 0;
                 .dish-mobile-img {
                     img {
-                        width: 120px;
+                        width: 100px;
                         height: auto;
-                        clip-path: circle(40px at center);
+                        clip-path: circle(36px at center);
+                        margin-left: -10px;
                     }
                 }
                 .dish-mobile-text {
