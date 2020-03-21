@@ -347,16 +347,16 @@
 
     /* контейнер для кнопочки открывающей кнопку чс */
     .black-list-container {
-        width: 100%;
+        // width: 100%;
         height: auto;
-        padding: 10px 20px 10px 0;
+        padding: 10px 15px 10px 0;
         background: transparent;
         display: flex;
         justify-content: flex-end;
 
         .black-list {
-            width: 60px;
-            height: 20px;
+            width: 45px;
+            height: 22.5px;
             cursor: pointer;
         }
     }
@@ -414,8 +414,12 @@
         bottom: 0;
         left: 50%;
         transform: translateX(-50%);
-        height: 50px;
-        background: rgba(255, 255, 255, 0.5);
+        height: 45px;
+        // border-top: 10px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 0 10px 10px rgba(255, 255, 255, 1);
+                    // 0 0 5px 5px rgba(255, 255, 255, 0.2);
+        // background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.9));
+        background: rgba(255, 255, 255, 1);
         width: 100%;
         z-index: 20;
     }
@@ -923,6 +927,7 @@
         }
 
         .total-sum {
+            height: 95px;
             flex-direction: column;
         }
         .total-container {
@@ -1227,7 +1232,7 @@
             }
         }
         .total-sum {
-            height: 100px;
+            height: 95px;
         }
         .money-spent, .money-left {
             font-size: 24px;
