@@ -5,10 +5,11 @@
             <div class="dish-category" v-for="(categories, categoryIndex) in todayMenu.categories" :key="categoryIndex">
                 <h3 class="category-name">{{categories.name}}</h3>
                 <div class="dish-main">
-                    <div class="dish" :class="{ active: index === activeItem}"
+                    <div class="dish" 
                          v-for="(dish, index) in categories.dishes" :key="index"
                          @click="buyDish(todayMenu.id, dish.id, index, categoryIndex, buttonId = 'card')"
-                         :id="dish.in_blacklist ? 'blacklisted' : index">
+                         :id="dish.in_blacklist ? 'blacklisted' : index"
+                         :class="{ active: dish.in_basket_count == 0}">
                         <div class="dish-top">
                             <div class="dish-img" :style="{'background-image': `url(${dish.image})`}">
                                 <div class="black-list-container" @click="manageBL" tabindex="-1">
@@ -338,7 +339,9 @@
         max-width: 1500px;
         margin: auto;
     }
-
+    .active {
+        cursor: pointer;
+    }
     // категории
     .category-name {
         font-size: 40px;
