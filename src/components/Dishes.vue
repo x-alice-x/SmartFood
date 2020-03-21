@@ -335,6 +335,8 @@
 <style scoped lang="scss">
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
+
+
     .dishes {
         max-width: 1500px;
         margin: auto;
@@ -555,6 +557,9 @@
         &-category {
             margin-bottom: 50px;
         }
+        // &-category:last-child {
+        //     margin-bottom: 30px;
+        // }
         &-amount {
             width: 82px;
             height: 30px;
@@ -906,17 +911,18 @@
             width: 45px;
             height: 22px;
         }
+
         /* слайдер для включения чс*/
         .slider {
             &:before {
-                height: 25px;
-                width: 25px;
-                left: -1px;
-                bottom: -1px;
+                height: 18px;
+                width: 18px;
+                left: 2px;
+                bottom: 2px;
             }
         }
         input:checked + .slider:before {
-            transform: translateX(25px);
+            transform: translateX(22px);
         }
     }
     // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
@@ -925,7 +931,7 @@
             margin-bottom: 0;
         }
         .container {
-            margin-bottom: 150px;
+            margin-bottom: 80px;
         }
         .category-name {
             width: 85%;
