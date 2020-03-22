@@ -12,7 +12,7 @@
                          :class="{ active: dish.in_basket_count == 0}">
                         <div class="dish-top">
                             <div class="dish-img" :style="{'background-image': `url(${dish.image})`}">
-                                <div class="black-list-container" @click="manageBL" tabindex="-1">
+                                <div class="black-list-container" tabindex="-1" @click="manageBL">
                                     <img class="black-list" src="../assets/img/dots.svg"/>
                                 </div>
                                 <div id="black-list-content">
@@ -244,6 +244,7 @@
                 this.blackListShow ? this.$store.dispatch("fetchMenu", 0) : this.$store.dispatch("fetchMenu", 1)
             },
             manageBL() {
+                console.log("stop")
                 event.stopPropagation()
             }
         },
@@ -363,8 +364,10 @@
     /* контейнер для кнопочки открывающей кнопку чс */
     .black-list-container {
         outline: none;
-        height: auto;
-        padding: 10px 15px 10px 0;
+        width: fit-content;
+        padding: 10px 15px 5px 0;
+        margin-left: 290px;
+        cursor: pointer;
         background: transparent;
         display: flex;
         justify-content: flex-end;
@@ -372,7 +375,6 @@
         .black-list {
             width: 45px;
             height: 22.5px;
-            cursor: pointer;
         }
     }
 
@@ -431,10 +433,10 @@
         transform: translateX(-50%);
         height: 45px;
         // border-top: 10px solid rgba(255, 255, 255, 0.3);
-        box-shadow: 0 0 10px 10px rgba(255, 255, 255, 1);
+        box-shadow: 0 0 10px 10px rgba(255, 255, 255, 0.9);
         // 0 0 5px 5px rgba(255, 255, 255, 0.2);
         // background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.9));
-        background: rgba(255, 255, 255, 1);
+        background: rgba(255, 255, 255, 0.9);
         width: 100%;
         z-index: 20;
     }
@@ -584,6 +586,13 @@
         overflow: hidden;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         transition: 0.3s;
+
+        // &-top {
+        //     .dish-img {
+        //         display: flex;
+        //         justify-content: flex-end;
+        //     }
+        // }
 
         &:hover {
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
