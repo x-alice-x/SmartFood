@@ -1019,7 +1019,7 @@
             margin-bottom: 0;
         }
         .container {
-            margin-bottom: 80px;
+            margin-bottom: 120px;
         }
         .category-name {
             width: 85%;
