@@ -222,12 +222,12 @@ export default {
     }
     input {
       padding: 3px 0 10px 0 !important;
-      font-size: 15px !important;
+      font-size: 16px !important;
       max-width: 400px !important;
       text-indent: 30% !important;
     }
     .signin-form label {
-      font-size: 15px;
+      font-size: 16px;
       margin-top: 6px;
     }
     .form-submit {
