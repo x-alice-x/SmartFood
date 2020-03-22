@@ -270,13 +270,15 @@
                 await this.$store.dispatch("ClearCookies");
                 this.$router.push('/');
             }
-            $(document).on("touchstart  mousedown", ".card-content", function (event) {
+            $(document).on("touchstart", ".card-content", function (event) {
                 self.categoryIndex = event.currentTarget.dataset.categoryindex;
                 self.dishIndex = event.currentTarget.dataset.dishindex;
                 self.todayMenuId = event.currentTarget.dataset.todaymenuid;
                 self.dishId = event.currentTarget.dataset.dishid;
                 self.buttonId = event.currentTarget.dataset.buttonId;
-                self.downX = event.changedTouches[0].clientX;
+                if (event.changedTouches[0]) {
+                    self.downX = event.changedTouches[0].clientX;
+                }
                 if (!self.revealed) {
                     self.$store.commit('showBlackList', {
                         indexCategory: self.categoryIndex,
@@ -286,8 +288,10 @@
                 }
                 event.stopPropagation();
             });
-            $(document).on("touchend  mouseup", ".card-content", function (event) {
-                self.upX = event.changedTouches[0].clientX;
+            $(document).on("touchend", ".card-content", function (event) {
+                if (event.changedTouches[0]) {
+                    self.upX = event.changedTouches[0].clientX;
+                }
                 self.revealed = event.currentTarget.dataset.revealed;
                 // self.$store.commit('showBlackList', {
                 //     indexCategory: self.categoryIndex,
@@ -767,7 +771,7 @@
 
             .swipeout-action.dish-mobile-delete {
                 width: 220px;
-                height: 150px;
+                height: 100%;
                 background: linear-gradient(90deg, #A60000 0%, #CE0000 100%), #FFFFFF;
 
                 .dish-mobile-delete-dish {
@@ -793,7 +797,7 @@
                 display: flex;
                 justify-content: flex-end;
                 width: 220px;
-                height: 150px;
+                height: 100%;
                 background: linear-gradient(90deg, #460B79 0%, #88267F 100%), #FFFFFF;
 
                 .dish-mobile-add-dish {
@@ -817,15 +821,16 @@
 
             .swipeout-action.dish-mobile-black-add {
                 width: 60px;
-                height: 150px;
+                height: 100%;
                 background: linear-gradient(0deg, #F2EDF6, #F2EDF6), #FFFFFF;
 
                 .dish-mobile-black-add-dish {
                     display: flex;
+                    justify-content: center;
                     flex-direction: column;
                     align-items: center;
-                    width: 60px;
                     text-align: center;
+                    width: 100%;
 
                     img {
                         width: 50px;
@@ -842,15 +847,16 @@
 
             .swipeout-action.dish-mobile-black-delete {
                 width: 60px;
-                height: 150px;
+                height: 100%;
                 background: linear-gradient(90deg, #000000 0%, rgba(0, 0, 0, 0.81) 100%), #FFFFFF;
 
                 .dish-mobile-black-delete-dish {
                     display: flex;
+                    justify-content: center;
                     flex-direction: column;
                     align-items: center;
-                    width: 60px;
                     text-align: center;
+                    width: 100%;
 
                     img {
                         width: 60px;
@@ -1032,32 +1038,40 @@
             }
 
             .swipeout-action.dish-mobile-delete {
+                width: 160px;
+
                 .dish-mobile-delete-dish {
+                    width: 30px;
+
                     img {
                         width: 40px;
                     }
 
                     div {
                         font-size: 12px;
-                        margin-bottom: 20px;
                     }
                 }
             }
 
             .swipeout-action.dish-mobile-add {
+                width: 160px;
+
                 .dish-mobile-add-dish {
+                    width: 30px;
+
                     img {
                         width: 40px;
                     }
 
                     div {
                         font-size: 12px;
-                        margin-bottom: 20px;
                     }
                 }
             }
 
             .swipeout-action.dish-mobile-black-add {
+                width: 30px;
+
                 .dish-mobile-black-add-dish {
                     img {
                         width: 30px;
@@ -1065,12 +1079,13 @@
 
                     div {
                         font-size: 12px;
-                        margin-bottom: 30px;
                     }
                 }
             }
 
             .swipeout-action.dish-mobile-black-delete {
+                width: 30px;
+
                 .dish-mobile-black-delete-dish {
                     img {
                         width: 40px;
@@ -1078,7 +1093,6 @@
 
                     div {
                         font-size: 12px;
-                        margin-bottom: 30px;
                     }
                 }
             }
@@ -1196,31 +1210,63 @@
             width: 100%;
 
             .swipeout-action.dish-mobile-delete {
-                width: 140px;
-                padding-left: 15px;
-                // .dish-mobile-delete-dish {
-                // }
+                width: 120px;
+
+                .dish-mobile-delete-dish {
+                    width: 10px;
+
+                    img {
+                        width: 40px;
+                    }
+
+                    div {
+                        font-size: 10px;
+                    }
+                }
             }
 
             .swipeout-action.dish-mobile-add {
-                width: 140px;
-                padding-right: 15px;
-                // .dish-mobile-add-dish {
-                // }
+                width: 120px;
+
+                .dish-mobile-add-dish {
+                    width: 10px;
+
+                    img {
+                        width: 40px;
+                    }
+
+                    div {
+                        font-size: 10px;
+                    }
+                }
             }
 
             .swipeout-action.dish-mobile-black-add {
-                // width: 20px;
-                padding: 0 20px;
-                // .dish-mobile-black-add-dish {
-                // }
+                width: 10px;
+
+                .dish-mobile-black-add-dish {
+                    img {
+                        width: 30px;
+                    }
+
+                    div {
+                        font-size: 10px;
+                    }
+                }
             }
 
             .swipeout-action.dish-mobile-black-delete {
-                // width: 30px;
-                padding: 0 20px;
-                // .dish-mobile-black-delete-dish {
-                // }
+                width: 10px;
+
+                .dish-mobile-black-delete-dish {
+                    img {
+                        width: 40px;
+                    }
+
+                    div {
+                        font-size: 10px;
+                    }
+                }
             }
 
             .card-content {
@@ -1311,70 +1357,61 @@
         }
         .dish-mobile {
             .swipeout-action.dish-mobile-delete {
-                max-height: 100px;
+                width: 100px;
 
                 .dish-mobile-delete-dish {
-                    width: 50px;
+                    width: 0px;
 
                     img {
-                        width: 30px;
+                        width: 35px;
                     }
 
                     div {
                         font-size: 10px;
-                        margin-bottom: 10px;
                     }
                 }
             }
 
             .swipeout-action.dish-mobile-add {
-                max-height: 100px;
                 width: 100px;
 
                 .dish-mobile-add-dish {
-                    width: 50px;
+                    width: 0px;
 
                     img {
-                        width: 30px;
+                        width: 40px;
                     }
 
                     div {
                         font-size: 10px;
-                        margin-bottom: 10px;
                     }
                 }
             }
 
             .swipeout-action.dish-mobile-black-add {
-                max-height: 100px;
+                width: 0px;
 
                 .dish-mobile-black-add-dish {
-                    width: 50px;
-
-                    img {
-                        width: 20px;
-                    }
-
-                    div {
-                        font-size: 10px;
-                        margin-bottom: 10px;
-                    }
-                }
-            }
-
-            .swipeout-action.dish-mobile-black-delete {
-                max-height: 100px;
-
-                .dish-mobile-black-delete-dish {
-                    width: 50px;
-
                     img {
                         width: 30px;
                     }
 
                     div {
                         font-size: 10px;
-                        margin-bottom: 10px;
+                    }
+                }
+            }
+
+            .swipeout-action.dish-mobile-black-delete {
+                width: 0px;
+
+                .dish-mobile-black-delete-dish {
+                    img {
+                        width: 35px;
+                    }
+
+                    div {
+                        font-size: 9px;
                     }
                 }
             }
@@ -1441,50 +1478,6 @@
             /* плашка внизу страницы */
             .total-sum {
                 flex-direction: column;
-            }
-            .dish-mobile {
-                .swipeout-action.dish-mobile-add {
-                    width: 120px;
-                    padding: 0 10px;
-
-                    div {
-                        font-size: 8px;
-                    }
-                }
-
-                .swipeout-action.dish-mobile-black-add {
-                    padding: 0 10px;
-
-                    .dish-mobile-black-add-dish {
-                        div {
-                            font-size: 8px;
-                        }
-                    }
-                }
-
-                .swipeout-action.dish-mobile-delete {
-                    width: 120px;
-                    padding: 0 10px;
-
-                    .dish-mobile-delete-dish {
-                        div {
-                            font-size: 8px;
-                        }
-                    }
-                }
-
-                .swipeout-action.dish-mobile-black-delete {
-                    // width: 60px;
-                    display: flex;
-                    padding: 0 10px;
-                    justify-content: center;
-
-                    .dish-mobile-black-delete-dish {
-                        div {
-                            font-size: 8px;
-                        }
-                    }
-                }
             }
             .total-container {
                 display: flex;
