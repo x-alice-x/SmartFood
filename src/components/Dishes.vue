@@ -73,6 +73,7 @@
                                  :data-todayMenuId="todayMenu.id"
                                  :data-dishId="item.id"
                                  :data-revealed="revealed"
+                                 :data-inBlack="item.in_blacklist"
                                  :id="item.in_blacklist ? 'blacklisted' : index"
                                  @click="closeContent(categoryIndex)">
                                 <div class="dish-mobile-img">
@@ -101,7 +102,10 @@
                         </template>
                         <template v-slot:left="{ item, close, index }">
                             <div class="swipeout-action dish-mobile-add"
-                                 @click="buyDish(todayMenu.id, item.id, index, categoryIndex, buttonId = 'plus')">
+                                 @click="buyDish(todayMenu.id, item.id, index, categoryIndex, buttonId = 'plus')"
+                                 :style="{width: widthX + 'px'}"
+                                 :class="{aloneButton: item.showTransition && !item.in_blacklist}"
+                            >
                                 <div class="dish-mobile-add-dish">
                                     <img src="../assets/img/cartMobile.svg">
                                     <div>ДОБАВИТЬ</div>
@@ -126,7 +130,10 @@
                                 </div>
                             </div>
                             <div class="swipeout-action dish-mobile-delete"
-                                 @click="deleteDish(todayMenu.id, item.id, index, categoryIndex)">
+                                 @click="deleteDish(todayMenu.id, item.id, index, categoryIndex)"
+                                 :style="{width: widthX + 'px'}"
+                                 :class="{aloneButtonDel: item.showTransition && item.in_blacklist}"
+                            >
                                 <div class="dish-mobile-delete-dish">
                                     <img src="../assets/img/delete.svg">
                                     <div>УДАЛИТЬ</div>
@@ -185,7 +192,11 @@
                 dishId: 0,
                 downX: 0,
                 upX: 0,
-                blackListShow: false
+                moveX: 0,
+                widthX: 60,
+                transition: 0,
+                blackListShow: false,
+                inBlack: false,
             };
         },
         components: {
@@ -273,61 +284,122 @@
             }
             $(document).on("touchstart", ".card-content", function (event) {
                 self.categoryIndex = event.currentTarget.dataset.categoryindex;
+                self.$refs.list[self.categoryIndex].close();
                 self.dishIndex = event.currentTarget.dataset.dishindex;
                 self.todayMenuId = event.currentTarget.dataset.todaymenuid;
                 self.dishId = event.currentTarget.dataset.dishid;
                 self.buttonId = event.currentTarget.dataset.buttonId;
+                self.inBlack = event.currentTarget.dataset.inblack;
                 self.downX = event.changedTouches[0].clientX;
                 if (!self.revealed) {
                     self.$store.commit('showBlackList', {
                         indexCategory: self.categoryIndex,
                         indexDishes: self.dishIndex,
-                        bool: false
+                        bool: true
                     });
                 }
                 event.stopPropagation();
             });
+            $(document).on("touchmove", ".card-content", function (event) {
+                self.moveX = event.changedTouches[0].clientX;
+                if (self.moveX - self.downX >= 3 * window.screen.width / 4) {
+                    self.transition = self.moveX - self.downX;
+                    if (self.inBlack) {
+                        self.widthX = 220;
+                        self.$store.commit('showBlackList', {
+                            indexCategory: self.categoryIndex,
+                            indexDishes: self.dishIndex,
+                            bool: false
+                        });
+                    } else {
+                        self.widthX = 220;
+                        self.$store.commit('showTransition', {
+                            indexCategory: self.categoryIndex,
+                            indexDishes: self.dishIndex,
+                            bool: true
+                        });
+                    }
+                } else if (self.moveX - self.downX <= -(3 * window.screen.width / 4)) {
+                    if (self.inBlack) {
+                        self.widthX = 220;
+                        self.$store.commit('showTransition', {
+                            indexCategory: self.categoryIndex,
+                            indexDishes: self.dishIndex,
+                            bool: true
+                        });
+                    } else {
+                        self.widthX = 220;
+                        self.$store.commit('showBlackList', {
+                            indexCategory: self.categoryIndex,
+                            indexDishes: self.dishIndex,
+                            bool: false
+                        });
+                    }
+                } else {
+                    self.widthX = 60;
+                    self.$store.commit('showBlackList', {
+                        indexCategory: self.categoryIndex,
+                        indexDishes: self.dishIndex,
+                        bool: true
+                    });
+                    self.$store.commit('showTransition', {
+                        indexCategory: self.categoryIndex,
+                        indexDishes: self.dishIndex,
+                        bool: false
+                    });
+                }
+            });
             $(document).on("touchend", ".card-content", function (event) {
                 self.upX = event.changedTouches[0].clientX;
                 self.revealed = event.currentTarget.dataset.revealed;
-                // self.$store.commit('showBlackList', {
-                //     indexCategory: self.categoryIndex,
-                //     indexDishes: self.dishIndex,
-                //     bool: false
-                // });
             })
         },
         watch: {
             upX: function () {
-                this.$store.commit('showBlackList', {
-                    indexCategory: this.categoryIndex,
-                    indexDishes: this.dishIndex,
-                    bool: false
-                })
                 if (Math.abs(this.upX - this.downX) >= 3 * window.screen.width / 4) {
                     if (this.revealed === 'right') {
-                        this.$store.commit('showBlackList', {
-                            indexCategory: this.categoryIndex,
-                            indexDishes: this.dishIndex,
-                            bool: false
-                        });
                         this.deleteDish(this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex)
                         this.$refs.list[this.categoryIndex].close()
+                        setTimeout(() => (
+                            this.$store.commit('showBlackList', {
+                                indexCategory: this.categoryIndex,
+                                indexDishes: this.dishIndex,
+                                bool: true
+                            }),
+                                this.$store.commit('showTransition', {
+                                    indexCategory: this.categoryIndex,
+                                    indexDishes: this.dishIndex,
+                                    bool: false
+                                }),
+                                this.widthX = 60), 50)
                     } else if (this.revealed === 'left') {
-                        this.$store.commit('showBlackList', {
-                            indexCategory: this.categoryIndex,
-                            indexDishes: this.dishIndex,
-                            bool: false
-                        });
                         this.buyDish(this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex, this.buttonId);
                         this.$refs.list[this.categoryIndex].close()
+                        setTimeout(() => (
+                            this.$store.commit('showBlackList', {
+                                indexCategory: this.categoryIndex,
+                                indexDishes: this.dishIndex,
+                                bool: true
+                            }),
+                                this.$store.commit('showTransition', {
+                                    indexCategory: this.categoryIndex,
+                                    indexDishes: this.dishIndex,
+                                    bool: false
+                                }),
+                                this.widthX = 60), 50)
                     }
                 } else {
                     this.$store.commit('showBlackList', {
                         indexCategory: this.categoryIndex,
                         indexDishes: this.dishIndex,
                         bool: true
-                    })
+                    });
+                    this.$store.commit('showTransition', {
+                        indexCategory: this.categoryIndex,
+                        indexDishes: this.dishIndex,
+                        bool: false
+                    });
+                    this.widthX = 60
                 }
             }
         },
@@ -775,7 +847,6 @@
             }
 
             .swipeout-action.dish-mobile-delete {
-                width: 220px;
                 height: 100%;
                 background: linear-gradient(90deg, #A60000 0%, #CE0000 100%), #FFFFFF;
 
@@ -801,7 +872,6 @@
             .swipeout-action.dish-mobile-add {
                 display: flex;
                 justify-content: flex-end;
-                width: 220px;
                 height: 100%;
                 background: linear-gradient(90deg, #460B79 0%, #88267F 100%), #FFFFFF;
 
@@ -1577,5 +1647,13 @@
         border: none;
         outline: none;
         cursor: pointer;
+    }
+
+    .aloneButton {
+        transform: translate3d(312px, 0px, 0px) !important;
+    }
+
+    .aloneButtonDel {
+        transform: translate3d(-312px, 0px, 0px) !important;
     }
 </style>
