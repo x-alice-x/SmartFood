@@ -26,6 +26,9 @@ export default {
         },
         showBlackList(state, payload) {
             state.todayMenu.categories[payload.indexCategory].dishes[payload.indexDishes].showBlackList = payload.bool
+        },
+        showTransition(state, payload) {
+            state.todayMenu.categories[payload.indexCategory].dishes[payload.indexDishes].showTransition = payload.bool
         }
     },
     actions: {
@@ -48,7 +51,8 @@ export default {
                                         if (resp.data.data[i].categories[j].dishes[k].image === 'https://edatomsk.ru/images/delivery/delivery.svg') {
                                             resp.data.data[i].categories[j].dishes[k].image = 'https://image.flaticon.com/icons/svg/857/857681.svg'
                                         }
-                                        resp.data.data[i].categories[j].dishes[k].showBlackList = false;
+                                        resp.data.data[i].categories[j].dishes[k].showBlackList = true;
+                                        resp.data.data[i].categories[j].dishes[k].showTransition = false;
                                     }
                                 }
                             }

@@ -2,17 +2,18 @@
     <div class="dishes">
         <div class="container">
             <Weekdays class="week"></Weekdays>
-            <div class="dish-category" v-for="(categories, categoryIndex) in todayMenu.categories" :key="categoryIndex">
-                <h3 class="category-name">{{categories.name}}</h3>
+            <div class="dish-category" v-for="(categories, categoryIndex) in todayMenu.categories"
+                 :key="categoryIndex">
+                <h3 class="category-name" v-if="categories.dishes.length">{{categories.name}}</h3>
                 <div class="dish-main">
-                    <div class="dish" 
+                    <div class="dish"
                          v-for="(dish, index) in categories.dishes" :key="index"
                          @click="buyDish(todayMenu.id, dish.id, index, categoryIndex, buttonId = 'card')"
                          :id="dish.in_blacklist ? 'blacklisted' : index"
                          :class="{ active: dish.in_basket_count == 0}">
                         <div class="dish-top">
                             <div class="dish-img" :style="{'background-image': `url(${dish.image})`}">
-                                <div class="black-list-container" @click="manageBL" tabindex="-1">
+                                <div class="black-list-container" tabindex="-1" @click="manageBL">
                                     <img class="black-list" src="../assets/img/dots.svg"/>
                                 </div>
                                 <div id="black-list-content">
@@ -72,6 +73,7 @@
                                  :data-todayMenuId="todayMenu.id"
                                  :data-dishId="item.id"
                                  :data-revealed="revealed"
+                                 :data-inBlack="item.in_blacklist"
                                  :id="item.in_blacklist ? 'blacklisted' : index"
                                  @click="closeContent(categoryIndex)">
                                 <div class="dish-mobile-img">
@@ -100,7 +102,10 @@
                         </template>
                         <template v-slot:left="{ item, close, index }">
                             <div class="swipeout-action dish-mobile-add"
-                                 @click="buyDish(todayMenu.id, item.id, index, categoryIndex, buttonId = 'plus')">
+                                 @click="buyDish(todayMenu.id, item.id, index, categoryIndex, buttonId = 'plus')"
+                                 :style="{width: widthX + 'px'}"
+                                 :class="{aloneButton: item.showTransition && !item.in_blacklist}"
+                            >
                                 <div class="dish-mobile-add-dish">
                                     <img src="../assets/img/cartMobile.svg">
                                     <div>ДОБАВИТЬ</div>
@@ -125,7 +130,10 @@
                                 </div>
                             </div>
                             <div class="swipeout-action dish-mobile-delete"
-                                 @click="deleteDish(todayMenu.id, item.id, index, categoryIndex)">
+                                 @click="deleteDish(todayMenu.id, item.id, index, categoryIndex)"
+                                 :style="{width: widthX + 'px'}"
+                                 :class="{aloneButtonDel: item.showTransition && item.in_blacklist}"
+                            >
                                 <div class="dish-mobile-delete-dish">
                                     <img src="../assets/img/delete.svg">
                                     <div>УДАЛИТЬ</div>
@@ -168,6 +176,7 @@
     import 'vue-swipe-actions/dist/vue-swipe-actions.css';
     import Weekdays from './Weekdays'
     import $ from "jquery";
+
     export default {
         data() {
             return {
@@ -183,7 +192,11 @@
                 dishId: 0,
                 downX: 0,
                 upX: 0,
-                blackListShow: false
+                moveX: 0,
+                widthX: 60,
+                transition: 0,
+                blackListShow: false,
+                inBlack: false,
             };
         },
         components: {
@@ -269,63 +282,124 @@
                 await this.$store.dispatch("ClearCookies");
                 this.$router.push('/');
             }
-            $(document).on("touchstart  mousedown", ".card-content", function (event) {
+            $(document).on("touchstart", ".card-content", function (event) {
                 self.categoryIndex = event.currentTarget.dataset.categoryindex;
+                self.$refs.list[self.categoryIndex].close();
                 self.dishIndex = event.currentTarget.dataset.dishindex;
                 self.todayMenuId = event.currentTarget.dataset.todaymenuid;
                 self.dishId = event.currentTarget.dataset.dishid;
                 self.buttonId = event.currentTarget.dataset.buttonId;
+                self.inBlack = event.currentTarget.dataset.inblack;
                 self.downX = event.changedTouches[0].clientX;
                 if (!self.revealed) {
                     self.$store.commit('showBlackList', {
                         indexCategory: self.categoryIndex,
                         indexDishes: self.dishIndex,
-                        bool: false
+                        bool: true
                     });
                 }
                 event.stopPropagation();
             });
-            $(document).on("touchend  mouseup", ".card-content", function (event) {
+            $(document).on("touchmove", ".card-content", function (event) {
+                self.moveX = event.changedTouches[0].clientX;
+                if (self.moveX - self.downX >= 3 * window.screen.width / 4) {
+                    self.transition = self.moveX - self.downX;
+                    if (self.inBlack) {
+                        self.widthX = 220;
+                        self.$store.commit('showBlackList', {
+                            indexCategory: self.categoryIndex,
+                            indexDishes: self.dishIndex,
+                            bool: false
+                        });
+                    } else {
+                        self.widthX = 220;
+                        self.$store.commit('showTransition', {
+                            indexCategory: self.categoryIndex,
+                            indexDishes: self.dishIndex,
+                            bool: true
+                        });
+                    }
+                } else if (self.moveX - self.downX <= -(3 * window.screen.width / 4)) {
+                    if (self.inBlack) {
+                        self.widthX = 220;
+                        self.$store.commit('showTransition', {
+                            indexCategory: self.categoryIndex,
+                            indexDishes: self.dishIndex,
+                            bool: true
+                        });
+                    } else {
+                        self.widthX = 220;
+                        self.$store.commit('showBlackList', {
+                            indexCategory: self.categoryIndex,
+                            indexDishes: self.dishIndex,
+                            bool: false
+                        });
+                    }
+                } else {
+                    self.widthX = 60;
+                    self.$store.commit('showBlackList', {
+                        indexCategory: self.categoryIndex,
+                        indexDishes: self.dishIndex,
+                        bool: true
+                    });
+                    self.$store.commit('showTransition', {
+                        indexCategory: self.categoryIndex,
+                        indexDishes: self.dishIndex,
+                        bool: false
+                    });
+                }
+            });
+            $(document).on("touchend", ".card-content", function (event) {
                 self.upX = event.changedTouches[0].clientX;
                 self.revealed = event.currentTarget.dataset.revealed;
-                // self.$store.commit('showBlackList', {
-                //     indexCategory: self.categoryIndex,
-                //     indexDishes: self.dishIndex,
-                //     bool: false
-                // });
             })
         },
         watch: {
             upX: function () {
-                this.$store.commit('showBlackList', {
-                    indexCategory: this.categoryIndex,
-                    indexDishes: this.dishIndex,
-                    bool: false
-                })
                 if (Math.abs(this.upX - this.downX) >= 3 * window.screen.width / 4) {
                     if (this.revealed === 'right') {
-                        this.$store.commit('showBlackList', {
-                            indexCategory: this.categoryIndex,
-                            indexDishes: this.dishIndex,
-                            bool: false
-                        });
                         this.deleteDish(this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex)
                         this.$refs.list[this.categoryIndex].close()
+                        setTimeout(() => (
+                            this.$store.commit('showBlackList', {
+                                indexCategory: this.categoryIndex,
+                                indexDishes: this.dishIndex,
+                                bool: true
+                            }),
+                                this.$store.commit('showTransition', {
+                                    indexCategory: this.categoryIndex,
+                                    indexDishes: this.dishIndex,
+                                    bool: false
+                                }),
+                                this.widthX = 60), 50)
                     } else if (this.revealed === 'left') {
-                        this.$store.commit('showBlackList', {
-                            indexCategory: this.categoryIndex,
-                            indexDishes: this.dishIndex,
-                            bool: false
-                        });
                         this.buyDish(this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex, this.buttonId);
                         this.$refs.list[this.categoryIndex].close()
+                        setTimeout(() => (
+                            this.$store.commit('showBlackList', {
+                                indexCategory: this.categoryIndex,
+                                indexDishes: this.dishIndex,
+                                bool: true
+                            }),
+                                this.$store.commit('showTransition', {
+                                    indexCategory: this.categoryIndex,
+                                    indexDishes: this.dishIndex,
+                                    bool: false
+                                }),
+                                this.widthX = 60), 50)
                     }
                 } else {
                     this.$store.commit('showBlackList', {
                         indexCategory: this.categoryIndex,
                         indexDishes: this.dishIndex,
                         bool: true
-                    })
+                    });
+                    this.$store.commit('showTransition', {
+                        indexCategory: this.categoryIndex,
+                        indexDishes: this.dishIndex,
+                        bool: false
+                    });
+                    this.widthX = 60
                 }
             }
         },
@@ -343,9 +417,11 @@
         max-width: 1500px;
         margin: auto;
     }
+
     .active {
         cursor: pointer;
     }
+
     // категории
     .category-name {
         font-size: 40px;
@@ -354,20 +430,24 @@
         margin-bottom: 2%;
         font-weight: 400;
     }
+
     /* контейнер для кнопочки открывающей кнопку чс */
     .black-list-container {
         outline: none;
-        height: auto;
-        padding: 10px 15px 10px 0;
+        width: fit-content;
+        padding: 10px 15px 5px 0;
+        margin-left: 290px;
+        cursor: pointer;
         background: transparent;
         display: flex;
         justify-content: flex-end;
+
         .black-list {
             width: 45px;
             height: 22.5px;
-            cursor: pointer;
         }
     }
+
     /* сама кнопка чс */
     #black-list-content {
         display: none;
@@ -375,6 +455,7 @@
         width: 100%;
         z-index: 1;
     }
+
     #black-list-content button {
         width: 90%;
         cursor: pointer;
@@ -390,40 +471,32 @@
         font-size: 16px;
         z-index: 2;
     }
+
     .black-list-container:focus + #black-list-content, #black-list-content:hover {
         display: block;
         z-index: 1;
     }
+
     #black-list-content button:hover {
         opacity: 1;
     }
+
     /* класс, который делает карточки черно-белыми */
     .is_blacklisted {
         transition: .3s;
         filter: grayscale(100%);
     }
+
     #blacklisted {
         transition: .3s;
         filter: grayscale(100%);
     }
+
     /* плашка внизу страницы */
     .total-sum {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        position: fixed;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        height: 45px;
-        // border-top: 10px solid rgba(255, 255, 255, 0.3);
-        box-shadow: 0 0 10px 10px rgba(255, 255, 255, 1);
-                    // 0 0 5px 5px rgba(255, 255, 255, 0.2);
-        // background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.9));
-        background: rgba(255, 255, 255, 1);
-        width: 100%;
-        z-index: 20;
+        display: none;
     }
+
     .total-container {
         display: flex;
         flex-direction: row;
@@ -441,6 +514,7 @@
         left: 50%;
         transform: translateX(-50%);
         z-index: 20;
+
         p {
             font-size: 24px;
             font-weight: bold;
@@ -448,6 +522,7 @@
             text-align: center;
         }
     }
+
     .cart-icon {
         width: 30px;
         height: 30px;
@@ -456,6 +531,7 @@
         align-items: center;
         margin: 0 2%;
     }
+
     /* контейнер слайдера чс */
     .show-black-listed {
         display: flex;
@@ -465,6 +541,7 @@
         right: 15%;
         // transform: translateX(-50%);
         z-index: 2;
+
         p {
             margin-left: 15px;
             color: #000;
@@ -472,6 +549,7 @@
             font-weight: 700;
         }
     }
+
     /* слайдер */
     .switch {
         position: relative;
@@ -484,12 +562,14 @@
         justify-content: center;
         z-index: 2;
     }
+
     /* убрать дефолтный чекбокс */
     .switch input {
         opacity: 0;
         width: 0;
         height: 0;
     }
+
     /* слайдер для включения чс*/
     .slider {
         position: absolute;
@@ -500,6 +580,7 @@
         bottom: 0;
         background-color: #ccc;
         transition: .3s;
+
         &:before {
             position: absolute;
             content: "";
@@ -511,21 +592,27 @@
             transition: .3s;
         }
     }
+
     input:checked + .slider {
         background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
     }
+
     input:checked + .slider:before {
         transform: translateX(26px);
     }
+
     .slider.round {
         border-radius: 30px;
+
         &:before {
             border-radius: 50%;
         }
     }
+
     .dishes {
         height: 600px;
     }
+
     // .week-mob {
     //     display: none !important;
     // }
@@ -536,11 +623,13 @@
         color: $font-color;
         margin-bottom: 10px;
     }
+
     .dish-main {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
     }
+
     .dish {
         width: 350px;
         display: flex;
@@ -553,12 +642,22 @@
         overflow: hidden;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         transition: 0.3s;
+
+        // &-top {
+        //     .dish-img {
+        //         display: flex;
+        //         justify-content: flex-end;
+        //     }
+        // }
+
         &:hover {
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
         }
+
         &-category {
             margin-bottom: 50px;
         }
+
         // &-category:last-child {
         //     margin-bottom: 30px;
         // }
@@ -569,6 +668,7 @@
             border: 1px solid $font-color;
             border-radius: 10px;
             color: $font-color;
+
             &-color {
                 font-weight: 700;
                 font-size: 18px;
@@ -577,6 +677,7 @@
                 padding-top: 5px;
             }
         }
+
         &-middle {
             width: 100%;
             background: white;
@@ -586,6 +687,7 @@
             flex-direction: column;
             justify-content: space-between;
         }
+
         &-name {
             font-weight: 700;
             font-size: 22px;
@@ -595,6 +697,7 @@
             margin-right: auto;
             margin-left: auto;
         }
+
         &-descr {
             width: 90%;
             font-weight: 300;
@@ -605,15 +708,18 @@
             margin-top: 20px;
             padding-bottom: 20px;
         }
+
         &-add {
             padding-bottom: 20px;
             display: flex;
             justify-content: center;
+
             button {
                 background: none;
                 border: none;
                 outline: none;
                 cursor: pointer;
+
                 img {
                     outline: none;
                     margin: 0 10px;
@@ -622,34 +728,40 @@
                 }
             }
         }
+
         &-top {
             height: 250px;
             position: relative;
             text-align: right;
         }
+
         &-img {
             height: 250px;
             background-repeat: no-repeat;
             background-position: center;
             background-size: cover;
         }
+
         &-typ {
             display: flex;
             justify-content: space-evenly;
             align-items: center;
             background: $c-main;
             height: 60px;
+
             a {
                 z-index: 10;
                 font-weight: bold;
                 font-size: 30px;
                 line-height: 35px;
             }
+
             a:nth-child(2n) {
                 font-weight: 300;
                 font-size: 24px;
                 line-height: 28px;
             }
+
             /*&-background {*/
             /*    top: 0;*/
             /*    right: 0;*/
@@ -657,9 +769,11 @@
             /*}*/
         }
     }
+
     .dish-mobile {
         display: none;
     }
+
     @media (max-width: 1110px) {
         /* плашка внизу страницы */
         .total-container {
@@ -670,6 +784,7 @@
             right: 7%;
         }
     }
+
     @media (max-width: 839px) {
         /* плашка внизу страницы */
         .total-sum {
@@ -688,6 +803,7 @@
             margin-bottom: 90px;
         }
     }
+
     // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
     @media (max-width: 790px) {
         .category-name {
@@ -709,6 +825,7 @@
         .dish-mobile {
             display: flex;
             width: 100%;
+
             .swipeout-action {
                 display: flex;
                 align-items: center;
@@ -716,18 +833,21 @@
                 cursor: pointer;
                 left: 0;
             }
+
             .swipeout-action.dish-mobile-delete {
-                width: 220px;
-                height: 150px;
+                height: 100%;
                 background: linear-gradient(90deg, #A60000 0%, #CE0000 100%), #FFFFFF;
+
                 .dish-mobile-delete-dish {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
                     width: 60px;
+
                     img {
                         width: 60px;
                     }
+
                     div {
                         margin-top: 5px;
                         font-weight: 700;
@@ -736,20 +856,23 @@
                     }
                 }
             }
+
             .swipeout-action.dish-mobile-add {
                 display: flex;
                 justify-content: flex-end;
-                width: 220px;
-                height: 150px;
+                height: 100%;
                 background: linear-gradient(90deg, #460B79 0%, #88267F 100%), #FFFFFF;
+
                 .dish-mobile-add-dish {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
                     width: 60px;
+
                     img {
                         width: 60px;
                     }
+
                     div {
                         margin-top: 5px;
                         font-weight: 700;
@@ -758,19 +881,24 @@
                     }
                 }
             }
+
             .swipeout-action.dish-mobile-black-add {
                 width: 60px;
-                height: 150px;
+                height: 100%;
                 background: linear-gradient(0deg, #F2EDF6, #F2EDF6), #FFFFFF;
+
                 .dish-mobile-black-add-dish {
                     display: flex;
+                    justify-content: center;
                     flex-direction: column;
                     align-items: center;
-                    width: 60px;
                     text-align: center;
+                    width: 100%;
+
                     img {
                         width: 50px;
                     }
+
                     div {
                         margin-top: 5px;
                         font-weight: 700;
@@ -779,19 +907,24 @@
                     }
                 }
             }
+
             .swipeout-action.dish-mobile-black-delete {
                 width: 60px;
-                height: 150px;
+                height: 100%;
                 background: linear-gradient(90deg, #000000 0%, rgba(0, 0, 0, 0.81) 100%), #FFFFFF;
+
                 .dish-mobile-black-delete-dish {
                     display: flex;
+                    justify-content: center;
                     flex-direction: column;
                     align-items: center;
-                    width: 60px;
                     text-align: center;
+                    width: 100%;
+
                     img {
                         width: 60px;
                     }
+
                     div {
                         margin-top: 5px;
                         font-weight: 700;
@@ -800,6 +933,7 @@
                     }
                 }
             }
+
             .card-content {
                 display: flex;
                 justify-content: center;
@@ -808,15 +942,17 @@
                 background: #FFFFFF;
                 width: 100%;
                 border-top: 1px solid #F2EDF6;
+
                 .dish-mobile-img {
                     img {
                         width: 150px;
                         height: auto;
                         clip-path: circle(55px at center);
                         margin-left: -12px;
-                        
+
                     }
                 }
+
                 .dish-mobile-text {
                     width: 60%;
                     height: 125px;
@@ -824,6 +960,7 @@
                     align-items: flex-start;
                     justify-content: center;
                     flex-direction: column;
+
                     .dish-mobile-text-disc {
                         display: flex;
                         flex-wrap: wrap;
@@ -831,6 +968,7 @@
                         font-size: 22px;
                         color: #460B79;
                     }
+
                     .dish-mobile-text-prelude {
                         height: auto;
                         font-weight: 400;
@@ -838,8 +976,10 @@
                         color: #460B79;
                     }
                 }
+
                 .dish-mobile-price {
                     width: 25%;
+
                     .dish-mobile-price-grams, .dish-mobile-price-price {
                         font-weight: 400;
                         font-size: 28px;
@@ -848,29 +988,50 @@
                         text-align: right;
                         color: #460B79;
                     }
+
                     .dish-mobile-price-price {
                         font-weight: 700;
                     }
                 }
             }
+
             .transition-right {
                 transform: translate3d(100%, 0, 0) !important;
             }
+
             .transition-left {
                 transform: translate3d(-500%, 0, 0) !important;
             }
+
             .toolbar {
                 display: flex;
                 align-items: center;
             }
+
             .toolbar .toolbar-section {
                 flex: 0 0 auto;
             }
+
             .toolbar .toolbar-section--center {
                 flex: 1000 1 0%;
             }
         }
         .total-sum {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            // height: 45px;
+            // border-top: 10px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 10px 10px rgba(255, 255, 255, 0.9);
+            // 0 0 5px 5px rgba(255, 255, 255, 0.2);
+            // background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.9));
+            background: rgba(255, 255, 255, 0.9);
+            width: 100%;
+            z-index: 20;
             height: 95px;
             flex-direction: column;
         }
@@ -882,6 +1043,7 @@
             z-index: 2;
             justify-content: center;
             align-items: center;
+
             p {
                 font-size: 24px;
             }
@@ -904,6 +1066,7 @@
             justify-content: center;
             width: 100%;
             z-index: 2;
+
             p {
                 font-size: 18px;
             }
@@ -927,13 +1090,14 @@
             transform: translateX(22px);
         }
     }
+
     // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
     @media (max-width: 620px) {
          .week {
             margin-bottom: 0;
         }
         .container {
-            margin-bottom: 80px;
+            margin-bottom: 120px;
         }
         .category-name {
             width: 85%;
@@ -942,6 +1106,7 @@
         .dish-mobile {
             display: flex;
             width: 100%;
+
             .swipeout-action {
                 display: flex;
                 align-items: center;
@@ -949,52 +1114,70 @@
                 cursor: pointer;
                 left: 0;
             }
+
             .swipeout-action.dish-mobile-delete {
+                width: 160px;
+
                 .dish-mobile-delete-dish {
+                    width: 30px;
+
                     img {
                         width: 40px;
                     }
+
                     div {
                         font-size: 12px;
-                        margin-bottom: 20px;
                     }
                 }
             }
+
             .swipeout-action.dish-mobile-add {
+                width: 160px;
+
                 .dish-mobile-add-dish {
+                    width: 30px;
+
                     img {
                         width: 40px;
                     }
+
                     div {
                         font-size: 12px;
-                        margin-bottom: 20px;
                     }
                 }
             }
+
             .swipeout-action.dish-mobile-black-add {
+                width: 30px;
+
                 .dish-mobile-black-add-dish {
                     img {
                         width: 30px;
                     }
+
                     div {
                         font-size: 12px;
-                        margin-bottom: 30px;
                     }
                 }
             }
+
             .swipeout-action.dish-mobile-black-delete {
+                width: 30px;
+
                 .dish-mobile-black-delete-dish {
                     img {
                         width: 40px;
                     }
+
                     div {
                         font-size: 12px;
-                        margin-bottom: 30px;
                     }
                 }
             }
+
             .card-content {
                 height: 105px;
+
                 .dish-mobile-img {
                     img {
                         width: 150px;
@@ -1003,18 +1186,23 @@
                         margin-left: -12px;
                     }
                 }
+
                 .dish-mobile-text {
                     width: 60%;
                     height: 125px;
+
                     .dish-mobile-text-disc {
                         font-size: 18px;
                     }
+
                     .dish-mobile-text-prelude {
                         font-size: 14px;
                     }
                 }
+
                 .dish-mobile-price {
                     width: 25%;
+
                     .dish-mobile-price-grams, .dish-mobile-price-price {
                         font-size: 20px;
                     }
@@ -1057,35 +1245,45 @@
         //     transform: translateX(35px);
         // }
     }
+
     .dish-mobile {
         grid-template-columns: 25% 100% 25%;
+
         &-middle {
             transform: translateX(-25%);
+
             &-to-right {
                 transform: translateX(0%);
             }
+
             &-to-left {
                 transform: translateX(-50%);
             }
+
             &-to-middle {
                 transform: translateX(-25%);
             }
+
             &-about {
                 padding-left: 60px;
                 width: 60%;
+
                 &-name {
                     font-weight: 700;
                     font-size: 20px;
                 }
             }
+
             &-typ {
                 padding: 10px 5px 10px 0;
+
                 &-PW {
                     font-size: 20px;
                 }
             }
         }
     }
+
     // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
     @media (max-width: 475px) {
         .container .week {
@@ -1094,47 +1292,89 @@
         .dish-mobile {
             display: flex;
             width: 100%;
+
             .swipeout-action.dish-mobile-delete {
-                width: 140px;
-                padding-left: 15px;
-                // .dish-mobile-delete-dish {
-                // }
+                width: 120px;
+
+                .dish-mobile-delete-dish {
+                    width: 10px;
+
+                    img {
+                        width: 40px;
+                    }
+
+                    div {
+                        font-size: 10px;
+                    }
+                }
             }
+
             .swipeout-action.dish-mobile-add {
-                width: 140px;
-                padding-right: 15px;
-                // .dish-mobile-add-dish {
-                // }
+                width: 120px;
+
+                .dish-mobile-add-dish {
+                    width: 10px;
+
+                    img {
+                        width: 40px;
+                    }
+
+                    div {
+                        font-size: 10px;
+                    }
+                }
             }
+
             .swipeout-action.dish-mobile-black-add {
-                // width: 20px;
-                padding: 0 20px;
-                // .dish-mobile-black-add-dish {
-                // }
+                width: 10px;
+
+                .dish-mobile-black-add-dish {
+                    img {
+                        width: 30px;
+                    }
+
+                    div {
+                        font-size: 10px;
+                    }
+                }
             }
+
             .swipeout-action.dish-mobile-black-delete {
-                // width: 30px;
-                padding: 0 20px;
-                // .dish-mobile-black-delete-dish {
-                // }
+                width: 10px;
+
+                .dish-mobile-black-delete-dish {
+                    img {
+                        width: 40px;
+                    }
+
+                    div {
+                        font-size: 10px;
+                    }
+                }
             }
+
             .card-content {
                 .dish-mobile-text {
                     width: 50%;
                     height: 125px;
                     margin-right: 2%;
+
                     .dish-mobile-text-disc {
                         font-size: 13px;
                     }
+
                     .dish-mobile-text-prelude {
                         font-size: 12px;
                     }
                 }
+
                 .dish-mobile-price {
                     width: 30%;
+
                     &-amount {
                         font-size: 12px;;
                     }
+
                     .dish-mobile-price-grams, .dish-mobile-price-price {
                         font-size: 18px;
                     }
@@ -1175,20 +1415,24 @@
                 &-about {
                     padding-left: 10px;
                     width: 65%;
+
                     &-name {
                         font-size: 18px;
                     }
+
                     &-desc {
                         padding-top: 5px;
                         font-size: 13px;
                     }
                 }
+
                 &-typ {
                     padding: 5px 10px 5px 0;
                 }
             }
         }
     }
+
     // вот этот квери полностью новый обяз добавить
     @media (max-width: 400px) {
         .category-name {
@@ -1197,62 +1441,70 @@
         }
         .dish-mobile {
             .swipeout-action.dish-mobile-delete {
-                max-height: 100px;
-                .dish-mobile-delete-dish {
-                    width: 50px;
-                    img {
-                        width: 30px;
-                    }
-                    div {
-                        font-size: 10px;
-                        margin-bottom: 10px;
-                    }
-                }
-            }
-            .swipeout-action.dish-mobile-add {
-                max-height: 100px;
                 width: 100px;
+
+                .dish-mobile-delete-dish {
+                    width: 0px;
+
+                    img {
+                        width: 35px;
+                    }
+
+                    div {
+                        font-size: 10px;
+                    }
+                }
+            }
+
+            .swipeout-action.dish-mobile-add {
+                width: 100px;
+
                 .dish-mobile-add-dish {
-                    width: 50px;
+                    width: 0px;
+
                     img {
-                        width: 30px;
+                        width: 40px;
                     }
+
                     div {
                         font-size: 10px;
-                        margin-bottom: 10px;
                     }
                 }
             }
+
             .swipeout-action.dish-mobile-black-add {
-                max-height: 100px;
+                width: 0px;
+
                 .dish-mobile-black-add-dish {
-                    width: 50px;
-                    img {
-                        width: 20px;
-                    }
-                    div {
-                        font-size: 10px;
-                        margin-bottom: 10px;
-                    }
-                }
-            }
-            .swipeout-action.dish-mobile-black-delete {
-                max-height: 100px;
-                .dish-mobile-black-delete-dish {
-                    width: 50px;
                     img {
                         width: 30px;
                     }
+
                     div {
                         font-size: 10px;
-                        margin-bottom: 10px;
                     }
                 }
             }
+
+            .swipeout-action.dish-mobile-black-delete {
+                width: 0px;
+
+                .dish-mobile-black-delete-dish {
+                    img {
+                        width: 35px;
+                    }
+
+                    div {
+                        font-size: 9px;
+                    }
+                }
+            }
+
             .card-content {
                 max-height: 70px;
                 height: auto;
                 padding: 2% 0 2% 0;
+
                 .dish-mobile-img {
                     img {
                         width: 100px;
@@ -1261,37 +1513,47 @@
                         margin-left: -10px;
                     }
                 }
+
                 .dish-mobile-text {
                     width: 70%;
+
                     .dish-mobile-text-disc {
                         font-size: 12px;
                     }
+
                     .dish-mobile-text-prelude {
                         font-size: 10px;
                     }
                 }
+
                 .dish-mobile-price {
                     &-amount {
                         font-size: 10px;
                     }
+
                     .dish-mobile-price-grams, .dish-mobile-price-price {
                         font-size: 14px;
                         margin-right: 1%;
                     }
                 }
             }
+
             .total-sum {
                 flex-direction: column;
             }
+
             .total-container p {
                 font-size: 20px;
             }
+
             .show-black-listed p {
                 font-size: 18px;
             }
+
             .money-spent, .money-left {
                 font-size: 20px;
             }
+
             .money-left {
                 color: #42D547;
             }
@@ -1300,43 +1562,6 @@
             /* плашка внизу страницы */
             .total-sum {
                 flex-direction: column;
-            }
-            .dish-mobile {
-                .swipeout-action.dish-mobile-add {
-                    width: 120px;
-                    padding: 0 10px;
-                    div {
-                        font-size: 8px;
-                    }
-                }
-                .swipeout-action.dish-mobile-black-add {
-                    padding: 0 10px;
-                    .dish-mobile-black-add-dish {
-                        div {
-                            font-size: 8px;
-                        }
-                    }
-                }
-                .swipeout-action.dish-mobile-delete {
-                    width: 120px;
-                    padding: 0 10px;
-                    .dish-mobile-delete-dish {
-                        div {
-                            font-size: 8px;
-                        }
-                    }
-                }
-                .swipeout-action.dish-mobile-black-delete {
-                    // width: 60px;
-                    display: flex;
-                    padding: 0 10px;
-                    justify-content: center;
-                    .dish-mobile-black-delete-dish {
-                        div {
-                            font-size: 8px;
-                        }
-                    }
-                }
             }
             .total-container {
                 display: flex;
@@ -1354,6 +1579,7 @@
                 justify-content: center;
                 width: 100%;
                 z-index: 2;
+
                 p {
                     font-size: 16px;
                 }
@@ -1380,12 +1606,15 @@
                     &-about {
                         padding-left: 10px;
                         width: 65%;
+
                         &-name {
                             font-size: 9px;
                         }
+
                         &-desc {
                             font-size: 0px;
                         }
+
                         // &-name{
                         //     font-size: 16px;
                         // }
@@ -1394,9 +1623,11 @@
                         //     font-size: 12px;
                         // }
                     }
+
                     &-typ {
                         padding: 5px 10px 5px 0;
                     }
+
                     // &-typ{
                     //     padding: 5px 10px 5px 0;
                     // }
@@ -1412,16 +1643,26 @@
         display: flex;
         /* margin-top: 5px; */
     }
+
     .swipeout .swipeout-left, .swipeout .swipeout-right {
         position: absolute;
         height: 100%;
         display: flex;
         z-index: 0;
     }
+
     button {
         background: none;
         border: none;
         outline: none;
         cursor: pointer;
+    }
+
+    .aloneButton {
+        transform: translate3d(312px, 0px, 0px) !important;
+    }
+
+    .aloneButtonDel {
+        transform: translate3d(-312px, 0px, 0px) !important;
     }
 </style>

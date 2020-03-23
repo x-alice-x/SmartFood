@@ -11,6 +11,10 @@
             </div>
 
             <div class="cart">
+                <div class="sum">126</div>
+                <img src="../assets/img/cart_white.svg" 
+                     alt="Cart ico"
+                     @click="showCart = !showCart">
             </div>
         </div>
 
@@ -32,11 +36,21 @@
         </div>
       </modal>
 
+      <Cart class="cart_comp" 
+            v-if="showCart"
+            @closeCart = "showCart=false" />
     </div>
 </template>
 
 <script>
+  import Cart from "./Cart.vue";
   export default {
+        components: {Cart},
+        data() {
+            return {
+                showCart: false
+            }
+        },
         computed: {
             username() {
                 return this.$store.getters.getUserName;
@@ -105,7 +119,7 @@
         .container{
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
             height: 100%;
             padding: 0 75px;
             .user{
@@ -113,7 +127,7 @@
                 right: auto;
                 cursor: pointer;
                 width: 25px;
-                position: absolute;
+                // position: absolute;
             }
             .logo {
                 a {
@@ -121,6 +135,13 @@
                 font-size: 30px;
                 line-height: 45px;
                 color: #ffffff;
+                }
+            }
+            .cart {
+                display: flex;
+                img {
+                    cursor: pointer;
+                    width: 25px;
                 }
             }
         }
