@@ -78,12 +78,13 @@
             justify-content: center;
             align-items: center;
             width: 150px !important;
-            margin: 0 10px !important;
+            margin: 0 !important;
             height: 40px;
             background: white;
             color: $font-color;
             border-radius: 46px;
             opacity: 0.5;
+
             &-active {
                 background: linear-gradient(90deg, #460B79 0%, #88267F 100%) !important;
                 width: 150px !important;

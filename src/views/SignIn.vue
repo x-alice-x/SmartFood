@@ -84,6 +84,18 @@ export default {
 </script>
 
 <style scoped>
+/*  Вебкит для инпута */
+  @-webkit-keyframes autofill {
+    to {
+      color: #F0F2F4;
+      background: transparent;
+    }
+  }
+
+  input:-webkit-autofill {
+    -webkit-animation-name: autofill;
+    -webkit-animation-fill-mode: both;
+  }
 
 .signin {
   min-height: 100vh;
@@ -222,12 +234,12 @@ export default {
     }
     input {
       padding: 3px 0 10px 0 !important;
-      font-size: 15px !important;
+      font-size: 16px !important;
       max-width: 400px !important;
       text-indent: 30% !important;
     }
     .signin-form label {
-      font-size: 15px;
+      font-size: 16px;
       margin-top: 6px;
     }
     .form-submit {
