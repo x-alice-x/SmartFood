@@ -1220,13 +1220,13 @@
             }
 
             .card-content {
-                height: 105px;
+                height: 90px;
 
                 .dish-mobile-img {
                     img {
-                        width: 135px;
+                        width: 110px;
                         height: auto;
-                        clip-path: circle(50px at center);
+                        clip-path: circle(40px at center);
                         margin-left: -12px;
                     }
                 }
@@ -1241,6 +1241,9 @@
 
                     .dish-mobile-text-prelude {
                         font-size: 14px;
+                        max-height: 40%;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
                     }
                 }
 
