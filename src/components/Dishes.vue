@@ -2,8 +2,8 @@
     <div class="dishes">
         <div class="container">
             <Weekdays class="week"></Weekdays>
-            <div class="dish-category" v-for="(categories, categoryIndex) in todayMenu.categories" 
-                                       :key="categoryIndex">
+            <div class="dish-category" v-for="(categories, categoryIndex) in todayMenu.categories"
+                 :key="categoryIndex">
                 <h3 class="category-name" v-if="categories.dishes.length">{{categories.name}}</h3>
                 <div class="dish-main">
                     <div class="dish"
@@ -277,9 +277,7 @@
                 self.todayMenuId = event.currentTarget.dataset.todaymenuid;
                 self.dishId = event.currentTarget.dataset.dishid;
                 self.buttonId = event.currentTarget.dataset.buttonId;
-                if (event.changedTouches[0]) {
-                    self.downX = event.changedTouches[0].clientX;
-                }
+                self.downX = event.changedTouches[0].clientX;
                 if (!self.revealed) {
                     self.$store.commit('showBlackList', {
                         indexCategory: self.categoryIndex,
@@ -290,9 +288,7 @@
                 event.stopPropagation();
             });
             $(document).on("touchend", ".card-content", function (event) {
-                if (event.changedTouches[0]) {
-                    self.upX = event.changedTouches[0].clientX;
-                }
+                self.upX = event.changedTouches[0].clientX;
                 self.revealed = event.currentTarget.dataset.revealed;
                 // self.$store.commit('showBlackList', {
                 //     indexCategory: self.categoryIndex,
