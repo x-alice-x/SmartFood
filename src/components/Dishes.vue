@@ -843,7 +843,7 @@
                     width: 60px;
 
                     img {
-                        width: 60px;
+                        width: 40px;
                     }
 
                     div {
@@ -868,7 +868,7 @@
                     width: 60px;
 
                     img {
-                        width: 60px;
+                        width: 40px;
                     }
 
                     div {
@@ -894,7 +894,7 @@
                     width: 100%;
 
                     img {
-                        width: 50px;
+                        width: 30px;
                     }
 
                     div {
@@ -920,7 +920,7 @@
                     width: 100%;
 
                     img {
-                        width: 60px;
+                        width: 40px;
                     }
 
                     div {
@@ -936,16 +936,16 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                height: 130px;
+                height: 110px;
                 background: #FFFFFF;
                 width: 100%;
                 border-top: 1px solid #F2EDF6;
 
                 .dish-mobile-img {
                     img {
-                        width: 150px;
+                        width: 135px;
                         height: auto;
-                        clip-path: circle(55px at center);
+                        clip-path: circle(50px at center);
                         margin-left: -12px;
 
                     }
@@ -976,7 +976,7 @@
                 }
 
                 .dish-mobile-price {
-                    width: 25%;
+                    width: 23%;
 
                     .dish-mobile-price-grams, .dish-mobile-price-price {
                         font-weight: 400;
@@ -1119,10 +1119,6 @@
                 .dish-mobile-delete-dish {
                     width: 30px;
 
-                    img {
-                        width: 40px;
-                    }
-
                     div {
                         font-size: 12px;
                     }
@@ -1135,10 +1131,6 @@
                 .dish-mobile-add-dish {
                     width: 30px;
 
-                    img {
-                        width: 40px;
-                    }
-
                     div {
                         font-size: 12px;
                     }
@@ -1149,9 +1141,6 @@
                 width: 30px;
 
                 .dish-mobile-black-add-dish {
-                    img {
-                        width: 30px;
-                    }
 
                     div {
                         font-size: 12px;
@@ -1163,9 +1152,6 @@
                 width: 30px;
 
                 .dish-mobile-black-delete-dish {
-                    img {
-                        width: 40px;
-                    }
 
                     div {
                         font-size: 12px;
@@ -1178,9 +1164,9 @@
 
                 .dish-mobile-img {
                     img {
-                        width: 150px;
+                        width: 135px;
                         height: auto;
-                        clip-path: circle(55px at center);
+                        clip-path: circle(50px at center);
                         margin-left: -12px;
                     }
                 }
@@ -1199,8 +1185,6 @@
                 }
 
                 .dish-mobile-price {
-                    width: 25%;
-
                     .dish-mobile-price-grams, .dish-mobile-price-price {
                         font-size: 20px;
                     }
@@ -1292,7 +1276,7 @@
                     width: 10px;
 
                     img {
-                        width: 40px;
+                        width: 25px;
                     }
 
                     div {
@@ -1308,7 +1292,7 @@
                     width: 10px;
 
                     img {
-                        width: 40px;
+                        width: 25px;
                     }
 
                     div {
@@ -1322,7 +1306,7 @@
 
                 .dish-mobile-black-add-dish {
                     img {
-                        width: 30px;
+                        width: 15px;
                     }
 
                     div {
@@ -1336,7 +1320,7 @@
 
                 .dish-mobile-black-delete-dish {
                     img {
-                        width: 40px;
+                        width: 25px;
                     }
 
                     div {
@@ -1346,6 +1330,16 @@
             }
 
             .card-content {
+                height: 70px;
+                .dish-mobile-img {
+                    img {
+                        width: 100px;
+                        height: auto;
+                        clip-path: circle(30px at center);
+                        margin-left: -12px;
+
+                    }
+                }
                 .dish-mobile-text {
                     width: 50%;
                     height: 125px;
@@ -1357,11 +1351,15 @@
 
                     .dish-mobile-text-prelude {
                         font-size: 12px;
+                        max-height: 33%;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: pre-line;
                     }
                 }
 
                 .dish-mobile-price {
-                    width: 30%;
+                    width: 25%;
 
                     &-amount {
                         font-size: 12px;;
@@ -1438,9 +1436,9 @@
                 .dish-mobile-delete-dish {
                     width: 0px;
 
-                    img {
-                        width: 35px;
-                    }
+                    // img {
+                    //     width: 35px;
+                    // }
 
                     div {
                         font-size: 10px;
@@ -1454,9 +1452,9 @@
                 .dish-mobile-add-dish {
                     width: 0px;
 
-                    img {
-                        width: 40px;
-                    }
+                    // img {
+                    //     width: 40px;
+                    // }
 
                     div {
                         font-size: 10px;
@@ -1468,12 +1466,12 @@
                 width: 0px;
 
                 .dish-mobile-black-add-dish {
-                    img {
-                        width: 30px;
-                    }
+                    // img {
+                    //     width: 30px;
+                    // }
 
                     div {
-                        font-size: 10px;
+                        font-size: 8px;
                     }
                 }
             }
@@ -1482,9 +1480,9 @@
                 width: 0px;
 
                 .dish-mobile-black-delete-dish {
-                    img {
-                        width: 35px;
-                    }
+                    // img {
+                    //     width: 35px;
+                    // }
 
                     div {
                         font-size: 9px;
@@ -1494,17 +1492,17 @@
 
             .card-content {
                 max-height: 70px;
-                height: auto;
+                height: 50px;
                 padding: 2% 0 2% 0;
 
-                .dish-mobile-img {
-                    img {
-                        width: 100px;
-                        height: auto;
-                        clip-path: circle(36px at center);
-                        margin-left: -10px;
-                    }
-                }
+                // .dish-mobile-img {
+                //     img {
+                //         width: 100px;
+                //         height: auto;
+                //         clip-path: circle(36px at center);
+                //         margin-left: -10px;
+                //     }
+                // }
 
                 .dish-mobile-text {
                     width: 70%;
@@ -1519,6 +1517,7 @@
                 }
 
                 .dish-mobile-price {
+                    width: 30%;
                     &-amount {
                         font-size: 10px;
                     }
