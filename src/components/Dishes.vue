@@ -168,6 +168,7 @@
                 </div>
             </div>
         </div>
+        <button @click="scrollTop" class="arrow"></button>
     </div>
 </template>
 
@@ -204,6 +205,11 @@
             SwipeList,
         },
         methods: {
+            // Кнопка вверх
+            async scrollTop(){
+                $('body').animate({'scrollTop': 0}, 500);
+                $('html').animate({'scrollTop': 0}, 500)
+            },
             // Добавление блюда
             buyDish(menu_id, dish_id, index, categoryIndex, buttonId) {
                 if (buttonId === 'card') {
@@ -353,6 +359,12 @@
                 self.upX = event.changedTouches[0].clientX;
                 self.revealed = event.currentTarget.dataset.revealed;
             })
+            // Кнопка вверх
+            $(window).scroll(() =>{
+                $(window).scrollTop() > 200
+                    ? $('.arrow').addClass('active')
+                    : $('.arrow').removeClass('active')
+            })
         },
         watch: {
             upX: function () {
@@ -409,6 +421,51 @@
 <style scoped lang="scss">
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
+    /*Кнопка вверх*/
+    .arrow{
+        position: fixed;
+        bottom: -55px;
+        right: 100px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border: 2px solid #460B79;
+        background: white;
+        z-index: 9999;
+        outline: none;
+        transition: .4s;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    }
+    .arrow:after{
+        content: '';
+        width: 14px;
+        height: 14px;
+        border-top: 3px solid black;
+        border-left: 3px solid black;
+        transform: rotate(45deg);
+        position: absolute;
+        top: -8px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+    }
+    .arrow:before{
+        content: '';
+        width: 0px;
+        height: 30px;
+        border-left: 3px solid black;
+        position: absolute;
+        top: 4px;
+        bottom: 0;
+        left: 1px;
+        right: 0;
+        margin: auto;
+    }
+    .arrow.active{
+        bottom: 33px;
+    }
+
 
 
     .dishes {
@@ -804,6 +861,9 @@
 
     // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
     @media (max-width: 790px) {
+        .arrow{
+            display: none;
+        }
         .category-name {
             width: 85%;
             margin: 10px auto 20px auto;

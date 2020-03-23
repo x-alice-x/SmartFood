@@ -84,6 +84,18 @@ export default {
 </script>
 
 <style scoped>
+/*  Вебкит для инпута */
+  @-webkit-keyframes autofill {
+    to {
+      color: #F0F2F4;
+      background: transparent;
+    }
+  }
+
+  input:-webkit-autofill {
+    -webkit-animation-name: autofill;
+    -webkit-animation-fill-mode: both;
+  }
 
 .signin {
   min-height: 100vh;
