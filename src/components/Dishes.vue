@@ -424,25 +424,27 @@
     /*Кнопка вверх*/
     .arrow{
         position: fixed;
-        bottom: -45px;
+        bottom: -55px;
         right: 100px;
-        width: 37px;
-        height: 37px;
+        width: 50px;
+        height: 50px;
         border-radius: 50%;
         border: 2px solid #460B79;
+        background: white;
         z-index: 9999;
         outline: none;
         transition: .4s;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
     }
     .arrow:after{
         content: '';
-        width: 10px;
-        height: 10px;
+        width: 14px;
+        height: 14px;
         border-top: 3px solid black;
         border-left: 3px solid black;
         transform: rotate(45deg);
         position: absolute;
-        top: -4px;
+        top: -8px;
         bottom: 0;
         left: 0;
         right: 0;
@@ -450,13 +452,13 @@
     }
     .arrow:before{
         content: '';
-        width: 0;
-        height: 20px;
+        width: 0px;
+        height: 30px;
         border-left: 3px solid black;
         position: absolute;
-        top: 2px;
+        top: 4px;
         bottom: 0;
-        left: 0;
+        left: 1px;
         right: 0;
         margin: auto;
     }
@@ -858,6 +860,9 @@
 
     // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
     @media (max-width: 790px) {
+        .arrow{
+            display: none;
+        }
         .category-name {
             width: 85%;
             margin: 10px auto 20px auto;

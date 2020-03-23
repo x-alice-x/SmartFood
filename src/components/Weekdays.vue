@@ -70,7 +70,7 @@
         padding-top: 20px;
         padding-bottom: 10px;
         cursor: pointer;
-
+        margin-left: -10px;
         &-slide {
             font-weight: 700;
             font-size: 20px;
@@ -78,13 +78,12 @@
             justify-content: center;
             align-items: center;
             width: 150px !important;
-            margin: 0 !important;
             height: 40px;
-            background: white;
-            color: $font-color;
+            background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
+            color: white;
             border-radius: 46px;
             opacity: 0.5;
-
+            margin: 0 10px !important;
             &-active {
                 background: linear-gradient(90deg, #460B79 0%, #88267F 100%) !important;
                 width: 150px !important;
