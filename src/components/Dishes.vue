@@ -2,8 +2,9 @@
     <div class="dishes">
         <div class="container">
             <Weekdays class="week"></Weekdays>
-            <div class="dish-category" v-for="(categories, categoryIndex) in todayMenu.categories" :key="categoryIndex">
-                <h3 class="category-name">{{categories.name}}</h3>
+            <div class="dish-category" v-for="(categories, categoryIndex) in todayMenu.categories" 
+                                       :key="categoryIndex">
+                <h3 class="category-name" v-if="categories.dishes.length">{{categories.name}}</h3>
                 <div class="dish-main">
                     <div class="dish"
                          v-for="(dish, index) in categories.dishes" :key="index"
@@ -244,7 +245,6 @@
                 this.blackListShow ? this.$store.dispatch("fetchMenu", 0) : this.$store.dispatch("fetchMenu", 1)
             },
             manageBL() {
-                console.log("stop")
                 event.stopPropagation()
             }
         },
