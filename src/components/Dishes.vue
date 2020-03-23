@@ -492,21 +492,7 @@
 
     /* плашка внизу страницы */
     .total-sum {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        position: fixed;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        height: 45px;
-        // border-top: 10px solid rgba(255, 255, 255, 0.3);
-        box-shadow: 0 0 10px 10px rgba(255, 255, 255, 0.9);
-        // 0 0 5px 5px rgba(255, 255, 255, 0.2);
-        // background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.9));
-        background: rgba(255, 255, 255, 0.9);
-        width: 100%;
-        z-index: 20;
+        display: none;
     }
 
     .total-container {
@@ -1029,6 +1015,21 @@
             }
         }
         .total-sum {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            // height: 45px;
+            // border-top: 10px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 10px 10px rgba(255, 255, 255, 0.9);
+            // 0 0 5px 5px rgba(255, 255, 255, 0.2);
+            // background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.9));
+            background: rgba(255, 255, 255, 0.9);
+            width: 100%;
+            z-index: 20;
             height: 95px;
             flex-direction: column;
         }
