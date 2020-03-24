@@ -19,7 +19,7 @@
             </div>
         </div>
 
-        <modal name="profile-modal">
+    <modal name="profile-modal">
         <div class="profile-modal">
           <div class="head">
             <div class="close-btn" @click="hide"><img id="close-btn-img" src="../assets/img/close_icon.svg" /> </div>
@@ -37,7 +37,7 @@
                     <div class="show-black-listed">
                         <p>Черный список</p>
                         <label class="switch">
-                            <input type="checkbox" @click="blackListMenuChange">
+                            <input type="checkbox" :checked="blackListShow == true"  @click="blackListMenuChange">
                             <span class="slider round"></span>
                         </label>
                     </div>
@@ -119,8 +119,8 @@
   .v--modal-box.v--modal {
     top: 0 !important;
     left: 0 !important;
-    width: 508px !important;
-    height: 428px !important;
+    width: 480px !important;
+    height: auto !important;
     border: none;
     border-radius: 10px;
     box-shadow: 0px 4px 33px rgba(0, 0, 0, 0.75);
@@ -129,13 +129,19 @@
   @media (max-width: 768px) {
       .v--modal-box.v--modal {
           width: 408px !important;
-          height: 328px !important;
+          height: auto !important;
       }
   }
-  @media (max-width: 450px) {
+    @media (max-width: 450px) {
       .v--modal-box.v--modal {
-          width: 300px !important;
-          height: 300px !important;
+          width: 250px !important;
+          height: auto !important;
+      }
+  }
+  @media (max-width: 1190px) {
+      .v--modal-box.v--modal {
+          width: 408px !important;
+          height: auto !important;
       }
   }
 </style>
@@ -320,6 +326,7 @@
   display: flex;
   justify-content: center;
   margin-top: 30px;
+  margin-bottom: 30px;
     button {
         background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
         border-radius: 46px;
@@ -362,7 +369,7 @@
         top: 0 !important;
         left: 0 !important;
         width: 408px !important;
-        height: 328px !important;
+        height: auto !important;
         border: none;
         border-radius: 10px;
         box-shadow: 0px 4px 33px rgba(0, 0, 0, 0.75);
@@ -373,9 +380,80 @@
     }
     .logout-btn {
         margin-top: 30px;
+        margin-bottom: 30px;
     }
 }
 @media (max-width: 450px) {
+    
+        .show-black-listed {
+
+            width: 85%;
+            p {
+                font-size: 16px;
+            }
+        }
+
+    /* слайдер */
+    .switch {
+        width: 50px;
+        height: 27px;
+        margin-left: 10px;
+    }
+
+    /* слайдер для включения чс*/
+    .slider {
+        &:before {
+            height: 23px;
+            width: 23px;
+            left: 2px;
+            bottom: 2px;
+        }
+    }
+
+    input:checked + .slider:before {
+        transform: translateX(23px);
+    }
+.head {
+    height: auto;
+    img {
+        width: 30px;
+        height: auto;
+        margin-bottom: 0;
+        margin-top: 20px;
+    }
+}
+.username {
+  font-weight: 700;
+  font-size: 24px;
+  margin-bottom: 0;
+  line-height: 28px;
+}
+.email {
+  font-weight: 400;
+  font-size: 16px;
+
+}
+.logout-btn {
+  margin-bottom: 20px;
+  margin-top: 20px;
+    button {
+        width: 120px;
+        height: 35px;
+        font-weight: 700;
+        font-size: 16px;
+    }
+}
+    .close-btn {
+        position: absolute;
+        cursor: pointer;
+        right: 10px;
+        top: 0;
+
+        #close-btn-img {
+        width: 20px;
+        height: 20px;
+        }
+    }
     .header {
         .container {
             padding: 0 15px;

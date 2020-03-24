@@ -160,7 +160,7 @@
                     </div>
                     <div class="show-black-listed">
                         <label class="switch">
-                            <input type="checkbox" @click="blackListMenuChange">
+                            <input type="checkbox"  @click="blackListMenuChange">
                             <span class="slider round"></span>
                         </label>
                         <p>Черный список</p>
