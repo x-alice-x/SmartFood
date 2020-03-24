@@ -219,9 +219,12 @@
                 if (buttonId === 'card') {
                     if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count == 0) {
                         this.$store.dispatch("OrderDish", {menu_id, dish_id, count});
-                        this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++
+                        this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++;
+                        console.log(this.todayMenu.basket_summ)
                         this.todayMenu.basket_summ = this.todayMenu.basket_summ
-                            + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
+                            + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price);
+                        console.log(this.todayMenu.basket_summ);
+                        this.todayCart.basket_summ = this.todayMenu.basket_summ;
                     }
                     event.stopPropagation()
                 } else {
@@ -229,6 +232,8 @@
                     this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++
                     this.todayMenu.basket_summ = this.todayMenu.basket_summ
                         + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
+
+                    this.todayCart.basket_summ = this.todayMenu.basket_summ;
                     event.stopPropagation()
                 }
             },
@@ -239,6 +244,8 @@
                     this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count--
                     this.todayMenu.basket_summ = this.todayMenu.basket_summ
                         - parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
+
+                    this.todayCart.basket_summ = this.todayMenu.basket_summ;
                 }
                 event.stopPropagation()
             },
@@ -299,6 +306,9 @@
                     this.todayMenu.basket_summ - this.todayMenu.basket_summ_limit :
                     this.todayMenu.basket_summ_limit - this.todayMenu.basket_summ
             },
+            todayCart() {
+                return this.$store.getters.getTodayCart;
+            }
         },
         async mounted() {
             let self = this;
@@ -1427,6 +1437,16 @@
         //     transform: translateX(35px);
         // }
         .dish-mobile {
+            .card-content {
+                .dish-mobile-price {
+                    width: 30%;
+                }
+                .dish-mobile-text {
+                    .dish-mobile-text-prelude {
+                        max-height: 28%;
+                    }
+                }
+            }
             &-middle {
                 &-about {
                     padding-left: 10px;

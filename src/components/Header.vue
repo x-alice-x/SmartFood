@@ -12,7 +12,10 @@
             </div>
 
             <div class="cart">
-                <div class="sum">{{currentSum}}</div>
+                <div class="sum" 
+                     :style="{'color' : (this.currentSum >= this.limit ? '#ED2736' : '#FFFFFF')}">
+                        {{ currentSum }} P
+                </div>
                 <img src="../assets/img/cart_white.svg" 
                      alt="Cart ico"
                      @click="showCart = !showCart">
@@ -80,6 +83,9 @@
             },
             currentSum() {
                 return this.$store.getters.getCartSum;
+            },
+            limit() {
+                return this.$store.getters.getLimit;
             }
         },
         methods: {

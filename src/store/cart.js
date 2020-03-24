@@ -111,6 +111,9 @@ export default {
 		},
 		getCartSum(state) {
 			return state.todayCart.basket_summ;
+		},
+		getLimit(state) {
+			return state.todayCart.basket_summ_limit;
 		}
 	}
 }

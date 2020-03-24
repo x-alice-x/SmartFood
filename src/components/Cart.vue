@@ -101,6 +101,7 @@
           }
         }
         this.todayCart.basket_summ = 0;
+        this.todayMenu.basket_summ = 0;
       }
     },
     computed: {
@@ -109,7 +110,10 @@
         },
         todayMenu() {
           return this.$store.getters.todayMenu;
-        }
+        },
+        // count() {
+          // if (this.todayCart)
+        // }
       },
       async mounted() {
         await this.$store.dispatch("fetchCart");
