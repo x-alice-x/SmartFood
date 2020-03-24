@@ -12,7 +12,7 @@
             </div>
 
             <div class="cart">
-                <div class="sum">126 Р</div>
+                <div class="sum">{{currentSum}}</div>
                 <img src="../assets/img/cart_white.svg" 
                      alt="Cart ico"
                      @click="showCart = !showCart">
@@ -50,8 +50,7 @@
       </modal>
 
       <Cart class="cart_comp" 
-            v-if="showCart"
-            @closeCart = "showCart=false" />
+            v-if="showCart"/>
     </div>
 </template>
 
@@ -62,7 +61,7 @@
         data() {
             return {
                 showCart: false,
-                blackListShow: false,
+                blackListShow: false
             }
         },
         computed: {
@@ -78,6 +77,9 @@
             },
             errors() {
                 return this.$store.getters.getError;
+            },
+            currentSum() {
+                return this.$store.getters.getCartSum;
             }
         },
         methods: {
@@ -96,18 +98,21 @@
             blackListMenuChange() {
                 this.blackListShow = !this.blackListShow
                 this.blackListShow ? this.$store.dispatch("fetchMenu", 0) : this.$store.dispatch("fetchMenu", 1)
-            },
+            }
         },
 
         //закрывает корзину по клику снаружи корзины
         created: function() {
            let self = this;
            window.addEventListener('click', function(e){
-           if (!self.$el.contains(e.target)){
-           self.showCart = false
-       } 
-  })
-},
+                if (!self.$el.contains(e.target)){
+                    self.showCart = false
+                }
+            })
+        },
+        async mounted() {
+            await this.$store.dispatch("fetchCart");
+        }
     }
 </script>
 
@@ -280,10 +285,13 @@
             .cart {
                 display: flex;
                 // width: 10%;
+                .sum {
+                    font-size: 26px;
+                }
                 img {
                     cursor: pointer;
-                    width: 40px;
-                    height: auto;
+                    width: auto;
+                    height: 33.5px;
                 }
             }
         }

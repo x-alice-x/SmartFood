@@ -2,7 +2,7 @@
   <div class="cart">
   <div class="dish-container">
     <div v-for="(dish, index) in todayCart.basket_dishes" :key="index">
-      <div class="dish" v-if="dish.count">
+      <div class="dish" v-show="dish.count > 0">
         <div class="dish-photo">
             <img :src="dish.image">
         </div>
@@ -12,11 +12,11 @@
           <p class="price">{{dish.price.replace(/.00/, '')}} P</p>
         </div>
         <div class="dish-add">
-              <img src="../assets/img/minus.svg" @click="deleteDish(index, todayCart.id, dish.id, count = 0)">
+              <img src="../assets/img/minus.svg" @click="deleteDish(index, dish.category_id, todayCart.id, dish.id, count = 1)">
               <div class="amount">
                   {{dish.count}}
               </div>
-              <img src="../assets/img/plus.svg" @click="buyDish(index, todayCart.id, dish.id, count = 0)">
+              <img src="../assets/img/plus.svg" @click="buyDish(index, dish.category_id, todayCart.id, dish.id, count = 1)">
         </div>
       </div> 
     </div>
@@ -27,9 +27,9 @@
        <p>Итого:</p> 
        <p class="number">{{todayCart.basket_summ}} P</p>
       </div>
-      <div class="limit">
+      <div class="limit" :style="{'color' : (this.todayCart.basket_summ >= this.todayCart.basket_summ_limit ? '#ED2736':'#42D547')}">
         <p>Оставшийся лимит:</p> 
-        <p class="number">{{todayCart.basket_summ_limit}} P</p>
+        <p class="number">{{todayCart.basket_summ_limit - this.todayCart.basket_summ}} P</p>
       </div>
     </div>
     <div class="btns">
@@ -48,33 +48,67 @@
       }
     },
     methods: {
-      buyDish(index, menu_id, dish_id, count) {
+      buyDish(index, categoryIndex, menu_id, dish_id, count) {
         this.$store.dispatch("OrderDish", {menu_id, dish_id, count});
         this.todayCart.basket_dishes[index].count++;
         this.todayCart.basket_summ = this.todayCart.basket_summ
                             + parseInt(this.todayCart.basket_dishes[index].price);
+                            
+        for (let i = 0; i < this.todayMenu.categories.length; i++) {
+          if (this.todayMenu.categories[i].id == categoryIndex) {
+            for (let j = 0; j < this.todayMenu.categories[i].dishes.length; j++)
+              if (this.todayMenu.categories[i].dishes[j].id == dish_id) {
+                this.todayMenu.categories[i].dishes[j].in_basket_count++;
+              }
+          }
+        }
+        // this.todayMenu.categories[categoryIndex].dishes[dish_id].in_basket_count++;
       },
-      deleteDish(index, menu_id, dish_id, count) {
+      deleteDish(index, categoryIndex, menu_id, dish_id, count) {
         this.$store.dispatch("DeleteDish", {menu_id, dish_id, count});
         console.log(this.todayCart.basket_dishes[index])
         this.todayCart.basket_dishes[index].count--;
         this.todayCart.basket_summ = this.todayCart.basket_summ
                             - parseInt(this.todayCart.basket_dishes[index].price);
+        
+        for (let i = 0; i < this.todayMenu.categories.length; i++) {
+          if (this.todayMenu.categories[i].id == categoryIndex) {
+            for (let j = 0; j < this.todayMenu.categories[i].dishes.length; j++)
+              if (this.todayMenu.categories[i].dishes[j].id == dish_id) {
+                this.todayMenu.categories[i].dishes[j].in_basket_count--;
+              }
+          }
+        }
       },
       clearCart(menu_id) {
         let dish_id = 0;
         let count = 0;
+        let categoryIndex = 0;
         for (let i = 0; i < this.todayCart.basket_dishes.length; i++) {
           dish_id = this.todayCart.basket_dishes[i].id;
           count = this.todayCart.basket_dishes[i].count;
+          categoryIndex = this.todayCart.basket_dishes[i].category_id;
           this.$store.dispatch("DeleteDish", {menu_id, dish_id, count});
+          this.todayCart.basket_dishes[i].count -= count;
+          // for (let k = 0; k < this.todayMenu.categories.length; i++) {
+          //   if (this.todayMenu.categories[k].id == categoryIndex) {
+          //     for (let j = 0; j < this.todayMenu.categories[k].dishes.length; j++)
+          //       if (this.todayMenu.categories[k].dishes[j].id == dish_id) {
+          //         this.todayMenu.categories[k].dishes[j].in_basket_count -= count;
+          //       }
+          //   }
+          // }
         }
+        this.todayCart.basket_summ = 0;
       }
     },
     computed: {
         todayCart() {
             return this.$store.getters.getTodayCart;
         },
+        todayMenu() {
+          return this.$store.getters.todayMenu;
+        }
       },
       async mounted() {
         await this.$store.dispatch("fetchCart");
@@ -202,7 +236,7 @@
 }
 
 .limit {
-  color: #44A334;
+  // color: #44A334;
   font-size: 18px;
   font-weight: 400;
   margin-left: 25px;

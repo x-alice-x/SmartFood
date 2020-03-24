@@ -216,7 +216,6 @@
             },
             // Добавление блюда
             buyDish(menu_id, dish_id, index, categoryIndex, buttonId, count) {
-                
                 if (buttonId === 'card') {
                     if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count == 0) {
                         this.$store.dispatch("OrderDish", {menu_id, dish_id, count});

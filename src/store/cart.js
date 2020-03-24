@@ -34,8 +34,15 @@ export default {
 			await axios(requestParams).then(
 				resp => {
 					if (resp.data.data) {
-						console.log(resp.data.data[0])
+						for (let i = 0; i < resp.data.data.length; i++) {
+							for (let j = 0; j < resp.data.data[i].basket_dishes.length; j++) {
+								if (resp.data.data[i].basket_dishes[j].image === 'https://edatomsk.ru/images/delivery/delivery.svg') {
+									resp.data.data[i].basket_dishes[j].image = 'https://image.flaticon.com/icons/svg/857/857681.svg'
+								}
+							}
+						}
 						cart = resp.data.data;
+						console.log(cart);
 						commit("UPDATE_CART", cart);
 						commit("SET_CART");
 					}
@@ -101,6 +108,9 @@ export default {
 	getters: {
 		getTodayCart(state) {
 			return state.todayCart;
+		},
+		getCartSum(state) {
+			return state.todayCart.basket_summ;
 		}
 	}
 }
