@@ -90,14 +90,15 @@
           categoryIndex = this.todayCart.basket_dishes[i].category_id;
           this.$store.dispatch("DeleteDish", {menu_id, dish_id, count});
           this.todayCart.basket_dishes[i].count -= count;
-          // for (let k = 0; k < this.todayMenu.categories.length; i++) {
-          //   if (this.todayMenu.categories[k].id == categoryIndex) {
-          //     for (let j = 0; j < this.todayMenu.categories[k].dishes.length; j++)
-          //       if (this.todayMenu.categories[k].dishes[j].id == dish_id) {
-          //         this.todayMenu.categories[k].dishes[j].in_basket_count -= count;
-          //       }
-          //   }
-          // }
+          for (let k = 0; k < this.todayMenu.categories.length; k++) {
+            if (this.todayMenu.categories[k].id == categoryIndex) {
+              for (let j = 0; j < this.todayMenu.categories[k].dishes.length; j++)
+                if (this.todayMenu.categories[k].dishes[j].id == dish_id) {
+                  // console.log(this.todayMenu.categories[k].dishes[j].in_basket_count);
+                  this.todayMenu.categories[k].dishes[j].in_basket_count -= count;
+                }
+            }
+          }
         }
         this.todayCart.basket_summ = 0;
       }
