@@ -282,10 +282,14 @@
             }
             .logo {
                 a {
-                font-weight: 900;
-                font-size: 30px;
-                line-height: 45px;
-                color: #ffffff;
+                    font-weight: 900;
+                    font-size: 30px;
+                    line-height: 45px;
+                    color: #ffffff;
+                    position: absolute;
+                    top: 0%;
+                    margin-top: 3px;
+                    left: 44%;
                 }
             }
             .cart {
@@ -366,6 +370,9 @@
     .header{
         .container{
             padding: 0 15px;
+            .logo a{
+                position: unset;
+            }
         }
         .cart {
             img {
