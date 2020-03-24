@@ -29,11 +29,11 @@
     <div class="sum-container">
       <div class="sum">
        <p>Итого:</p> 
-       <p class="number">100 P{{ cartSum }}</p>
+       <p class="number">100 P</p>
       </div>
       <div class="limit">
         <p>Оставшийся лимит:</p> 
-        <p class="number">100 P {{ cartSum }}</p>
+        <p class="number">100 Р</p>
       </div>
     </div>
     <div class="btns">
@@ -201,8 +201,8 @@
       button {
         border-radius: 46px;
         outline: none;
-        width: 200px;
-        height: 48px;
+        width: 180px;
+        height: 38px;
         font-family: $font;
         font-size: 18px;
       }

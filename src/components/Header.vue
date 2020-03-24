@@ -92,8 +92,13 @@
                 if (!this.errors) {
                     this.$router.push("/");
                 }
-            }
+            },
+            blackListMenuChange() {
+                this.blackListShow = !this.blackListShow
+                this.blackListShow ? this.$store.dispatch("fetchMenu", 0) : this.$store.dispatch("fetchMenu", 1)
+            },
         },
+
         //закрывает корзину по клику снаружи корзины
         created: function() {
            let self = this;
