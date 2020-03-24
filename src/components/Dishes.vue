@@ -466,6 +466,10 @@
         bottom: 33px;
     }
 
+// =======
+// .container:last-child {
+//     margin-bottom: 60px;
+// >>>>>>> yulya
 
 
     .dishes {
@@ -481,9 +485,11 @@
     .category-name {
         font-size: 40px;
         color: #000;
-        margin-left: 150px;
-        margin-bottom: 2%;
+        width: 25%;
+        margin: 0 auto;
+        margin-bottom: 1%;
         font-weight: 400;
+        text-align: center;
     }
 
     /* контейнер для кнопочки открывающей кнопку чс */
@@ -587,83 +593,6 @@
         margin: 0 2%;
     }
 
-    /* контейнер слайдера чс */
-    .show-black-listed {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        position: fixed;
-        right: 15%;
-        // transform: translateX(-50%);
-        z-index: 2;
-
-        p {
-            margin-left: 15px;
-            color: #000;
-            font-size: 18px;
-            font-weight: 700;
-        }
-    }
-
-    /* слайдер */
-    .switch {
-        position: relative;
-        display: inline-block;
-        width: 60px;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        margin-left: 20px;
-        justify-content: center;
-        z-index: 2;
-    }
-
-    /* убрать дефолтный чекбокс */
-    .switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-    }
-
-    /* слайдер для включения чс*/
-    .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #ccc;
-        transition: .3s;
-
-        &:before {
-            position: absolute;
-            content: "";
-            height: 26px;
-            width: 26px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: .3s;
-        }
-    }
-
-    input:checked + .slider {
-        background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
-    }
-
-    input:checked + .slider:before {
-        transform: translateX(26px);
-    }
-
-    .slider.round {
-        border-radius: 30px;
-
-        &:before {
-            border-radius: 50%;
-        }
-    }
-
     .dishes {
         height: 600px;
     }
@@ -710,7 +639,7 @@
         }
 
         &-category {
-            margin-bottom: 50px;
+            margin-bottom: 5%;
         }
 
         // &-category:last-child {
@@ -1151,11 +1080,11 @@
 
     // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
     @media (max-width: 620px) {
-        .container .week {
+         .week {
             margin-bottom: 0;
         }
         .container {
-            margin-bottom: 120px;
+            margin-bottom: 20px;
         }
         .category-name {
             width: 85%;
@@ -1254,6 +1183,12 @@
                 }
             }
         }
+        // .card-content:last-child {
+        //     margin-bottom: 80px;
+        // }
+        //        ::i-block-chrome, .container {
+        //     margin-bottom: 80px;
+        // }
         .total-sum {
             height: 100px;
         }
