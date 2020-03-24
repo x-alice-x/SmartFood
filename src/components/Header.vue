@@ -93,7 +93,16 @@
                     this.$router.push("/");
                 }
             }
-        }
+        },
+        //закрывает корзину по клику снаружи корзины
+        created: function() {
+           let self = this;
+           window.addEventListener('click', function(e){
+           if (!self.$el.contains(e.target)){
+           self.showCart = false
+       } 
+  })
+},
     }
 </script>
 
@@ -133,9 +142,10 @@
     display: flex;
     align-items: center;
     font-size: 30px; 
+    font-weight: 700;
     text-align: center;
     color: #FFFFFF;
-    margin-right: 15px;
+    margin-right: 25px;
     min-width: 25%;
 }
 

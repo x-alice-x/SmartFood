@@ -1,10 +1,10 @@
 <template>
   <div class="cart">
-    <div class="header">
+    <!-- <div class="header">
       <img src="../assets/img/close.svg"
            alt="Close"
            @click="showCart = !showCart">
-    </div>
+    </div> -->
   <div class="dish-container">
     <div class="dish">
       <div class="dish-photo">
@@ -23,6 +23,8 @@
             <img src="../assets/img/plus.svg">
       </div>
     </div> 
+
+
   </div>
     <div class="sum-container">
       <div class="sum">
@@ -36,7 +38,6 @@
     </div>
     <div class="btns">
       <button class="clear-cart">Очистить корзину</button>
-      <button class="confirm-order">Подтвердить заказ</button>
     </div>
 
   </div>
@@ -68,16 +69,20 @@
     @import "../assets/scss/vars.scss";    
     @import "../assets/scss/root.scss";
   .cart {
-    width: 550px;
-    height: 600px;
+    width: 500px;
+    // min-height: 600px;
+    height: auto;
     box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.25);  
-    background: #FCFAF1;
+    background: #fff;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
     
     .header {
-      height: 26px;
-      background: $c-main;
+      height: 40px;
+      // background: $c-main;
       display: flex;
-      background: #460B79;
+      border: none;
+      background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
       justify-content: flex-end;
       align-items: center;
       padding: 0 10px;
@@ -89,17 +94,19 @@
     }
     .dish-container {
     height: auto;
-     min-height: 350px;
+    min-height: 380px;
+    padding-top: 2%;
     }
     .dish {
       display: flex;
       flex-direction: row;
       justify-content: space-around;
-      margin: 1%;
-      width: 90%;
+      margin: 2%;
+      width: 94%;
       img {
-        height: 110px;
-        width: auto;
+        width: 70px;
+        height: auto;
+        clip-path: circle(55px at center);
       }
       .info {
         display: flex;
@@ -111,31 +118,24 @@
         // height: 30px;
         // align-items: center;
         padding: 10px 15px;
-        font-size: 18px;
+        font-size: 14px;
         font-weight: 700;
         .name {
         text-transform: uppercase;
         }
         .weight {
-        font-size: 16px;
+        font-size: 14px;
         font-weight: 300;
         text-align: left;
         margin-top: 5px;
         }
         .price {
           font-weight: 700;
-          font-size: 16px;
+          font-size: 14px;
           text-align: left;
           margin-top: 3px;
         }
       }
-      // .sum {
-      //   padding: 10px 20px;
-      //   display: flex;
-      //   align-items: flex-end;
-      //   font-size: 22px;
-      //   font-weight: 700;
-      // }
     }
     .dish-add {
           display: flex;
@@ -151,9 +151,12 @@
             border: 1px solid #460B79;
             border-radius: 10px;
             background: #ffffff;
-            width: 88px;
-            height: 32px;
+            width: 68px;
+            height: 28px;
             text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
           }
         }
 
@@ -161,6 +164,7 @@
   width: 100%;
   border-top: 1px solid #BFBCBC;
   border-bottom: 1px solid #BFBCBC;
+  margin-bottom: 2%;
 }
 
 .sum, .limit {
@@ -171,25 +175,29 @@
 
 .number {
   margin-right: 5%;
-  font-size: 20px;
+  font-size: 18px;
 }
 .sum {
   color: #460B79;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
-  margin: 19px auto 14px 25px;
+  margin: 14px auto 10px 25px;
 }
 
 .limit {
   color: #44A334;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 400;
   margin-left: 25px;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
 }
     .btns {
-      position: absolute;
-      bottom: 5%;
+      margin-bottom: 2%;
+      width: 100%;
+      min-height: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       button {
         border-radius: 46px;
         outline: none;
@@ -197,18 +205,11 @@
         height: 48px;
         font-family: $font;
         font-size: 18px;
-        font-weight: 500;
-        margin-left: 50px;  
       }
       .clear-cart {
         border: 1px solid $font-color;
-        background: #FCFAF1;
+        background: transparent;
         color: $font-color;
-      }
-      .confirm-order {
-        border: none;
-        background: $font-color;
-        color: #ffffff;
       }
     }
   }
