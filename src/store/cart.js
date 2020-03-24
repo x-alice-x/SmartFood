@@ -11,7 +11,7 @@ export default {
 			let requestParams = {
 				url: url,
 				method: "POST",
-				params: { dish_id: ids.dish_id, menu_id: ids.menu_id }
+				params: { dish_id: ids.dish_id, menu_id: ids.menu_id, count: ids.count}
 			};
 			await axios(requestParams).then(
 				resp => {
@@ -27,7 +27,7 @@ export default {
 			let requestParams = {
 				url: url,
 				method: "DELETE",
-				params: { dish_id: ids.dish_id, menu_id: ids.menu_id }
+				params: { dish_id: ids.dish_id, menu_id: ids.menu_id, count: ids.count }
 			};
 			await axios(requestParams).then(
 				resp => {

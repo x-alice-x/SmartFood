@@ -8,7 +8,7 @@
                 <div class="dish-main">
                     <div class="dish"
                          v-for="(dish, index) in categories.dishes" :key="index"
-                         @click="buyDish(todayMenu.id, dish.id, index, categoryIndex, buttonId = 'card')"
+                         @click="buyDish(todayMenu.id, dish.id, index, categoryIndex, buttonId = 'card', count = 1)"
                          :id="dish.in_blacklist ? 'blacklisted' : index"
                          :class="{ active: dish.in_basket_count == 0}">
                         <div class="dish-top">
@@ -36,7 +36,7 @@
                             <div class="dish-add" v-if="dish.in_basket_count > 0">
                                 <button>
                                     <img src="../assets/img/minus.svg"
-                                         @click="deleteDish(todayMenu.id, dish.id, index, categoryIndex)">
+                                         @click="deleteDish(todayMenu.id, dish.id, index, categoryIndex, count = 1)">
                                 </button>
                                 <div class="dish-amount">
                                     <div class="dish-amount-color">
@@ -45,7 +45,7 @@
                                 </div>
                                 <button>
                                     <img src="../assets/img/plus.svg"
-                                         @click="buyDish(todayMenu.id, dish.id, index, categoryIndex, buttonId = 'plus')">
+                                         @click="buyDish(todayMenu.id, dish.id, index, categoryIndex, buttonId = 'plus', 1)">
                                 </button>
                             </div>
                         </div>
@@ -102,7 +102,7 @@
                         </template>
                         <template v-slot:left="{ item, close, index }">
                             <div class="swipeout-action dish-mobile-add"
-                                 @click="buyDish(todayMenu.id, item.id, index, categoryIndex, buttonId = 'plus')"
+                                 @click="buyDish(todayMenu.id, item.id, index, categoryIndex, buttonId = 'plus', count = 1)"
                                  :style="{width: widthX + 'px'}"
                                  :class="{aloneButton: item.showTransition && !item.in_blacklist}"
                             >
@@ -130,7 +130,7 @@
                                 </div>
                             </div>
                             <div class="swipeout-action dish-mobile-delete"
-                                 @click="deleteDish(todayMenu.id, item.id, index, categoryIndex)"
+                                 @click="deleteDish(todayMenu.id, item.id, index, categoryIndex, count = 1)"
                                  :style="{width: widthX + 'px'}"
                                  :class="{aloneButtonDel: item.showTransition && item.in_blacklist}"
                             >
@@ -211,17 +211,18 @@
                 $('html').animate({'scrollTop': 0}, 500)
             },
             // Добавление блюда
-            buyDish(menu_id, dish_id, index, categoryIndex, buttonId) {
+            buyDish(menu_id, dish_id, index, categoryIndex, buttonId, count) {
+                
                 if (buttonId === 'card') {
-                    if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count === 0) {
-                        this.$store.dispatch("OrderDish", {menu_id, dish_id});
+                    if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count == 0) {
+                        this.$store.dispatch("OrderDish", {menu_id, dish_id, count});
                         this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++
                         this.todayMenu.basket_summ = this.todayMenu.basket_summ
                             + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
                     }
                     event.stopPropagation()
                 } else {
-                    this.$store.dispatch("OrderDish", {menu_id, dish_id});
+                    this.$store.dispatch("OrderDish", {menu_id, dish_id, count});
                     this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++
                     this.todayMenu.basket_summ = this.todayMenu.basket_summ
                         + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
@@ -229,9 +230,9 @@
                 }
             },
             // Удаление блюда
-            deleteDish(menu_id, dish_id, index, categoryIndex) {
+            deleteDish(menu_id, dish_id, index, categoryIndex, count) {
                 if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count != 0) {
-                    this.$store.dispatch("DeleteDish", {menu_id, dish_id});
+                    this.$store.dispatch("DeleteDish", {menu_id, dish_id, count});
                     this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count--
                     this.todayMenu.basket_summ = this.todayMenu.basket_summ
                         - parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
