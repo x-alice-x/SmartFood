@@ -1,66 +1,83 @@
 <template>
   <div class="cart">
-    <!-- <div class="header">
-      <img src="../assets/img/close.svg"
-           alt="Close"
-           @click="showCart = !showCart">
-    </div> -->
   <div class="dish-container">
-    <div class="dish">
-      <div class="dish-photo">
-          <img src="https://image.flaticon.com/icons/svg/857/857681.svg">
-      </div>
-      <div class="info">
-        <p class="name">Паста с курочкой в слив соусе</p>
-        <p class="weight">144 г.</p>
-        <p class="price">123 Р</p>
-      </div>
-      <div class="dish-add">
-            <img src="../assets/img/minus.svg">
-            <div class="amount">
-                1
-            </div>
-            <img src="../assets/img/plus.svg">
-      </div>
-    </div> 
-
-
+    <div v-for="(dish, index) in todayCart.basket_dishes" :key="index">
+      <div class="dish" v-if="dish.count">
+        <div class="dish-photo">
+            <img :src="dish.image">
+        </div>
+        <div class="info">
+          <p class="name">{{dish.name}}</p>
+          <p class="weight">{{dish.weight}} г.</p>
+          <p class="price">{{dish.price.replace(/.00/, '')}} P</p>
+        </div>
+        <div class="dish-add">
+              <img src="../assets/img/minus.svg" @click="deleteDish(index, todayCart.id, dish.id, count = 0)">
+              <div class="amount">
+                  {{dish.count}}
+              </div>
+              <img src="../assets/img/plus.svg" @click="buyDish(index, todayCart.id, dish.id, count = 0)">
+        </div>
+      </div> 
+    </div>
   </div>
+
     <div class="sum-container">
       <div class="sum">
        <p>Итого:</p> 
-       <p class="number">100 P</p>
+       <p class="number">{{todayCart.basket_summ}} P</p>
       </div>
       <div class="limit">
         <p>Оставшийся лимит:</p> 
-        <p class="number">100 Р</p>
+        <p class="number">{{todayCart.basket_summ_limit}} P</p>
       </div>
     </div>
     <div class="btns">
-      <button class="clear-cart">Очистить корзину</button>
+      <button class="clear-cart" @click="clearCart(todayCart.id)">Очистить корзину</button>
     </div>
 
   </div>
 </template>
 
 <script>
+// import $ from "jquery";
   export default {
     data () {
       return {
         showCart: false,
       }
     },
-    computed: {
-        todayMenu() {
-            if (this.$store.getters.todayMenu) {
-                return this.$store.getters.todayMenu
-            } else {
-                return []
-            }
-        }
+    methods: {
+      buyDish(index, menu_id, dish_id, count) {
+        this.$store.dispatch("OrderDish", {menu_id, dish_id, count});
+        this.todayCart.basket_dishes[index].count++;
+        this.todayCart.basket_summ = this.todayCart.basket_summ
+                            + parseInt(this.todayCart.basket_dishes[index].price);
       },
-      cartSum() {
-        return 120;
+      deleteDish(index, menu_id, dish_id, count) {
+        this.$store.dispatch("DeleteDish", {menu_id, dish_id, count});
+        console.log(this.todayCart.basket_dishes[index])
+        this.todayCart.basket_dishes[index].count--;
+        this.todayCart.basket_summ = this.todayCart.basket_summ
+                            - parseInt(this.todayCart.basket_dishes[index].price);
+      },
+      clearCart(menu_id) {
+        let dish_id = 0;
+        let count = 0;
+        for (let i = 0; i < this.todayCart.basket_dishes.length; i++) {
+          dish_id = this.todayCart.basket_dishes[i].id;
+          count = this.todayCart.basket_dishes[i].count;
+          this.$store.dispatch("DeleteDish", {menu_id, dish_id, count});
+        }
+      }
+    },
+    computed: {
+        todayCart() {
+            return this.$store.getters.getTodayCart;
+        },
+      },
+      async mounted() {
+        await this.$store.dispatch("fetchCart");
       }
     }
 </script>
@@ -121,7 +138,7 @@
         font-size: 14px;
         font-weight: 700;
         .name {
-        text-transform: uppercase;
+          font-size: 16px;
         }
         .weight {
         font-size: 14px;
