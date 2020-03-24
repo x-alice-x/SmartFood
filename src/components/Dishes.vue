@@ -1580,18 +1580,17 @@
             }
 
             .card-content {
-                max-height: 70px;
                 height: 50px;
                 padding: 2% 0 2% 0;
 
-                // .dish-mobile-img {
-                //     img {
-                //         width: 100px;
-                //         height: auto;
-                //         clip-path: circle(36px at center);
-                //         margin-left: -10px;
-                //     }
-                // }
+                .dish-mobile-img {
+                    img {
+                        width: 100px;
+                        height: auto;
+                        clip-path: circle(30px at center);
+                        margin-left: -10px;
+                    }
+                }
 
                 .dish-mobile-text {
                     width: 70%;
