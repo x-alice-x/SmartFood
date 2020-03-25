@@ -151,7 +151,7 @@
                 </div>
             </div>
             <div class="total-sum-container" @click="showCart = !showCart">
-               <Cart v-if="showCart" @closeCart="showCart==false" class="cart_comp"/> 
+               <Cart v-if="showCart" @click="showCart==false" class="cart_comp"/> 
                 <div class="total-sum" >
                     <div class="total-container">
                         <p class="money-spent">{{todayMenu.basket_summ}} Р</p>
@@ -213,12 +213,7 @@
             Cart
         },
         methods: {
-            cartOpen() {
 
-            },
-            cartClose () {
-
-            },
             // Кнопка вверх
             async scrollTop() {
                 $('body').animate({'scrollTop': 0}, 500);
@@ -695,7 +690,8 @@
         flex-direction: column;
         justify-content: center;
         color: $font-color;
-        margin-bottom: 10px;
+        height: 100vh;
+        // margin-bottom: 10px;
     }
 
     .dish-main {

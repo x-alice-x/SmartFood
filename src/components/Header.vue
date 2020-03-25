@@ -51,7 +51,7 @@
 
       <Cart class="cart_comp" 
             v-if="showCart"
-            @closeCart = "showCart=false" />
+            @click = "showCart=false" />
     </div>
 </template>
 
