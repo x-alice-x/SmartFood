@@ -1,5 +1,5 @@
 <template>
-  <div class="cart">
+<div class="cart">
   <div class="dish-container">
     <div v-for="(dish, index) in todayCart.basket_dishes" :key="index">
       <div class="dish" v-if="dish.count">
@@ -14,7 +14,7 @@
         <div class="dish-add">
               <img src="../assets/img/minus.svg" @click="deleteDish(index, todayCart.id, dish.id, count = 0)">
               <div class="amount">
-                  {{dish.count}}
+                <p>{{dish.count}}</p>
               </div>
               <img src="../assets/img/plus.svg" @click="buyDish(index, todayCart.id, dish.id, count = 0)">
         </div>
@@ -44,7 +44,7 @@
   export default {
     data () {
       return {
-        showCart: false,
+        // showCart: false,
       }
     },
     methods: {
@@ -85,149 +85,339 @@
 <style lang="scss" scoped>
     @import "../assets/scss/vars.scss";    
     @import "../assets/scss/root.scss";
-  .cart {
-    width: 500px;
-    // min-height: 600px;
-    height: auto;
-    box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.25);  
-    background: #fff;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    
-    .header {
-      height: 40px;
-      // background: $c-main;
-      display: flex;
-      border: none;
-      background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
-      justify-content: flex-end;
-      align-items: center;
-      padding: 0 10px;
-      img {
-        height: auto;
-        width: 16px;
-        cursor: pointer;
-      }
+.cart {
+	width: 500px;
+	height: auto;
+	box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.25);
+	background: #fff;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	.header {
+		height: 40px;
+		display: flex;
+		border: none;
+		background: linear-gradient(90deg, #460b79 0%, #88267f 100%);
+		justify-content: flex-end;
+		align-items: center;
+		padding: 0 10px;
+		img {
+			height: auto;
+			width: 16px;
+			cursor: pointer;
+		}
+	}
+	.dish-container {
+		height: auto;
+		min-height: 380px;
+		padding-top: 2%;
+	}
+	.dish-photo {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		img {
+			width: 80px;
+			height: auto;
+			clip-path: circle(30px at center);
+			margin-left: -10px;
+			margin-top: -10px;
+			margin-right: 10px;
+		}
+	}
+	.dish {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		margin: 2%;
+		width: 94%;
+		height: 80px;
+		.info {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: flex-start;
+			width: 90%;
+			height: auto;
+			padding: 10px 0 0 0;
+			font-size: 14px;
+			font-weight: 700;
+			.name {
+				font-size: 16px;
+			}
+			.weight {
+				font-size: 14px;
+				font-weight: 300;
+				text-align: left;
+				margin-top: 5px;
+			}
+			.price {
+				font-weight: 700;
+				font-size: 14px;
+				text-align: left;
+				margin-top: 3px;
+			}
+		}
+	}
+	.dish-add {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		img {
+			width: 15px;
+			height: auto;
+			margin: 0 5px;
+			cursor: pointer;
+		}
+		.amount {
+			border: 1px solid #460b79;
+			border-radius: 10px;
+			background: #fff;
+			width: 68px;
+			height: 28px;
+			text-align: center;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+	}
+	.sum-container {
+		width: 100%;
+		border-top: 1px solid #bfbcbc;
+		border-bottom: 1px solid #bfbcbc;
+		margin-bottom: 2%;
+	}
+	.sum {
+		display: flex;
+		justify-content: space-between;
+		width: 95%;
+		color: #460b79;
+		font-size: 20px;
+		font-weight: 700;
+		margin: 14px auto 10px 25px;
+	}
+	.limit {
+		display: flex;
+		justify-content: space-between;
+		width: 95%;
+		color: #44a334;
+		font-size: 18px;
+		font-weight: 400;
+		margin-left: 25px;
+		margin-bottom: 14px;
+	}
+	.number {
+		margin-right: 5%;
+		font-size: 18px;
+	}
+	.btns {
+		margin-bottom: 2%;
+		width: 100%;
+		min-height: 60px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		button {
+			border-radius: 46px;
+			outline: none;
+			width: 180px;
+			height: 38px;
+			font-family: 'Roboto', sans-serif;
+			font-size: 18px;
+		}
+		.clear-cart {
+			border: 1px solid #460b79;
+			background: transparent;
+			color: #460b79;
+		}
+	}
+}
+@media (max-width: 790px) {
+	.cart {
+		width: 100vw !important;
+		height: 100vh !important;
+	}
+	.dish-add {
+		width: 20%;
+		img {
+			display: none !important;
+		}
+		.amount {
+      margin-right: 12%;
+      border: none !important;
+			p {
+				font-size: 24px;
+				font-weight: 700;
+			}
+		}
+	}
+	.dish-container {
+		min-height: 75% !important;
+		height: auto;
+	}
+	.dish-photo {
+		img {
+			width: 160px !important;
+			height: auto;
+			clip-path: circle(60px at center) !important;
+			margin-left: -30px !important;
+			margin-top: 10px !important;
+			margin-right: 10px;
+		}
+	}
+	.dish {
+		width: 97% !important;
+		height: 100px !important;
+		.info {
+			.name {
+				font-size: 20px !important;
+			}
+			.weight {
+				font-size: 18px !important;
+			}
+			.price {
+				font-size: 18px !important;
+			}
+		}
+	}
+}
+@media (max-width: 650px) {
+	.dish-container {
+		min-height: 70% !important;
+		height: auto;
+		padding-top: 0;
+	}
+	.dish-photo {
+		img {
+			width: 150px !important;
+			height: auto;
+			clip-path: circle(50px at center) !important;
+			margin-left: -30px !important;
+			margin-top: 10px !important;
+			margin-right: 10px;
+		}
+	}
+	.dish {
+		width: 97% !important;
+		height: 100px !important;
+		.info {
+			font-size: 18px !important;
+			.name {
+				font-size: 18px !important;
+			}
+			.weight {
+				font-size: 16px !important;
+			}
+			.price {
+				font-size: 16px !important;
+			}
+		}
+		.dish-add {
+			width: 20%;
+			img {
+				display: none !important;
+			}
+			.amount {
+				p {
+					font-size: 18px;
+					font-weight: 700;
+				}
+			}
+		}
+	}
+}
+@media (max-width: 470px) {
+  .sum {
+    p {
+      font-size: 16px;
     }
-    .dish-container {
-    height: auto;
-    min-height: 380px;
-    padding-top: 2%;
-    }
-    .dish {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-around;
-      margin: 2%;
-      width: 94%;
-      img {
-        width: 70px;
-        height: auto;
-        clip-path: circle(55px at center);
-      }
-      .info {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: flex-start;
-        width: 90%;
-        height: auto;
-        // height: 30px;
-        // align-items: center;
-        padding: 10px 15px;
-        font-size: 14px;
-        font-weight: 700;
-        .name {
-          font-size: 16px;
-        }
-        .weight {
-        font-size: 14px;
-        font-weight: 300;
-        text-align: left;
-        margin-top: 5px;
-        }
-        .price {
-          font-weight: 700;
-          font-size: 14px;
-          text-align: left;
-          margin-top: 3px;
-        }
-      }
-    }
-    .dish-add {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          img {
-            width: 15px;
-            height: auto;
-            margin: 0 5px;
-            cursor: pointer;
-          }
-          .amount {
-            border: 1px solid #460B79;
-            border-radius: 10px;
-            background: #ffffff;
-            width: 68px;
-            height: 28px;
-            text-align: center;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-          }
-        }
-
-.sum-container {
-  width: 100%;
-  border-top: 1px solid #BFBCBC;
-  border-bottom: 1px solid #BFBCBC;
-  margin-bottom: 2%;
-}
-
-.sum, .limit {
-  display: flex;
-  justify-content: space-between;
-  width: 95%;
-}
-
-.number {
-  margin-right: 5%;
-  font-size: 18px;
-}
-.sum {
-  color: #460B79;
-  font-size: 20px;
-  font-weight: 700;
-  margin: 14px auto 10px 25px;
-}
-
-.limit {
-  color: #44A334;
-  font-size: 18px;
-  font-weight: 400;
-  margin-left: 25px;
-  margin-bottom: 14px;
-}
-    .btns {
-      margin-bottom: 2%;
-      width: 100%;
-      min-height: 60px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      button {
-        border-radius: 46px;
-        outline: none;
-        width: 180px;
-        height: 38px;
-        font-family: $font;
-        font-size: 18px;
-      }
-      .clear-cart {
-        border: 1px solid $font-color;
-        background: transparent;
-        color: $font-color;
-      }
+      .number {
+      font-size: 16px;
+      margin-right: 20px;
     }
   }
+  .limit {
+    p {
+      font-size: 16px;
+    }
+    .number {
+      font-size: 16px;
+      margin-right: 20px;
+    }
+  }
+	.dish-container {
+		min-height: 68% !important;
+		height: auto;
+	}
+	.dish-photo {
+		img {
+			width: 80px !important;
+			height: auto;
+			clip-path: circle(30px at center) !important;
+			margin-left: -10px !important;
+			margin-top: 10px !important;
+			margin-right: 10px;
+		}
+	}
+	.dish {
+		width: 97% !important;
+		height: 100px !important;
+		.info {
+			.name {
+				font-size: 14px !important;
+			}
+			.weight {
+				font-size: 14px !important;
+			}
+			.price {
+				font-size: 14px !important;
+			}
+		}
+		.dish-add {
+			width: 25%;
+			img {
+				display: none !important;
+			}
+			.amount {
+				border: none;
+				margin-right: 12%;
+				p {
+					font-size: 18px;
+					font-weight: 700;
+				}
+			}
+		}
+	}
+}
+
+// @media (max-width: 376px) {
+// 	.dish-container {
+// 		min-height: 70% !important;
+// 	}
+// }
+
+@media (max-width: 340px) {
+	.dish-container {
+		min-height: 62% !important;
+	}
+	.dish {
+		.info {
+			.name {
+				font-size: 12px !important;
+			}
+			.weight {
+				font-size: 12px !important;
+			}
+			.price {
+				font-size: 12px !important;
+			}
+		}
+		.dish-add {
+			.amount {
+				p {
+					font-size: 16px;
+				}
+			}
+		}
+	}
+}
 </style>

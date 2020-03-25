@@ -61,7 +61,7 @@
     @import "../assets/scss/root.scss";
 
     .container {
-        z-index: 300;
+        z-index: 10;
         position: sticky;
         top: 20px;
         height: auto;

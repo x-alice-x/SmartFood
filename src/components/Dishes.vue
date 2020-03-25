@@ -150,8 +150,9 @@
                     </swipe-list>
                 </div>
             </div>
-            <div class="total-sum-container">
-                <div class="total-sum">
+            <div class="total-sum-container" @click="showCart = !showCart">
+               <Cart v-if="showCart" @closeCart="showCart==false" class="cart_comp"/> 
+                <div class="total-sum" >
                     <div class="total-container">
                         <p class="money-spent">{{todayMenu.basket_summ}} Р</p>
                         <img class="cart-icon" src="../assets/img/cart_white.svg"/>
@@ -178,6 +179,7 @@
     import {SwipeList} from 'vue-swipe-actions';
     import 'vue-swipe-actions/dist/vue-swipe-actions.css';
     import Weekdays from './Weekdays'
+    import Cart from './Cart'
     import $ from "jquery";
 
     export default {
@@ -202,11 +204,13 @@
                 transitionX: 0,
                 blackListShow: false,
                 inBlack: false,
+                showCart: false,
             };
         },
         components: {
             Weekdays,
             SwipeList,
+            Cart
         },
         methods: {
             // Кнопка вверх
@@ -489,6 +493,16 @@
 <style scoped lang="scss">
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
+
+
+    .cart_comp {
+    position: fixed;
+    top:0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 20;
+    overflow-y: hidden;
+}
     /*Кнопка вверх*/
     .arrow {
         position: fixed;
@@ -644,7 +658,7 @@
         bottom: 0;
         left: 50%;
         transform: translateX(-50%);
-        z-index: 20;
+        z-index: 501;
 
         p {
             font-size: 24px;
@@ -860,6 +874,15 @@
 
     // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
     @media (max-width: 790px) {
+        // .cart_comp {
+        //  width: 60% !important;
+        //   height: 67% !important;
+        //   margin: auto;
+        //   left: 20%;
+        //   right: auto;
+        //   bottom: 0%;
+
+        // }
         .arrow {
             display: none;
         }
@@ -1081,12 +1104,6 @@
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            // height: 45px;
-            // border-top: 10px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 10px 10px rgba(255, 255, 255, 0.9);
-            // 0 0 5px 5px rgba(255, 255, 255, 0.2);
-            // background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.9));
-            background: rgba(255, 255, 255, 0.9);
             width: 100%;
             z-index: 20;
             height: 95px;
@@ -1325,6 +1342,14 @@
             }
         }
     }
+
+@media (max-width: 650px ) {
+        .cart_comp {
+         width: 100% !important;
+          height: 100% !important;
+          left: 0;
+        }
+}
 
     @media (max-width: 500px) {
         .dish-mobile {
@@ -1651,6 +1676,7 @@
             }
         }
     }
+    
 </style>
 <style>
     .swipeout {
@@ -1689,4 +1715,5 @@
     .aloneButtonDelM {
         transform: translate3d(-220px, 0px, 0px) !important;
     }
+    
 </style>

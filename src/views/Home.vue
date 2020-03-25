@@ -23,4 +23,5 @@ import Dishes from '../components/Dishes'
 <style scoped lang="scss">
 @import "../assets/scss/vars.scss";
 @import "../assets/scss/root.scss";
+
 </style>
