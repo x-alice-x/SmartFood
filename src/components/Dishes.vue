@@ -106,7 +106,8 @@
                                  @click="buyDish(todayMenu.id, item.id, index, categoryIndex, buttonId = 'plus', count = 1)"
                                  :style="{width: widthX + 'px'}"
                                  :class="{aloneButtonL: item.showTransition && !item.in_blacklist && $el.clientWidth > 500,
-                                 aloneButtonM: item.showTransition && !item.in_blacklist && $el.clientWidth <= 500}"
+                                 aloneButtonS: item.showTransition && !item.in_blacklist && $el.clientWidth <= 500 && $el.clientWidth > 400,
+                                 aloneButtonS: item.showTransition && !item.in_blacklist && $el.clientWidth <= 400}"
                             >
                                 <div class="dish-mobile-add-dish">
                                     <img src="../assets/img/cartMobile.svg">
@@ -135,7 +136,8 @@
                                  @click="deleteDish(todayMenu.id, item.id, index, categoryIndex, count = 1)"
                                  :style="{width: widthX + 'px'}"
                                  :class="{aloneButtonDelL: item.showTransition && item.in_blacklist && $el.clientWidth > 500,
-                                 aloneButtonDelM: item.showTransition && item.in_blacklist && $el.clientWidth <= 500}"
+                                 aloneButtonDelM: item.showTransition && item.in_blacklist && $el.clientWidth <= 500 && $el.clientWidth > 400,
+                                 aloneButtonDelS: item.showTransition && item.in_blacklist && $el.clientWidth <= 400}"
                             >
                                 <div class="dish-mobile-delete-dish">
                                     <img src="../assets/img/delete.svg">
@@ -360,7 +362,7 @@
                             bool: false
                         });
                     } else {
-                        self.widthX = 220;
+                        self.widthX = self.transition;
                         self.$store.commit('showTransition', {
                             indexCategory: self.categoryIndex,
                             indexDishes: self.dishIndex,
@@ -1498,6 +1500,7 @@
             }
 
             .swipeout-action.dish-mobile-add {
+                transition: .1s !important;
 
                 .dish-mobile-add-dish {
                     width: 0px;
@@ -1707,11 +1710,19 @@
         transform: translate3d(220px, 0px, 0px) !important;
     }
 
+    .aloneButtonS {
+        transform: translate3d(150px, 0px, 0px) !important;
+    }
+
     .aloneButtonDelL {
         transform: translate3d(-312px, 0px, 0px) !important;
     }
 
     .aloneButtonDelM {
         transform: translate3d(-220px, 0px, 0px) !important;
+    }
+
+    .aloneButtonDelS {
+        transform: translate3d(-150px, 0px, 0px) !important;
     }
 </style>
