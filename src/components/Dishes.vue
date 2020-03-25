@@ -14,8 +14,7 @@
                         <div class="dish-top">
                             <div class="dish-img" :style="{'background-image': `url(${dish.image})`}">
                                 <div class="black-list-container" tabindex="-1" @click="manageBL">
-                                    <img class="black-list" src="../assets/img/dots.svg"/>
-                                    <!-- <img class="black-list" src="../assets/img/newDots.svg"/> -->
+                                    <img class="black-list" src="../assets/img/newDots.svg"/>
                                 </div>
                                 <div id="black-list-content">
                                     <button v-if="!dish.in_blacklist"
@@ -104,9 +103,9 @@
                         <template v-slot:left="{ item, close, index }">
                             <div class="swipeout-action dish-mobile-add"
                                  @click="buyDish(todayMenu.id, item.id, index, categoryIndex, buttonId = 'plus', count = 1)"
-                                 :style="{width: widthX + 'px'}"
+                                 :style="{width: widthX + 'px', transition: '.1s !important'}"
                                  :class="{aloneButtonL: item.showTransition && !item.in_blacklist && $el.clientWidth > 500,
-                                 aloneButtonS: item.showTransition && !item.in_blacklist && $el.clientWidth <= 500 && $el.clientWidth > 400,
+                                 aloneButtonM: item.showTransition && !item.in_blacklist && $el.clientWidth <= 500 && $el.clientWidth > 400,
                                  aloneButtonS: item.showTransition && !item.in_blacklist && $el.clientWidth <= 400}"
                             >
                                 <div class="dish-mobile-add-dish">
@@ -134,7 +133,7 @@
                             </div>
                             <div class="swipeout-action dish-mobile-delete"
                                  @click="deleteDish(todayMenu.id, item.id, index, categoryIndex, count = 1)"
-                                 :style="{width: widthX + 'px'}"
+                                 :style="{width: widthX + 'px', transition: '.1s !important'}"
                                  :class="{aloneButtonDelL: item.showTransition && item.in_blacklist && $el.clientWidth > 500,
                                  aloneButtonDelM: item.showTransition && item.in_blacklist && $el.clientWidth <= 500 && $el.clientWidth > 400,
                                  aloneButtonDelS: item.showTransition && item.in_blacklist && $el.clientWidth <= 400}"
@@ -153,7 +152,8 @@
                     </swipe-list>
                 </div>
             </div>
-            <div class="total-sum-container">
+            <Cart v-if="showCart" @closeCartMobile="showCart=false" class="cart_comp"/>
+            <div class="total-sum-container" @click="showCart = !showCart">
                 <div class="total-sum">
                     <div class="total-container">
                         <p class="money-spent">{{todayMenu.basket_summ}} Р</p>
@@ -181,6 +181,7 @@
     import {SwipeList} from 'vue-swipe-actions';
     import 'vue-swipe-actions/dist/vue-swipe-actions.css';
     import Weekdays from './Weekdays'
+    import Cart from './Cart'
     import $ from "jquery";
 
     export default {
@@ -205,34 +206,42 @@
                 transitionX: 0,
                 blackListShow: false,
                 inBlack: false,
+                showCart: false,
             };
         },
         components: {
             Weekdays,
             SwipeList,
+            Cart
         },
         methods: {
+            cartOpen() {
+
+            },
+            cartClose() {
+
+            },
             // Кнопка вверх
             async scrollTop() {
                 $('body').animate({'scrollTop': 0}, 500);
                 $('html').animate({'scrollTop': 0}, 500)
             },
+
             // Добавление блюда
             buyDish(menu_id, dish_id, index, categoryIndex, buttonId, count) {
                 if (buttonId === 'card') {
                     if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count == 0) {
                         this.$store.dispatch("OrderDish", {menu_id, dish_id, count});
                         this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++;
-                        console.log(this.todayMenu.basket_summ)
+
                         this.todayMenu.basket_summ = this.todayMenu.basket_summ
                             + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price);
-                        console.log(this.todayMenu.basket_summ);
                         this.todayCart.basket_summ = this.todayMenu.basket_summ;
                     }
                     event.stopPropagation()
                 } else {
                     this.$store.dispatch("OrderDish", {menu_id, dish_id, count});
-                    this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++
+                    this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++;
                     this.todayMenu.basket_summ = this.todayMenu.basket_summ
                         + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
 
@@ -244,7 +253,8 @@
             deleteDish(menu_id, dish_id, index, categoryIndex, count) {
                 if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count != 0) {
                     this.$store.dispatch("DeleteDish", {menu_id, dish_id, count});
-                    this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count--
+                    this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count--;
+                    // this.todayCart.basket_dishes[index].count--;
                     this.todayMenu.basket_summ = this.todayMenu.basket_summ
                         - parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
 
@@ -352,49 +362,57 @@
             });
             $(document).on("touchmove", ".card-content", function (event) {
                 self.moveX = event.changedTouches[0].clientX;
-                if (self.moveX - self.downX >= 3 * window.screen.width / 4) {
+                if (self.moveX - self.downX >= window.screen.width / 1.6) {
                     self.transition = self.moveX - self.downX;
                     if (self.inBlack) {
                         self.widthX = 220;
-                        self.$store.commit('showBlackList', {
-                            indexCategory: self.categoryIndex,
-                            indexDishes: self.dishIndex,
-                            bool: false
-                        });
+                        setTimeout(() => {
+                            self.$store.commit('showBlackList', {
+                                indexCategory: self.categoryIndex,
+                                indexDishes: self.dishIndex,
+                                bool: false
+                            });
+                        }, 50)
                     } else {
-                        self.widthX = self.transition;
-                        self.$store.commit('showTransition', {
-                            indexCategory: self.categoryIndex,
-                            indexDishes: self.dishIndex,
-                            bool: true
-                        });
+                        self.widthX = 220;
+                        setTimeout(() => {
+                            self.$store.commit('showTransition', {
+                                indexCategory: self.categoryIndex,
+                                indexDishes: self.dishIndex,
+                                bool: true
+                            });
+                        }, 0)
                     }
-                } else if (self.moveX - self.downX <= -(3 * window.screen.width / 4)) {
+                } else if (self.moveX - self.downX <= -(window.screen.width / 1.6)) {
                     if (self.inBlack) {
                         self.widthX = 220;
-                        self.$store.commit('showTransition', {
-                            indexCategory: self.categoryIndex,
-                            indexDishes: self.dishIndex,
-                            bool: true
-                        });
+                        setTimeout(() => {
+                            self.$store.commit('showTransition', {
+                                indexCategory: self.categoryIndex,
+                                indexDishes: self.dishIndex,
+                                bool: true
+                            });
+                        }, 0)
                     } else {
                         self.widthX = 220;
-                        self.$store.commit('showBlackList', {
-                            indexCategory: self.categoryIndex,
-                            indexDishes: self.dishIndex,
-                            bool: false
-                        });
+                        setTimeout(() => {
+                            self.$store.commit('showBlackList', {
+                                indexCategory: self.categoryIndex,
+                                indexDishes: self.dishIndex,
+                                bool: false
+                            });
+                        }, 50)
                     }
                 } else {
-                    if (window.screen.width > 620) {
-                        self.widthX = 60;
-                    } else if (window.screen.width <= 620 && window.screen.width > 500) {
-                        self.widthX = 30;
-                    } else if (window.screen.width <= 500 && window.screen.width > 400) {
-                        self.widthX = 10;
-                    } else if (window.screen.width <= 400) {
-                        self.widthX = 0;
-                    }
+                    // if (window.screen.width > 620) {
+                    //     self.widthX = 60;
+                    // } else if (window.screen.width <= 620 && window.screen.width > 500) {
+                    //     self.widthX = 30;
+                    // } else if (window.screen.width <= 500 && window.screen.width > 400) {
+                    //     self.widthX = 10;
+                    // } else if (window.screen.width <= 400) {
+                    //     self.widthX = 0;
+                    // }
                     self.$store.commit('showBlackList', {
                         indexCategory: self.categoryIndex,
                         indexDishes: self.dishIndex,
@@ -422,9 +440,11 @@
         },
         watch: {
             upX: function () {
-                if (Math.abs(this.upX - this.downX) >= 3 * window.screen.width / 4) {
+                if (Math.abs(this.upX - this.downX) >= window.screen.width / 1.6) {
                     if (this.revealed === 'right') {
-                        this.deleteDish(this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex)
+                        /*eslint-disable */
+                        this.deleteDish(this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex, 1)
+                        /*eslint-enable */
                         this.$refs.list[this.categoryIndex].close()
                         setTimeout(() => {
                             this.$store.commit('showBlackList', {
@@ -448,7 +468,9 @@
                             }
                         }, 50)
                     } else if (this.revealed === 'left') {
-                        this.buyDish(this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex, this.buttonId);
+                        /*eslint-disable */
+                        this.buyDish(this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex, this.buttonId, 1);
+                        /*eslint-enable */
                         this.$refs.list[this.categoryIndex].close()
                         setTimeout(() => {
                             this.$store.commit('showBlackList', {
@@ -501,6 +523,16 @@
 <style scoped lang="scss">
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
+
+    .cart_comp {
+        position: fixed;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 20;
+        overscroll-behavior: contain;
+    }
+
     /*Кнопка вверх*/
     .arrow {
         position: fixed;
@@ -578,19 +610,16 @@
     .black-list-container {
         outline: none;
         width: fit-content;
-        padding: 10px 15px 5px 0;
-        margin-left: 290px;
-        // margin-left: 325px;
+        padding: 15px 15px 5px 0;
+        margin-left: 325px;
         cursor: pointer;
         background: transparent;
         display: flex;
         justify-content: flex-end;
 
         .black-list {
-            width: 45px;
-            height: 22.5px;
-            // width: 15px;
-            // height: 35px;
+            width: 10px;
+            height: 25px;
         }
     }
 
@@ -659,7 +688,7 @@
         bottom: 0;
         left: 50%;
         transform: translateX(-50%);
-        z-index: 20;
+        z-index: 501;
 
         p {
             font-size: 24px;
@@ -875,6 +904,15 @@
 
     // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
     @media (max-width: 790px) {
+        // .cart_comp {
+        //  width: 60% !important;
+        //   height: 67% !important;
+        //   margin: auto;
+        //   left: 20%;
+        //   right: auto;
+        //   bottom: 0%;
+
+        // }
         .arrow {
             display: none;
         }
@@ -1096,15 +1134,9 @@
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            // height: 45px;
-            // border-top: 10px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 10px 10px rgba(255, 255, 255, 0.9);
-            // 0 0 5px 5px rgba(255, 255, 255, 0.2);
-            // background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.9));
-            background: rgba(255, 255, 255, 0.9);
             width: 100%;
             z-index: 20;
-            height: 95px;
+            // height: 95px;
             flex-direction: column;
         }
         .total-container {
@@ -1161,6 +1193,7 @@
         input:checked + .slider:before {
             transform: translateX(22px);
         }
+
     }
 
     // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
@@ -1341,6 +1374,12 @@
         }
     }
 
+    @media (max-width: 650px) {
+        .cart_comp {
+            padding-top: 50px;
+        }
+    }
+
     @media (max-width: 500px) {
         .dish-mobile {
             display: flex;
@@ -1500,7 +1539,6 @@
             }
 
             .swipeout-action.dish-mobile-add {
-                transition: .1s !important;
 
                 .dish-mobile-add-dish {
                     width: 0px;
@@ -1679,8 +1717,10 @@
             }
         }
     }
+
 </style>
 <style>
+
     .swipeout {
         position: relative;
         overflow: hidden;
@@ -1711,7 +1751,7 @@
     }
 
     .aloneButtonS {
-        transform: translate3d(150px, 0px, 0px) !important;
+        transform: translate3d(170px, 0px, 0px) !important;
     }
 
     .aloneButtonDelL {
@@ -1723,6 +1763,7 @@
     }
 
     .aloneButtonDelS {
-        transform: translate3d(-150px, 0px, 0px) !important;
+        transform: translate3d(-170px, 0px, 0px) !important;
     }
+
 </style>

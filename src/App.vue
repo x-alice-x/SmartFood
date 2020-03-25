@@ -17,5 +17,7 @@
 <style lang="scss">
     @import "./assets/scss/vars.scss";
     @import "./assets/scss/root.scss";
-
+body, html {
+    overflow: unset !important;
+}
 </style>
