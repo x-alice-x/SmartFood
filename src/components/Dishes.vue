@@ -14,7 +14,6 @@
                         <div class="dish-top">
                             <div class="dish-img" :style="{'background-image': `url(${dish.image})`}">
                                 <div class="black-list-container" tabindex="-1" @click="manageBL">
-                                    <!-- <img class="black-list" src="../assets/img/dots.svg"/> -->
                                     <img class="black-list" src="../assets/img/newDots.svg"/>
                                 </div>
                                 <div id="black-list-content">
@@ -221,6 +220,8 @@
                     if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count == 0) {
                         this.$store.dispatch("OrderDish", {menu_id, dish_id, count});
                         this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++;
+                        // this.todayCart.basket_dishes[index].count++;
+
                         console.log(this.todayMenu.basket_summ)
                         this.todayMenu.basket_summ = this.todayMenu.basket_summ
                             + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price);
@@ -231,6 +232,7 @@
                 } else {
                     this.$store.dispatch("OrderDish", {menu_id, dish_id, count});
                     this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++
+                    // this.todayCart.basket_dishes[index].count++;
                     this.todayMenu.basket_summ = this.todayMenu.basket_summ
                         + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
 
@@ -242,7 +244,8 @@
             deleteDish(menu_id, dish_id, index, categoryIndex, count) {
                 if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count != 0) {
                     this.$store.dispatch("DeleteDish", {menu_id, dish_id, count});
-                    this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count--
+                    this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count--;
+                    // this.todayCart.basket_dishes[index].count--;
                     this.todayMenu.basket_summ = this.todayMenu.basket_summ
                         - parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
 
@@ -576,17 +579,14 @@
     .black-list-container {
         outline: none;
         width: fit-content;
-        padding: 10px 15px 5px 0;
-        // margin-left: 290px;
-        margin-left: 330px;
+        padding: 15px 15px 5px 0;
+        margin-left: 325px;
         cursor: pointer;
         background: transparent;
         display: flex;
         justify-content: flex-end;
 
         .black-list {
-            // width: 45px;
-            // height: 22.5px;
             width: 10px;
             height: 25px;
         }

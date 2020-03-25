@@ -112,9 +112,9 @@
            let self = this;
            window.addEventListener('click', function(e){
                 if (!self.$el.contains(e.target)){
-                    self.showCart = false
+                    self.showCart = false;
                 }
-            })
+            });
         },
         async mounted() {
             await this.$store.dispatch("fetchCart");

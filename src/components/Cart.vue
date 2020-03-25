@@ -53,6 +53,7 @@
         this.todayCart.basket_dishes[index].count++;
         this.todayCart.basket_summ = this.todayCart.basket_summ
                             + parseInt(this.todayCart.basket_dishes[index].price);
+        this.todayMenu.basket_summ = this.todayCart.basket_summ;
                             
         for (let i = 0; i < this.todayMenu.categories.length; i++) {
           if (this.todayMenu.categories[i].id == categoryIndex) {
@@ -70,6 +71,7 @@
         this.todayCart.basket_dishes[index].count--;
         this.todayCart.basket_summ = this.todayCart.basket_summ
                             - parseInt(this.todayCart.basket_dishes[index].price);
+        this.todayMenu.basket_summ = this.todayCart.basket_summ;
         
         for (let i = 0; i < this.todayMenu.categories.length; i++) {
           if (this.todayMenu.categories[i].id == categoryIndex) {
