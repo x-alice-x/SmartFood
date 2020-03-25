@@ -150,8 +150,8 @@
                     </swipe-list>
                 </div>
             </div>
+               <Cart v-if="showCart" @closeCart="showCart=false" class="cart_comp"/> 
             <div class="total-sum-container" @click="showCart = !showCart">
-               <Cart v-if="showCart" @closeCart="showCart==false" class="cart_comp"/> 
                 <div class="total-sum" >
                     <div class="total-container">
                         <p class="money-spent">{{todayMenu.basket_summ}} Р</p>
@@ -231,19 +231,15 @@
                     if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count == 0) {
                         this.$store.dispatch("OrderDish", {menu_id, dish_id, count});
                         this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++;
-                        // this.todayCart.basket_dishes[index].count++;
 
-                        console.log(this.todayMenu.basket_summ)
                         this.todayMenu.basket_summ = this.todayMenu.basket_summ
                             + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price);
-                        console.log(this.todayMenu.basket_summ);
                         this.todayCart.basket_summ = this.todayMenu.basket_summ;
                     }
                     event.stopPropagation()
                 } else {
                     this.$store.dispatch("OrderDish", {menu_id, dish_id, count});
-                    this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++
-                    // this.todayCart.basket_dishes[index].count++;
+                    this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++;
                     this.todayMenu.basket_summ = this.todayMenu.basket_summ
                         + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
 
@@ -1125,7 +1121,7 @@
             transform: translateX(-50%);
             width: 100%;
             z-index: 20;
-            height: 95px;
+            // height: 95px;
             flex-direction: column;
         }
         .total-container {

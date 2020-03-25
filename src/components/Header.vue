@@ -52,7 +52,8 @@
       </modal>
 
       <Cart class="cart_comp"
-            v-if="showCart"/>
+            v-if="showCart"
+            @closeCart="showCart=false" />
     </div>
 </template>
 
@@ -109,23 +110,27 @@
 
         //закрывает корзину по клику снаружи корзины
         async created() {
-            let self = this;
-            $(document).mouseup(function (e) {
-                let container = $('.cart_comp');
-                let container_can = $('.cart');
-                if (!container.has(e.target).length && !container_can.has(e.target).length) {
-                    self.showCart = false;
-                }
-                else if (container_can.has(e.target).length && !container.has(e.target).length) {
-                    self.showCart = !self.showCart;
-                }
-                else if (container.has(e.target).length) {
-                    self.showCart = true;
-                }
-                else {
-                    self.showCart = false;
-                }
-            });
+            if(window.screen.width > 790) {
+                let self = this;
+                $(document).mouseup(function (e) {
+                    let container = $('.cart_comp');
+                    let container_can = $('.cart');
+                    console.log(e.target);
+                    
+                    if (!container.has(e.target).length && !container_can.has(e.target).length) {
+                        self.showCart = false;
+                    }
+                    else if (container_can.has(e.target).length && !container.has(e.target).length) {
+                        self.showCart = !self.showCart;
+                    }
+                    else if (container.has(e.target).length) {
+                        self.showCart = true;
+                    }
+                    else {
+                        self.showCart = false;
+                    }
+                });
+            }
         },
         async mounted() {
             await this.$store.dispatch("fetchCart");

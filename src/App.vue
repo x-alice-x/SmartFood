@@ -18,6 +18,7 @@
     @import "./assets/scss/vars.scss";
     @import "./assets/scss/root.scss";
 body, html {
+    height: 100%;
     overflow: auto;
 }
 </style>
