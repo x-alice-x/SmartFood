@@ -14,7 +14,7 @@
                         <div class="dish-top">
                             <div class="dish-img" :style="{'background-image': `url(${dish.image})`}">
                                 <div class="black-list-container" tabindex="-1" @click="manageBL">
-                                    <img class="black-list" src="../assets/img/dots.svg"/>
+                                    <img class="black-list" src="../assets/img/newDots.svg"/>
                                 </div>
                                 <div id="black-list-content">
                                     <button v-if="!dish.in_blacklist"
@@ -150,8 +150,12 @@
                     </swipe-list>
                 </div>
             </div>
+               <Cart v-if="showCart" @closeCartMobile="showCart=false" class="cart_comp"/> 
             <div class="total-sum-container" @click="showCart = !showCart">
+<<<<<<< HEAD
                <Cart v-if="showCart" @click="showCart==false" class="cart_comp"/> 
+=======
+>>>>>>> ce21d8069932959c59c1ce8190d81f3a5930ea40
                 <div class="total-sum" >
                     <div class="total-container">
                         <p class="money-spent">{{todayMenu.basket_summ}} Р</p>
@@ -222,20 +226,23 @@
 
             // Добавление блюда
             buyDish(menu_id, dish_id, index, categoryIndex, buttonId, count) {
-                
                 if (buttonId === 'card') {
                     if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count == 0) {
                         this.$store.dispatch("OrderDish", {menu_id, dish_id, count});
-                        this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++
+                        this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++;
+
                         this.todayMenu.basket_summ = this.todayMenu.basket_summ
-                            + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
+                            + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price);
+                        this.todayCart.basket_summ = this.todayMenu.basket_summ;
                     }
                     event.stopPropagation()
                 } else {
                     this.$store.dispatch("OrderDish", {menu_id, dish_id, count});
-                    this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++
+                    this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++;
                     this.todayMenu.basket_summ = this.todayMenu.basket_summ
                         + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
+
+                    this.todayCart.basket_summ = this.todayMenu.basket_summ;
                     event.stopPropagation()
                 }
             },
@@ -243,9 +250,12 @@
             deleteDish(menu_id, dish_id, index, categoryIndex, count) {
                 if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count != 0) {
                     this.$store.dispatch("DeleteDish", {menu_id, dish_id, count});
-                    this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count--
+                    this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count--;
+                    // this.todayCart.basket_dishes[index].count--;
                     this.todayMenu.basket_summ = this.todayMenu.basket_summ
                         - parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
+
+                    this.todayCart.basket_summ = this.todayMenu.basket_summ;
                 }
                 event.stopPropagation()
             },
@@ -306,6 +316,9 @@
                     this.todayMenu.basket_summ - this.todayMenu.basket_summ_limit :
                     this.todayMenu.basket_summ_limit - this.todayMenu.basket_summ
             },
+            todayCart() {
+                return this.$store.getters.getTodayCart;
+            }
         },
         async mounted() {
             let self = this;
@@ -581,16 +594,16 @@
     .black-list-container {
         outline: none;
         width: fit-content;
-        padding: 10px 15px 5px 0;
-        margin-left: 290px;
+        padding: 15px 15px 5px 0;
+        margin-left: 325px;
         cursor: pointer;
         background: transparent;
         display: flex;
         justify-content: flex-end;
 
         .black-list {
-            width: 45px;
-            height: 22.5px;
+            width: 10px;
+            height: 25px;
         }
     }
 
@@ -1108,7 +1121,7 @@
             transform: translateX(-50%);
             width: 100%;
             z-index: 20;
-            height: 95px;
+            // height: 95px;
             flex-direction: column;
         }
         .total-container {
@@ -1454,6 +1467,16 @@
         //     transform: translateX(35px);
         // }
         .dish-mobile {
+            .card-content {
+                .dish-mobile-price {
+                    width: 30%;
+                }
+                .dish-mobile-text {
+                    .dish-mobile-text-prelude {
+                        max-height: 28%;
+                    }
+                }
+            }
             &-middle {
                 &-about {
                     padding-left: 10px;

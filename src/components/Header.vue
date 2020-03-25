@@ -12,10 +12,12 @@
             </div>
 
             <div class="cart">
-                <div class="sum">126 Р</div>
+                <div class="sum" 
+                     :style="{'color' : (this.currentSum >= this.limit ? '#ED2736' : '#FFFFFF')}">
+                        {{ currentSum }} P
+                </div>
                 <img src="../assets/img/cart_white.svg" 
-                     alt="Cart ico"
-                     @click="showCart = !showCart">
+                     alt="Cart ico">
             </div>
         </div>
 
@@ -49,20 +51,25 @@
         </div>
       </modal>
 
-      <Cart class="cart_comp" 
+      <Cart class="cart_comp"
             v-if="showCart"
+<<<<<<< HEAD
             @click = "showCart=false" />
+=======
+            @closeCart="showCart=false" />
+>>>>>>> ce21d8069932959c59c1ce8190d81f3a5930ea40
     </div>
 </template>
 
 <script>
+  import $ from "jquery";
   import Cart from "./Cart.vue";
   export default {
         components: {Cart},
         data() {
             return {
                 showCart: false,
-                blackListShow: false,
+                blackListShow: false
             }
         },
         computed: {
@@ -78,6 +85,12 @@
             },
             errors() {
                 return this.$store.getters.getError;
+            },
+            currentSum() {
+                return this.$store.getters.getCartSum;
+            },
+            limit() {
+                return this.$store.getters.getLimit;
             }
         },
         methods: {
@@ -96,18 +109,36 @@
             blackListMenuChange() {
                 this.blackListShow = !this.blackListShow
                 this.blackListShow ? this.$store.dispatch("fetchMenu", 0) : this.$store.dispatch("fetchMenu", 1)
-            },
+            }
         },
 
         //закрывает корзину по клику снаружи корзины
-        created: function() {
-           let self = this;
-           window.addEventListener('click', function(e){
-           if (!self.$el.contains(e.target)){
-           self.showCart = false
-       } 
-  })
-},
+        async created() {
+            if(window.screen.width > 790) {
+                let self = this;
+                $(document).mouseup(function (e) {
+                    let container = $('.cart_comp');
+                    let container_can = $('.cart');
+                    console.log(e.target);
+                    
+                    if (!container.has(e.target).length && !container_can.has(e.target).length) {
+                        self.showCart = false;
+                    }
+                    else if (container_can.has(e.target).length && !container.has(e.target).length) {
+                        self.showCart = !self.showCart;
+                    }
+                    else if (container.has(e.target).length) {
+                        self.showCart = true;
+                    }
+                    else {
+                        self.showCart = false;
+                    }
+                });
+            }
+        },
+        async mounted() {
+            await this.$store.dispatch("fetchCart");
+        }
     }
 </script>
 
@@ -274,14 +305,14 @@
             }
             .logo {
                 a {
-                display: flex;
-                justify-content: center;
-                margin: 0 auto;
-                align-items: center;
-                font-weight: 900;
-                font-size: 30px;
-                line-height: 45px;
-                color: #ffffff;
+                    font-weight: 900;
+                    font-size: 30px;
+                    line-height: 45px;
+                    color: #ffffff;
+                    position: absolute;
+                    top: 0%;
+                    margin-top: 3px;
+                    left: 44%;
                 }
             }
             .cart {
@@ -289,10 +320,13 @@
                 position: absolute;
                 right: 3%;
                 // width: 10%;
+                .sum {
+                    font-size: 24px;
+                }
                 img {
                     cursor: pointer;
-                    width: 40px;
-                    height: auto;
+                    width: auto;
+                    height: 33.5px;
                 }
             }
         }
@@ -362,6 +396,10 @@
     .header{
         .container {
             padding: 0 15px;
+            .logo a{
+                position: unset;
+            }
+        }
         .cart {
             img {
               display: none;
@@ -370,7 +408,6 @@
                 display: none;
 
             }
-        }
         }
     }
     body.v--modal-background-click{

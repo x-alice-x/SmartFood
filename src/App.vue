@@ -18,6 +18,6 @@
     @import "./assets/scss/vars.scss";
     @import "./assets/scss/root.scss";
 body, html {
-    overflow: auto;
+    overflow: unset !important;
 }
 </style>

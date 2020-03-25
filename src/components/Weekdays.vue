@@ -26,7 +26,6 @@
             dateChange() {
                 let index = this.$refs.mySwiper.swiper.activeIndex
                 this.$store.commit('setDishes', index)
-                console.log(index)
                 this.$store.commit("SET_CART", index)
             }
         },

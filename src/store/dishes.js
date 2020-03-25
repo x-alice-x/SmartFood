@@ -53,6 +53,8 @@ export default {
                                         }
                                         resp.data.data[i].categories[j].dishes[k].showBlackList = true;
                                         resp.data.data[i].categories[j].dishes[k].showTransition = false;
+                                        resp.data.data[i].categories[j].dishes[k].in_basket_count =
+                                            resp.data.data[i].categories[j].dishes[k].in_basket_count.toString().replace(/.0/, '');
                                     }
                                 }
                             }
