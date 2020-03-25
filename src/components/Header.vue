@@ -256,7 +256,9 @@
         width: 100%;
         background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
         color: $font-color;
-        z-index: 700 !important;
+        z-index: 700;
+        position: relative;
+
         .container{
             display: flex;
             align-items: center;

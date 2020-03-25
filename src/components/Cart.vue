@@ -1,5 +1,6 @@
 <template>
 <div class="cart">
+  <Header></Header>
   <div class="dish-container">
     <div v-for="(dish, index) in todayCart.basket_dishes" :key="index">
       <div class="dish" v-if="dish.count">
@@ -40,8 +41,12 @@
 </template>
 
 <script>
+import Header from '../components/Header'
 // import $ from "jquery";
   export default {
+    components: {
+      Header
+    },
     data () {
       return {
         // showCart: false,
@@ -85,13 +90,18 @@
 <style lang="scss" scoped>
     @import "../assets/scss/vars.scss";    
     @import "../assets/scss/root.scss";
+body, html {
+  overflow: hidden;
+  position: fixed;
+}
 .cart {
 	width: 500px;
 	height: auto;
 	box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.25);
 	background: #fff;
 	border-bottom-left-radius: 10px;
-	border-bottom-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+
 	.header {
 		height: 40px;
 		display: flex;
@@ -230,20 +240,22 @@
 			color: #460b79;
 		}
 	}
-}
+
 @media (max-width: 790px) {
 	.cart {
-		width: 100vw !important;
-		height: 100vh !important;
+		width: 100vw;
+    height: 100vh;
+    margin-top: 50px;
+
 	}
 	.dish-add {
 		width: 20%;
 		img {
-			display: none !important;
+			display: none;
 		}
 		.amount {
       margin-right: 12%;
-      border: none !important;
+      border: none;
 			p {
 				font-size: 24px;
 				font-weight: 700;
@@ -251,70 +263,70 @@
 		}
 	}
 	.dish-container {
-		min-height: 75% !important;
+		min-height: 75%;
 		height: auto;
 	}
 	.dish-photo {
 		img {
-			width: 160px !important;
+			width: 160px;
 			height: auto;
-			clip-path: circle(60px at center) !important;
-			margin-left: -30px !important;
-			margin-top: 10px !important;
+			clip-path: circle(60px at center);
+			margin-left: -30px;
+			margin-top: 10px;
 			margin-right: 10px;
 		}
 	}
 	.dish {
-		width: 97% !important;
-		height: 100px !important;
+		width: 97%;
+		height: 100px;
 		.info {
 			.name {
-				font-size: 20px !important;
+				font-size: 20px;
 			}
 			.weight {
-				font-size: 18px !important;
+				font-size: 18px;
 			}
 			.price {
-				font-size: 18px !important;
+				font-size: 18px;
 			}
 		}
 	}
 }
 @media (max-width: 650px) {
 	.dish-container {
-		min-height: 70% !important;
+		min-height: 70%;
 		height: auto;
 		padding-top: 0;
 	}
 	.dish-photo {
 		img {
-			width: 150px !important;
+			width: 150px;
 			height: auto;
-			clip-path: circle(50px at center) !important;
-			margin-left: -30px !important;
-			margin-top: 10px !important;
+			clip-path: circle(50px at center);
+			margin-left: -30px;
+			margin-top: 10px;
 			margin-right: 10px;
 		}
 	}
 	.dish {
-		width: 97% !important;
-		height: 100px !important;
+		width: 97%;
+		height: 100px;
 		.info {
-			font-size: 18px !important;
+			font-size: 18px;
 			.name {
-				font-size: 18px !important;
+				font-size: 18px;
 			}
 			.weight {
-				font-size: 16px !important;
+				font-size: 16px ;
 			}
 			.price {
-				font-size: 16px !important;
+				font-size: 16px;
 			}
 		}
 		.dish-add {
 			width: 20%;
 			img {
-				display: none !important;
+				display: none;
 			}
 			.amount {
 				p {
@@ -345,37 +357,37 @@
     }
   }
 	.dish-container {
-		min-height: 68% !important;
+		min-height: 68%;
 		height: auto;
 	}
 	.dish-photo {
 		img {
-			width: 80px !important;
+			width: 80px;
 			height: auto;
-			clip-path: circle(30px at center) !important;
-			margin-left: -10px !important;
-			margin-top: 10px !important;
+			clip-path: circle(30px at center);
+			margin-left: -10px;
+			margin-top: 10px;
 			margin-right: 10px;
 		}
 	}
 	.dish {
-		width: 97% !important;
-		height: 100px !important;
+		width: 97%;
+		height: 100px;
 		.info {
 			.name {
-				font-size: 14px !important;
+				font-size: 14px;
 			}
 			.weight {
-				font-size: 14px !important;
+				font-size: 14px;
 			}
 			.price {
-				font-size: 14px !important;
+				font-size: 14px;
 			}
 		}
 		.dish-add {
 			width: 25%;
 			img {
-				display: none !important;
+				display: none;
 			}
 			.amount {
 				border: none;
@@ -397,18 +409,20 @@
 
 @media (max-width: 340px) {
 	.dish-container {
-		min-height: 62% !important;
-	}
+		min-height: 62%;
+  }
+  
+
 	.dish {
 		.info {
 			.name {
-				font-size: 12px !important;
+				font-size: 12px;
 			}
 			.weight {
-				font-size: 12px !important;
+				font-size: 12px;
 			}
 			.price {
-				font-size: 12px !important;
+				font-size: 12px;
 			}
 		}
 		.dish-add {
@@ -418,6 +432,7 @@
 				}
 			}
 		}
-	}
+  }
+}
 }
 </style>

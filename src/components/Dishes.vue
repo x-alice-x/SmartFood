@@ -494,7 +494,6 @@
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
 
-
     .cart_comp {
     position: fixed;
     top:0;
@@ -1345,9 +1344,7 @@
 
 @media (max-width: 650px ) {
         .cart_comp {
-         width: 100% !important;
-          height: 100% !important;
-          left: 0;
+margin-top: 50px;
         }
 }
 
@@ -1679,6 +1676,10 @@
     
 </style>
 <style>
+body.cart_comp, html.cart_comp {
+  overflow: hidden;
+  position: fixed;
+}
     .swipeout {
         position: relative;
         overflow: hidden;
