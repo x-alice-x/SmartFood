@@ -150,7 +150,7 @@
                     </swipe-list>
                 </div>
             </div>
-               <Cart v-if="showCart" @closeCart="showCart=false" class="cart_comp"/> 
+               <Cart v-if="showCart" @closeCartMobile="showCart=false" class="cart_comp"/> 
             <div class="total-sum-container" @click="showCart = !showCart">
                 <div class="total-sum" >
                     <div class="total-container">

@@ -105,7 +105,7 @@
         }
         this.todayCart.basket_summ = 0;
 		this.todayMenu.basket_summ = 0;
-		this.$emit("closeCart");
+		window.screen.width > 790 ? this.$emit('closeCart') : this.$emit('closeCartMobile');
       }
     },
     computed: {
@@ -283,9 +283,10 @@
 		}
 	}
 	.dish-container {
-		min-height: 70%;
+		min-height: 67%;
     height: auto;
-    overflow:scroll;
+	overflow:scroll;
+	margin-top: 20px;
 	}
 	.dish-photo {
 		img {
@@ -316,7 +317,8 @@
 		min-height: 61%;
 		height: auto;
     padding-top: 0;
-    overflow:scroll;
+	overflow:scroll;
+	margin-top: 0;
 	}
 	.dish {
 		width: 97%;
