@@ -14,8 +14,8 @@
                         <div class="dish-top">
                             <div class="dish-img" :style="{'background-image': `url(${dish.image})`}">
                                 <div class="black-list-container" tabindex="-1" @click="manageBL">
-                                    <img class="black-list" src="../assets/img/dots.svg"/>
-                                    <!-- <img class="black-list" src="../assets/img/newDots.svg"/> -->
+                                    <!-- <img class="black-list" src="../assets/img/dots.svg"/> -->
+                                    <img class="black-list" src="../assets/img/newDots.svg"/>
                                 </div>
                                 <div id="black-list-content">
                                     <button v-if="!dish.in_blacklist"
@@ -577,18 +577,18 @@
         outline: none;
         width: fit-content;
         padding: 10px 15px 5px 0;
-        margin-left: 290px;
-        // margin-left: 325px;
+        // margin-left: 290px;
+        margin-left: 330px;
         cursor: pointer;
         background: transparent;
         display: flex;
         justify-content: flex-end;
 
         .black-list {
-            width: 45px;
-            height: 22.5px;
-            // width: 15px;
-            // height: 35px;
+            // width: 45px;
+            // height: 22.5px;
+            width: 10px;
+            height: 25px;
         }
     }
 
