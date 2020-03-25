@@ -163,7 +163,7 @@
                     </div>
                     <div class="show-black-listed">
                         <label class="switch">
-                            <input type="checkbox"  @click="blackListMenuChange">
+                            <input type="checkbox" @click="blackListMenuChange">
                             <span class="slider round"></span>
                         </label>
                         <p>Черный список</p>
@@ -547,10 +547,10 @@
         bottom: 33px;
     }
 
-// =======
-// .container:last-child {
-//     margin-bottom: 60px;
-// >>>>>>> yulya
+    // =======
+    // .container:last-child {
+    //     margin-bottom: 60px;
+    // >>>>>>> yulya
 
     .dishes {
         max-width: 1500px;
@@ -1163,7 +1163,7 @@
 
     // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
     @media (max-width: 620px) {
-         .week {
+        .week {
             margin-bottom: 0;
         }
         .container {
@@ -1445,12 +1445,14 @@
                 .dish-mobile-price {
                     width: 30%;
                 }
+
                 .dish-mobile-text {
                     .dish-mobile-text-prelude {
                         max-height: 28%;
                     }
                 }
             }
+
             &-middle {
                 &-about {
                     padding-left: 10px;
