@@ -1,5 +1,5 @@
 <template>
-    <div class="header">
+    <div class="header" >
         <div class="container">
 
             <div class="user">
@@ -356,6 +356,7 @@
     position: absolute;
     right: 5%;
     z-index: 500;
+
 }
 @media (max-width: 790px){
     .header{

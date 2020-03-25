@@ -213,11 +213,18 @@
             Cart
         },
         methods: {
+            cartOpen() {
+
+            },
+            cartClose () {
+
+            },
             // Кнопка вверх
             async scrollTop() {
                 $('body').animate({'scrollTop': 0}, 500);
                 $('html').animate({'scrollTop': 0}, 500)
             },
+
             // Добавление блюда
             buyDish(menu_id, dish_id, index, categoryIndex, buttonId, count) {
                 
@@ -500,7 +507,7 @@
     width: 100vw;
     height: 100vh;
     z-index: 20;
-    overflow-y: hidden;
+    overscroll-behavior: contain;
 }
     /*Кнопка вверх*/
     .arrow {
@@ -1162,6 +1169,7 @@
         input:checked + .slider:before {
             transform: translateX(22px);
         }
+
     }
 
     // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
@@ -1344,7 +1352,7 @@
 
 @media (max-width: 650px ) {
         .cart_comp {
-margin-top: 50px;
+        padding-top: 50px;
         }
 }
 
@@ -1676,10 +1684,7 @@ margin-top: 50px;
     
 </style>
 <style>
-body.cart_comp, html.cart_comp {
-  overflow: hidden;
-  position: fixed;
-}
+
     .swipeout {
         position: relative;
         overflow: hidden;

@@ -1,6 +1,5 @@
 <template>
 <div class="cart">
-  <Header></Header>
   <div class="dish-container">
     <div v-for="(dish, index) in todayCart.basket_dishes" :key="index">
       <div class="dish" v-if="dish.count">
@@ -41,11 +40,9 @@
 </template>
 
 <script>
-import Header from '../components/Header'
 // import $ from "jquery";
   export default {
     components: {
-      Header
     },
     data () {
       return {
@@ -90,10 +87,7 @@ import Header from '../components/Header'
 <style lang="scss" scoped>
     @import "../assets/scss/vars.scss";    
     @import "../assets/scss/root.scss";
-body, html {
-  overflow: hidden;
-  position: fixed;
-}
+
 .cart {
 	width: 500px;
 	height: auto;
@@ -102,24 +96,11 @@ body, html {
 	border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 
-	.header {
-		height: 40px;
-		display: flex;
-		border: none;
-		background: linear-gradient(90deg, #460b79 0%, #88267f 100%);
-		justify-content: flex-end;
-		align-items: center;
-		padding: 0 10px;
-		img {
-			height: auto;
-			width: 16px;
-			cursor: pointer;
-		}
-	}
 	.dish-container {
 		height: auto;
 		min-height: 380px;
-		padding-top: 2%;
+    padding-top: 2%;
+    overflow: scroll;
 	}
 	.dish-photo {
 		display: flex;
@@ -194,7 +175,8 @@ body, html {
 		width: 100%;
 		border-top: 1px solid #bfbcbc;
 		border-bottom: 1px solid #bfbcbc;
-		margin-bottom: 2%;
+    margin-bottom: 2%;
+    overflow: hidden;
 	}
 	.sum {
 		display: flex;
@@ -242,10 +224,11 @@ body, html {
 	}
 
 @media (max-width: 790px) {
+
 	.cart {
 		width: 100vw;
     height: 100vh;
-    margin-top: 50px;
+    // margin-top: 50px;
 
 	}
 	.dish-add {
@@ -263,17 +246,16 @@ body, html {
 		}
 	}
 	.dish-container {
-		min-height: 75%;
-		height: auto;
+		min-height: 70%;
+    height: auto;
+    overflow:scroll;
 	}
 	.dish-photo {
 		img {
-			width: 160px;
+			width: 110px;
 			height: auto;
-			clip-path: circle(60px at center);
-			margin-left: -30px;
-			margin-top: 10px;
-			margin-right: 10px;
+      clip-path: circle(40px at center);
+      margin: 10px 10px 0 10px;
 		}
 	}
 	.dish {
@@ -294,23 +276,14 @@ body, html {
 }
 @media (max-width: 650px) {
 	.dish-container {
-		min-height: 70%;
+		min-height: 61%;
 		height: auto;
-		padding-top: 0;
-	}
-	.dish-photo {
-		img {
-			width: 150px;
-			height: auto;
-			clip-path: circle(50px at center);
-			margin-left: -30px;
-			margin-top: 10px;
-			margin-right: 10px;
-		}
+    padding-top: 0;
+    overflow:scroll;
 	}
 	.dish {
 		width: 97%;
-		height: 100px;
+		height: 70px;
 		.info {
 			font-size: 18px;
 			.name {
@@ -357,8 +330,8 @@ body, html {
     }
   }
 	.dish-container {
-		min-height: 68%;
-		height: auto;
+		height: 64%;
+    overflow:scroll;
 	}
 	.dish-photo {
 		img {
@@ -372,7 +345,7 @@ body, html {
 	}
 	.dish {
 		width: 97%;
-		height: 100px;
+		height: 70px;
 		.info {
 			.name {
 				font-size: 14px;
@@ -401,19 +374,38 @@ body, html {
 	}
 }
 
-// @media (max-width: 376px) {
-// 	.dish-container {
-// 		min-height: 70% !important;
-// 	}
-// }
+@media (max-width: 376px) {
+	.dish-container {
+     height: 50%;
+     overflow:scroll;
+	}
+}
 
 @media (max-width: 340px) {
 	.dish-container {
-		min-height: 62%;
+    max-height: 46%;
+    overflow:scroll;
   }
   
-
+	.btns {
+    margin-top: 1%;
+    margin-bottom: 2%;
+		width: 100%;
+		min-height: 37px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		button {
+			border-radius: 46px;
+			outline: none;
+			width: 150px;
+			height: 32px;
+			font-family: 'Roboto', sans-serif;
+			font-size: 14px;
+		}
+	}
 	.dish {
+    max-height: 70px;
 		.info {
 			.name {
 				font-size: 12px;
