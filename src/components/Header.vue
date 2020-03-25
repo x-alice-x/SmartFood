@@ -1,5 +1,5 @@
 <template>
-    <div class="header">
+    <div class="header" >
         <div class="container">
 
             <div class="user">
@@ -17,8 +17,7 @@
                         {{ currentSum }} P
                 </div>
                 <img src="../assets/img/cart_white.svg" 
-                     alt="Cart ico"
-                     @click="showCart = !showCart">
+                     alt="Cart ico">
             </div>
         </div>
 
@@ -52,12 +51,13 @@
         </div>
       </modal>
 
-      <Cart class="cart_comp" 
+      <Cart class="cart_comp"
             v-if="showCart"/>
     </div>
 </template>
 
 <script>
+  import $ from "jquery";
   import Cart from "./Cart.vue";
   export default {
         components: {Cart},
@@ -108,10 +108,21 @@
         },
 
         //закрывает корзину по клику снаружи корзины
-        created: function() {
-           let self = this;
-           window.addEventListener('click', function(e){
-                if (!self.$el.contains(e.target)){
+        async created() {
+            let self = this;
+            $(document).mouseup(function (e) {
+                let container = $('.cart_comp');
+                let container_can = $('.cart');
+                if (!container.has(e.target).length && !container_can.has(e.target).length) {
+                    self.showCart = false;
+                }
+                else if (container_can.has(e.target).length && !container.has(e.target).length) {
+                    self.showCart = !self.showCart;
+                }
+                else if (container.has(e.target).length) {
+                    self.showCart = true;
+                }
+                else {
                     self.showCart = false;
                 }
             });
@@ -267,10 +278,13 @@
         width: 100%;
         background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
         color: $font-color;
+        z-index: 700;
+        position: relative;
+
         .container{
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
             height: 100%;
             padding: 0 75px;
             .user{
@@ -278,7 +292,7 @@
                 right: auto;
                 cursor: pointer;
                 width: 25px;
-                // position: absolute;
+                position: absolute;
             }
             .logo {
                 a {
@@ -294,9 +308,11 @@
             }
             .cart {
                 display: flex;
+                position: absolute;
+                right: 3%;
                 // width: 10%;
                 .sum {
-                    font-size: 26px;
+                    font-size: 24px;
                 }
                 img {
                     cursor: pointer;
@@ -365,10 +381,11 @@
     position: absolute;
     right: 5%;
     z-index: 500;
+
 }
 @media (max-width: 790px){
     .header{
-        .container{
+        .container {
             padding: 0 15px;
             .logo a{
                 position: unset;
@@ -376,10 +393,11 @@
         }
         .cart {
             img {
-                display: none;
+              display: none;
             }
             div {
                 display: none;
+
             }
         }
     }
@@ -402,6 +420,26 @@
     .logout-btn {
         margin-top: 30px;
         margin-bottom: 30px;
+    }
+}
+@media (max-width: 590px){
+    .header{
+        .container {
+            padding: 0 15px;
+        .cart {
+            img {
+               width: 25px;
+               height: auto;
+            }
+            div {
+                font-size: 22px;
+
+            }
+        }
+        }
+    }
+    .sum {
+        margin-right: 7px;
     }
 }
 @media (max-width: 450px) {
