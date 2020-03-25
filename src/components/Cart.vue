@@ -125,7 +125,6 @@
 <style lang="scss" scoped>
     @import "../assets/scss/vars.scss";    
     @import "../assets/scss/root.scss";
-
 .cart {
 	width: 500px;
 	height: auto;
@@ -133,7 +132,6 @@
 	background: #fff;
 	border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
-
 	.dish-container {
 		max-height: 500px;
 		min-height: 380px;
@@ -248,25 +246,25 @@
 		button {
 			border-radius: 46px;
 			outline: none;
-			width: 180px;
-			height: 38px;
+			width: 190px;
+			height: 48px;
 			font-family: 'Roboto', sans-serif;
-			font-size: 18px;
-		}
-		.clear-cart {
-			border: 1px solid #460b79;
-			background: transparent;
-			color: #460b79;
+      font-size: 16px;
+      background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
+      border-radius: 46px;
+      border: none;
+      color: #fff;
+      text-transform: uppercase;
 		}
 	}
-
 @media (max-width: 790px) {
-
+  .sum-container {
+    display: none;
+  }
 	.cart {
 		width: 100vw;
     height: 100vh;
     // margin-top: 50px;
-
 	}
 	.dish-add {
 		width: 20%;
@@ -283,8 +281,8 @@
 		}
 	}
 	.dish-container {
-		min-height: 67%;
-    height: auto;
+	min-height: 80%;
+  height: auto;
 	overflow:scroll;
 	margin-top: 20px;
 	}
@@ -310,11 +308,15 @@
 				font-size: 18px;
 			}
 		}
-	}
+  }
+  .btns {
+    position: absolute;
+    bottom: 5%;
+  }
 }
 @media (max-width: 650px) {
 	.dish-container {
-		min-height: 61%;
+		min-height: 58%;
 		height: auto;
     padding-top: 0;
 	overflow:scroll;
@@ -347,7 +349,11 @@
 				}
 			}
 		}
-	}
+  }
+    .btns {
+    position: absolute;
+    bottom: 5%;
+  }
 }
 @media (max-width: 470px) {
   .sum {
@@ -412,37 +418,35 @@
 		}
 	}
 }
-
 @media (max-width: 376px) {
 	.dish-container {
      height: 50%;
      overflow:scroll;
 	}
 }
-
 @media (max-width: 340px) {
 	.dish-container {
     max-height: 46%;
     overflow:scroll;
   }
   
-	.btns {
-    margin-top: 1%;
-    margin-bottom: 2%;
-		width: 100%;
-		min-height: 37px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		button {
-			border-radius: 46px;
-			outline: none;
-			width: 150px;
-			height: 32px;
-			font-family: 'Roboto', sans-serif;
-			font-size: 14px;
-		}
-	}
+	// .btns {
+  //   margin-top: 1%;
+  //   margin-bottom: 2%;
+	// 	width: 100%;
+	// 	min-height: 37px;
+	// 	display: flex;
+	// 	justify-content: center;
+	// 	align-items: center;
+	// 	button {
+	// 		border-radius: 46px;
+	// 		outline: none;
+	// 		width: 150px;
+	// 		height: 32px;
+	// 		font-family: 'Roboto', sans-serif;
+	// 		font-size: 14px;
+	// 	}
+	// }
 	.dish {
     max-height: 70px;
 		.info {
@@ -464,8 +468,11 @@
 			}
 		}
   }
+    .btns {
+    position: absolute;
+    bottom: 5%;
+  }
 }
-
 // .limit {
 //   // color: #44A334;
 //   font-size: 18px;
