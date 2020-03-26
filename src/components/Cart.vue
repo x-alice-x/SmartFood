@@ -289,9 +289,8 @@ import Header from './Header'
 	}
 	.dish-container {
 	height: 72%;
-    height: auto;
 	overflow:scroll;
-	margin-top: 20px;
+	padding-top: 0;
 	}
 	.dish-photo {
 		img {
@@ -318,7 +317,7 @@ import Header from './Header'
   }
     .btns {
     position: absolute;
-    // bottom: 5%;
+    bottom: 30px;
 	button {
 	font-weight: 400;
 	width: 170px;
@@ -329,7 +328,7 @@ import Header from './Header'
 }
 @media (max-width: 650px) {
 	.dish-container {
-	height: 70%;
+	height: 80%;
     padding-top: 0;
 	overflow:scroll;
 	margin-top: 0;
@@ -364,7 +363,7 @@ import Header from './Header'
   }
     .btns {
     position: absolute;
-    // bottom: 13%;
+    bottom: 30px;
 	button {
 	font-weight: 400;
 	width: 170px;
@@ -393,7 +392,7 @@ import Header from './Header'
     }
   }
 	.dish-container {
-	height: 65%;
+	height: 80%;
     overflow:scroll;
 	}
 	.dish-photo {
@@ -437,8 +436,8 @@ import Header from './Header'
 	}
 	.btns {
     position: fixed;
-	margin-top: 15px;
-    bottom: 70px;
+	padding-top: 15px;
+    bottom: 37px;
 	button {
 	font-weight: 400;
 	width: 170px;
@@ -449,12 +448,13 @@ import Header from './Header'
 }
 @media (max-width: 376px) {
 	.dish-container {
-     height: 79%;
+     height: 82%;
      overflow:scroll;
 	}
 	.btns {
     position: absolute;
-    bottom: 13%;
+	padding-top: 15px;
+    bottom: 12px;
 	button {
 	font-weight: 400;
 	width: 170px;
@@ -465,7 +465,7 @@ import Header from './Header'
 }
 @media (max-width: 340px) {
 	.dish-container {
-    height: 71%;
+    height: 80%;
     overflow:scroll;
   }
   
@@ -509,7 +509,7 @@ import Header from './Header'
   }
     .btns {
     position: absolute;
-    bottom: 17%;
+    bottom: 15px;
 	button {
 	font-weight: 400;
 	width: 170px;

@@ -152,8 +152,9 @@
                     </swipe-list>
                 </div>
             </div>
-            <Cart v-if="showCart" @closeCartMobile="showCart=false" class="cart_comp"/>
-            <div class="total-sum-container" @click="showCart = !showCart">
+            // eslint-disable-next-line vue/valid-v-on
+            <Cart v-if="showCart" @closeCartMobile="showCart=false"  class="cart_comp" />
+            <div class="total-sum-container" @click="showCart = !showCart" v-on:openCart="cartActive()">
                 <div class="total-sum">
                     <div class="total-container">
                         <p class="money-spent">{{todayMenu.basket_summ}} Р</p>
@@ -218,6 +219,9 @@
             async scrollTop() {
                 $('body').animate({'scrollTop': 0}, 500);
                 $('html').animate({'scrollTop': 0}, 500)
+            },
+            cartActive() {
+               this.showCart = true;
             },
             // Добавление блюда
             buyDish(menu_id, dish_id, index, categoryIndex, buttonId, count) {
@@ -517,7 +521,7 @@
         position: fixed;
         top: 0;
         width: 100vw;
-        height: 100vh;
+        height: 93vh;
         z-index: 20;
     }
 
@@ -845,14 +849,10 @@
     }
     // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
     @media (max-width: 790px) {
-        // .cart_comp {
-        //  width: 60% !important;
-        //   height: 67% !important;
-        //   margin: auto;
-        //   left: 20%;
-        //   right: auto;
-        //   bottom: 0%;
-        // }
+    .cart_comp {
+        height: 96vh;
+    }
+
         .arrow {
             display: none;
         }
@@ -1323,6 +1323,9 @@
                 font-size: 18px;
             }
         }
+            .cart_comp {
+        height: 95vh;
+    }
         /* слайдер */
         // .switch {
         //     width: 70px;

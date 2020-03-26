@@ -10,7 +10,7 @@
                 <a>SmartFood</a>
             </div>
 
-            <div class="cart cart_comp" @click="showCart=!showCart">
+            <div class="cart cart_comp" @click="cartOpen">
                 <div class="sum" 
                      :style="{'color' : (this.currentSum >= this.limit ? '#ED2736' : '#FFFFFF')}">
                         {{ currentSum }} P
@@ -90,6 +90,9 @@
             }
         },
         methods: {
+            cartOpen() {
+               this.$emit('openCart')
+            },
             show() {
               this.$modal.show('profile-modal');
             },
