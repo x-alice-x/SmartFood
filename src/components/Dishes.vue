@@ -174,6 +174,7 @@
             </div>
         </div>
         <button @click="scrollTop" class="arrow"></button>
+        <notifications group="foo" />
     </div>
 </template>
 
@@ -237,6 +238,14 @@
                         this.todayMenu.basket_summ = this.todayMenu.basket_summ
                             + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price);
                         this.todayCart.basket_summ = this.todayMenu.basket_summ;
+                        if (window.screen > 790) {
+                            this.$notify({
+                                group: 'foo',
+                                title: this.todayMenu.categories[categoryIndex].dishes[index].name 
+                                    + ' добавлено в корзину',
+                                duration: 450
+                            });
+                        }
                     }
                     event.stopPropagation()
                 } else {
@@ -1720,6 +1729,14 @@
 
 </style>
 <style>
+    .vue-notification {
+        background: #F2EDF6 !important;
+        border: none !important;
+        margin-top: 10px !important;
+        border-radius: 3px !important;
+        font-size: 16px !important;
+        color: #460B79 !important;
+    }
 
     .swipeout {
         position: relative;

@@ -88,6 +88,22 @@ export default {
 				}
 			);
 		},
+		async ClearCart(commit, del) {
+			const url = "/api/v2/food/basket/all";
+			let requestParams = {
+				url: url,
+				method: "DELETE",
+				params: {menu_id: del.menu_id}
+			};
+			await axios(requestParams).then(
+				resp => {
+					console.log(resp);
+				},
+				err => {
+					console.log(err);
+				}
+			);
+		},
 		async BlackListChange(commit, ids) {
 			let method = null
 			ids.whichFunc ? method = "DELETE" : method = "POST"
