@@ -125,18 +125,15 @@
 <style lang="scss" scoped>
     @import "../assets/scss/vars.scss";    
     @import "../assets/scss/root.scss";
-
 .cart {
 	width: 500px;
 	height: auto;
 	box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.25);
 	background: #fff;
 	border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-
+    border-bottom-right-radius: 10px;
 	.dish-container {
-		max-height: 500px;
-		min-height: 380px;
+	height: 500px;
     padding-top: 2%;
     overflow-y: scroll;
 	}
@@ -248,25 +245,26 @@
 		button {
 			border-radius: 46px;
 			outline: none;
-			width: 180px;
-			height: 38px;
+			width: 192px;
+			height: 48px;
 			font-family: 'Roboto', sans-serif;
-			font-size: 18px;
-		}
-		.clear-cart {
-			border: 1px solid #460b79;
-			background: transparent;
-			color: #460b79;
+            font-size: 16px;
+            background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
+            border-radius: 46px;
+            border: none;
+            color: #fff;
+            text-transform: uppercase;
+			font-weight: 700;
 		}
 	}
-
 @media (max-width: 790px) {
-
+  .sum-container {
+    display: none;
+  }
 	.cart {
-		width: 100vw;
+	width: 100vw;
     height: 100vh;
     // margin-top: 50px;
-
 	}
 	.dish-add {
 		width: 20%;
@@ -283,7 +281,7 @@
 		}
 	}
 	.dish-container {
-		min-height: 67%;
+	height: 72%;
     height: auto;
 	overflow:scroll;
 	margin-top: 20px;
@@ -292,8 +290,8 @@
 		img {
 			width: 110px;
 			height: auto;
-      clip-path: circle(40px at center);
-      margin: 10px 10px 0 10px;
+            clip-path: circle(40px at center);
+            margin: 10px 10px 0 10px;
 		}
 	}
 	.dish {
@@ -310,12 +308,21 @@
 				font-size: 18px;
 			}
 		}
+  }
+    .btns {
+    position: absolute;
+    bottom: 5%;
+	button {
+	font-weight: 400;
+	width: 170px;
+	font-size: 14px;
+	height: 44px;
 	}
+  }
 }
 @media (max-width: 650px) {
 	.dish-container {
-		min-height: 61%;
-		height: auto;
+	height: 70vh;
     padding-top: 0;
 	overflow:scroll;
 	margin-top: 0;
@@ -347,7 +354,17 @@
 				}
 			}
 		}
+  }
+    .btns {
+    position: absolute;
+    bottom: 13%;
+	button {
+	font-weight: 400;
+	width: 170px;
+	font-size: 14px;
+	height: 44px;
 	}
+  }
 }
 @media (max-width: 470px) {
   .sum {
@@ -369,7 +386,7 @@
     }
   }
 	.dish-container {
-		height: 64%;
+	height: 77%;
     overflow:scroll;
 	}
 	.dish-photo {
@@ -412,37 +429,45 @@
 		}
 	}
 }
-
 @media (max-width: 376px) {
 	.dish-container {
-     height: 50%;
+     height: 79%;
      overflow:scroll;
 	}
+	.btns {
+    position: absolute;
+    bottom: 13%;
+	button {
+	font-weight: 400;
+	width: 170px;
+	font-size: 14px;
+	height: 44px;
+	}
+  }
 }
-
 @media (max-width: 340px) {
 	.dish-container {
-    max-height: 46%;
+    height: 71%;
     overflow:scroll;
   }
   
-	.btns {
-    margin-top: 1%;
-    margin-bottom: 2%;
-		width: 100%;
-		min-height: 37px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		button {
-			border-radius: 46px;
-			outline: none;
-			width: 150px;
-			height: 32px;
-			font-family: 'Roboto', sans-serif;
-			font-size: 14px;
-		}
-	}
+	// .btns {
+  //   margin-top: 1%;
+  //   margin-bottom: 2%;
+	// 	width: 100%;
+	// 	min-height: 37px;
+	// 	display: flex;
+	// 	justify-content: center;
+	// 	align-items: center;
+	// 	button {
+	// 		border-radius: 46px;
+	// 		outline: none;
+	// 		width: 150px;
+	// 		height: 32px;
+	// 		font-family: 'Roboto', sans-serif;
+	// 		font-size: 14px;
+	// 	}
+	// }
 	.dish {
     max-height: 70px;
 		.info {
@@ -464,8 +489,17 @@
 			}
 		}
   }
+    .btns {
+    position: absolute;
+    bottom: 17%;
+	button {
+	font-weight: 400;
+	width: 170px;
+	font-size: 14px;
+	height: 44px;
+	}
+  }
 }
-
 // .limit {
 //   // color: #44A334;
 //   font-size: 18px;
