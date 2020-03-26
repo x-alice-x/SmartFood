@@ -238,7 +238,11 @@
                         this.todayMenu.basket_summ = this.todayMenu.basket_summ
                             + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price);
                         this.todayCart.basket_summ = this.todayMenu.basket_summ;
-                        if (window.screen > 790) {
+                        console.log("before if");
+                        
+                        if (window.screen.width > 790) {
+                            console.log("notif");
+                            
                             this.$notify({
                                 group: 'foo',
                                 title: this.todayMenu.categories[categoryIndex].dishes[index].name 
