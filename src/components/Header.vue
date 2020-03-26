@@ -115,7 +115,6 @@
                 $(document).mouseup(function (e) {
                     let container = $('.cart_comp');
                     let container_can = $('.cart');
-                    console.log(e.target);
                     
                     if (!container.has(e.target).length && !container_can.has(e.target).length) {
                         self.showCart = false;

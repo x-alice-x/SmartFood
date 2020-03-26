@@ -86,7 +86,6 @@
       clearCart(menu_id) {
         let dish_id = 0;
 		let categoryIndex = 0;
-		console.log(menu_id);
 		this.$store.dispatch("ClearCart", { menu_id });
         for (let i = 0; i < this.todayCart.basket_dishes.length; i++) {
           dish_id = this.todayCart.basket_dishes[i].id;
