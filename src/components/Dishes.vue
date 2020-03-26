@@ -174,7 +174,7 @@
             </div>
         </div>
         <button @click="scrollTop" class="arrow"></button>
-        <notifications group="foo" />
+        <notifications group="foo"/>
     </div>
 </template>
 
@@ -193,7 +193,6 @@
                     text: 'Добавить в черный список'
                 },
                 revealed: '',
-                zak: 0,
                 categoryIndex: 0,
                 dishIndex: 0,
                 oldCategoryIndex: 0,
@@ -204,7 +203,6 @@
                 upX: 0,
                 moveX: 0,
                 widthX: 0,
-                transitionX: 0,
                 blackListShow: false,
                 inBlack: false,
                 showCart: false,
@@ -216,36 +214,28 @@
             Cart
         },
         methods: {
-            cartOpen() {
-
-            },
-            cartClose() {
-
-            },
             // Кнопка вверх
             async scrollTop() {
                 $('body').animate({'scrollTop': 0}, 500);
                 $('html').animate({'scrollTop': 0}, 500)
             },
-
             // Добавление блюда
             buyDish(menu_id, dish_id, index, categoryIndex, buttonId, count) {
                 if (buttonId === 'card') {
                     if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count == 0) {
                         this.$store.dispatch("OrderDish", {menu_id, dish_id, count});
                         this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++;
-
                         this.todayMenu.basket_summ = this.todayMenu.basket_summ
                             + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price);
                         this.todayCart.basket_summ = this.todayMenu.basket_summ;
                         console.log("before if");
-                        
+
                         if (window.screen.width > 790) {
                             console.log("notif");
-                            
+
                             this.$notify({
                                 group: 'foo',
-                                title: this.todayMenu.categories[categoryIndex].dishes[index].name 
+                                title: this.todayMenu.categories[categoryIndex].dishes[index].name
                                     + ' добавлено в корзину',
                                 duration: 450
                             });
@@ -257,7 +247,6 @@
                     this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++;
                     this.todayMenu.basket_summ = this.todayMenu.basket_summ
                         + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
-
                     this.todayCart.basket_summ = this.todayMenu.basket_summ;
                     event.stopPropagation()
                 }
@@ -270,7 +259,6 @@
                     // this.todayCart.basket_dishes[index].count--;
                     this.todayMenu.basket_summ = this.todayMenu.basket_summ
                         - parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
-
                     this.todayCart.basket_summ = this.todayMenu.basket_summ;
                 }
                 event.stopPropagation()
@@ -594,11 +582,6 @@
         bottom: 33px;
     }
 
-    // =======
-    // .container:last-child {
-    //     margin-bottom: 60px;
-    // >>>>>>> yulya
-
     .dishes {
         max-width: 1500px;
         margin: auto;
@@ -753,14 +736,12 @@
         overflow: hidden;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         transition: 0.3s;
-
         // &-top {
         //     .dish-img {
         //         display: flex;
         //         justify-content: flex-end;
         //     }
         // }
-
         &:hover {
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
         }
@@ -924,7 +905,6 @@
         //   left: 20%;
         //   right: auto;
         //   bottom: 0%;
-
         // }
         .arrow {
             display: none;
@@ -1072,7 +1052,6 @@
                         height: auto;
                         clip-path: circle(50px at center);
                         margin-left: -12px;
-
                     }
                 }
 
@@ -1193,7 +1172,6 @@
             width: 45px;
             height: 22px;
         }
-
         /* слайдер для включения чс*/
         .slider {
             &:before {
@@ -1206,7 +1184,6 @@
         input:checked + .slider:before {
             transform: translateX(22px);
         }
-
     }
 
     // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
@@ -1234,7 +1211,6 @@
             }
 
             .swipeout-action.dish-mobile-delete {
-
                 .dish-mobile-delete-dish {
                     width: 30px;
 
@@ -1245,7 +1221,6 @@
             }
 
             .swipeout-action.dish-mobile-add {
-
                 .dish-mobile-add-dish {
                     width: 30px;
 
@@ -1259,7 +1234,6 @@
                 width: 20px;
 
                 .dish-mobile-black-add-dish {
-
                     div {
                         font-size: 10px;
                     }
@@ -1270,7 +1244,6 @@
                 width: 20px;
 
                 .dish-mobile-black-delete-dish {
-
                     div {
                         font-size: 10px;
                     }
@@ -1396,7 +1369,6 @@
             width: 100%;
 
             .swipeout-action.dish-mobile-delete {
-
                 .dish-mobile-delete-dish {
                     width: 10px;
 
@@ -1411,7 +1383,6 @@
             }
 
             .swipeout-action.dish-mobile-add {
-
                 .dish-mobile-add-dish {
                     width: 10px;
 
@@ -1453,7 +1424,6 @@
                 }
             }
         }
-
     }
 
     // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
@@ -1530,14 +1500,11 @@
         }
         .dish-mobile {
             .swipeout-action.dish-mobile-delete {
-
                 .dish-mobile-delete-dish {
                     width: 0px;
-
                     // img {
                     //     width: 35px;
                     // }
-
                     div {
                         font-size: 10px;
                     }
@@ -1545,14 +1512,11 @@
             }
 
             .swipeout-action.dish-mobile-add {
-
                 .dish-mobile-add-dish {
                     width: 0px;
-
                     // img {
                     //     width: 40px;
                     // }
-
                     div {
                         font-size: 10px;
                     }
@@ -1566,7 +1530,6 @@
                     // img {
                     //     width: 30px;
                     // }
-
                     div {
                         font-size: 8px;
                     }
@@ -1580,7 +1543,6 @@
                     // img {
                     //     width: 35px;
                     // }
-
                     div {
                         font-size: 9px;
                     }
