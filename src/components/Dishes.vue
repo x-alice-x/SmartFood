@@ -512,13 +512,13 @@
 <style scoped lang="scss">
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
+
     .cart_comp {
         position: fixed;
         top: 0;
         width: 100vw;
         height: 100vh;
         z-index: 20;
-        overscroll-behavior: contain;
     }
 
     /*Кнопка вверх*/
@@ -1250,11 +1250,11 @@
         }
     }
 
-    @media (max-width: 650px) {
-        .cart_comp {
-            padding-top: 50px;
-        }
-    }
+    // @media (max-width: 650px) {
+    //     .cart_comp {
+    //         padding-top: 50px;
+    //     }
+    // }
 
     @media (max-width: 500px) {
         .dish-mobile {

@@ -1,11 +1,14 @@
 <template>
 <div class="cart">
   <div class="dish-container">
+	<Header class="cart-header"></Header>
     <div v-for="(dish, index) in todayCart.basket_dishes" :key="index">
       <div class="dish" v-show="dish.count > 0">
         <div class="dish-photo">
             <img :src="dish.image">
         </div>
+
+
         <div class="info">
           <p class="name">{{dish.name}}</p>
           <p class="weight">{{dish.weight}} г.</p>
@@ -35,13 +38,14 @@
     <div class="btns">
       <button class="clear-cart" @click="clearCart(todayCart.id)">Очистить корзину</button>
     </div>
-
-  </div>
+</div>
 </template>
 
 <script>
+import Header from './Header'
   export default {
     components: {
+		Header,
     },
     data () {
       return {
@@ -125,6 +129,7 @@
 <style lang="scss" scoped>
     @import "../assets/scss/vars.scss";    
     @import "../assets/scss/root.scss";
+
 .cart {
 	width: 500px;
 	height: auto;
@@ -132,6 +137,7 @@
 	background: #fff;
 	border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+	position: relative;
 	.dish-container {
 	height: 500px;
     padding-top: 2%;
@@ -259,6 +265,7 @@
 	}
 @media (max-width: 790px) {
   .sum-container {
+	height: 0;
     display: none;
   }
 	.cart {
@@ -311,7 +318,7 @@
   }
     .btns {
     position: absolute;
-    bottom: 5%;
+    // bottom: 5%;
 	button {
 	font-weight: 400;
 	width: 170px;
@@ -322,7 +329,7 @@
 }
 @media (max-width: 650px) {
 	.dish-container {
-	height: 70vh;
+	height: 70%;
     padding-top: 0;
 	overflow:scroll;
 	margin-top: 0;
@@ -357,7 +364,7 @@
   }
     .btns {
     position: absolute;
-    bottom: 13%;
+    // bottom: 13%;
 	button {
 	font-weight: 400;
 	width: 170px;
@@ -386,7 +393,7 @@
     }
   }
 	.dish-container {
-	height: 77%;
+	height: 65%;
     overflow:scroll;
 	}
 	.dish-photo {
@@ -428,6 +435,17 @@
 			}
 		}
 	}
+	.btns {
+    position: fixed;
+	margin-top: 15px;
+    bottom: 70px;
+	button {
+	font-weight: 400;
+	width: 170px;
+	font-size: 14px;
+	height: 44px;
+	}
+  }
 }
 @media (max-width: 376px) {
 	.dish-container {

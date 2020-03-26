@@ -1,7 +1,6 @@
 <template>
     <div class="header" >
         <div class="container">
-
             <div class="user">
                 <img src="../assets/img/user.svg" 
                      alt="User Image"
@@ -11,7 +10,7 @@
                 <a>SmartFood</a>
             </div>
 
-            <div class="cart">
+            <div class="cart cart_comp" @click="showCart=!showCart">
                 <div class="sum" 
                      :style="{'color' : (this.currentSum >= this.limit ? '#ED2736' : '#FFFFFF')}">
                         {{ currentSum }} P
@@ -50,18 +49,19 @@
           </div>
         </div>
       </modal>
-
+<!-- 
       <Cart class="cart_comp"
             v-if="showCart"
-            @closeCart="showCart=false" />
+            @closeCart="showCart=false" /> -->
     </div>
 </template>
 
 <script>
   import $ from "jquery";
-  import Cart from "./Cart.vue";
+// import Cart from "./Cart.vue";
   export default {
-        components: {Cart},
+        name: 'Header',
+        // components: {Cart},
         data() {
             return {
                 showCart: false,
@@ -165,7 +165,7 @@
   }
     @media (max-width: 450px) {
       .v--modal-box.v--modal {
-          width: 290px !important;
+          width: 250px !important;
           height: auto;
           top: 0;
       }
@@ -269,7 +269,7 @@
         width: 100%;
         background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
         color: $font-color;
-        z-index: 700;
+        z-index: 10;
         position: relative;
         .container{
             display: flex;

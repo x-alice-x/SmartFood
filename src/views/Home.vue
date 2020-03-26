@@ -24,8 +24,3 @@ import Dishes from '../components/Dishes'
 @import "../assets/scss/vars.scss";
 @import "../assets/scss/root.scss";
 </style>
-<style>
-body, html {
-    overflow: auto;
-}
-</style>
