@@ -8,13 +8,13 @@
                 <div class="dish-main">
                     <div class="dish"
                          v-for="(dish, index) in categories.dishes" :key="index"
-                         @click="buyDish(todayMenu.id, dish.id, index, categoryIndex, buttonId = 'card')"
+                         @click="buyDish(todayMenu.id, dish.id, index, categoryIndex, buttonId = 'card', count = 1)"
                          :id="dish.in_blacklist ? 'blacklisted' : index"
                          :class="{ active: dish.in_basket_count == 0}">
                         <div class="dish-top">
                             <div class="dish-img" :style="{'background-image': `url(${dish.image})`}">
                                 <div class="black-list-container" tabindex="-1" @click="manageBL">
-                                    <img class="black-list" src="../assets/img/dots.svg"/>
+                                    <img class="black-list" src="../assets/img/newDots.svg"/>
                                 </div>
                                 <div id="black-list-content">
                                     <button v-if="!dish.in_blacklist"
@@ -36,16 +36,18 @@
                             <div class="dish-add" v-if="dish.in_basket_count > 0">
                                 <button>
                                     <img src="../assets/img/minus.svg"
-                                         @click="deleteDish(todayMenu.id, dish.id, index, categoryIndex)">
+                                         @click="deleteDish(todayMenu.id, dish.id, index, categoryIndex, count = 1)">
                                 </button>
                                 <div class="dish-amount">
                                     <div class="dish-amount-color">
-                                        {{dish.in_basket_count}}
+                                        <input type="text" v-model.trim="dish.in_basket_count"
+                                            @focusout="buyDish(todayMenu.id, dish.id, index, categoryIndex, buttonId = 'input',count = dish.in_basket_count)"
+                                            @click="oldCount = dish.in_basket_count">
                                     </div>
                                 </div>
                                 <button>
                                     <img src="../assets/img/plus.svg"
-                                         @click="buyDish(todayMenu.id, dish.id, index, categoryIndex, buttonId = 'plus')">
+                                         @click="buyDish(todayMenu.id, dish.id, index, categoryIndex, buttonId = 'plus', 1)">
                                 </button>
                             </div>
                         </div>
@@ -102,9 +104,11 @@
                         </template>
                         <template v-slot:left="{ item, close, index }">
                             <div class="swipeout-action dish-mobile-add"
-                                 @click="buyDish(todayMenu.id, item.id, index, categoryIndex, buttonId = 'plus')"
-                                 :style="{width: widthX + 'px'}"
-                                 :class="{aloneButton: item.showTransition && !item.in_blacklist}"
+                                 @click="buyDish(todayMenu.id, item.id, index, categoryIndex, buttonId = 'plus', count = 1)"
+                                 :style="{width: widthX + 'px', transition: '.1s !important'}"
+                                 :class="{aloneButtonL: item.showTransition && !item.in_blacklist && $el.clientWidth > 500,
+                                 aloneButtonM: item.showTransition && !item.in_blacklist && $el.clientWidth <= 500 && $el.clientWidth > 400,
+                                 aloneButtonS: item.showTransition && !item.in_blacklist && $el.clientWidth <= 400}"
                             >
                                 <div class="dish-mobile-add-dish">
                                     <img src="../assets/img/cartMobile.svg">
@@ -130,9 +134,11 @@
                                 </div>
                             </div>
                             <div class="swipeout-action dish-mobile-delete"
-                                 @click="deleteDish(todayMenu.id, item.id, index, categoryIndex)"
-                                 :style="{width: widthX + 'px'}"
-                                 :class="{aloneButtonDel: item.showTransition && item.in_blacklist}"
+                                 @click="deleteDish(todayMenu.id, item.id, index, categoryIndex, count = 1)"
+                                 :style="{width: widthX + 'px', transition: '.1s !important'}"
+                                 :class="{aloneButtonDelL: item.showTransition && item.in_blacklist && $el.clientWidth > 500,
+                                 aloneButtonDelM: item.showTransition && item.in_blacklist && $el.clientWidth <= 500 && $el.clientWidth > 400,
+                                 aloneButtonDelS: item.showTransition && item.in_blacklist && $el.clientWidth <= 400}"
                             >
                                 <div class="dish-mobile-delete-dish">
                                     <img src="../assets/img/delete.svg">
@@ -148,7 +154,8 @@
                     </swipe-list>
                 </div>
             </div>
-            <div class="total-sum-container">
+            <Cart v-if="showCart" @closeCartMobile="showCart=false" class="cart_comp"/>
+            <div class="total-sum-container" @click="showCart = !showCart">
                 <div class="total-sum">
                     <div class="total-container">
                         <p class="money-spent">{{todayMenu.basket_summ}} Р</p>
@@ -168,7 +175,7 @@
                 </div>
             </div>
         </div>
-        <button @click="scrollTop" class="arrow"></button>
+        <button @click="scrollTop" class="arrow"><img src="../assets/img/arrow.svg" alt="arrow"></button>
     </div>
 </template>
 
@@ -176,6 +183,7 @@
     import {SwipeList} from 'vue-swipe-actions';
     import 'vue-swipe-actions/dist/vue-swipe-actions.css';
     import Weekdays from './Weekdays'
+    import Cart from './Cart'
     import $ from "jquery";
 
     export default {
@@ -189,62 +197,113 @@
                 zak: 0,
                 categoryIndex: 0,
                 dishIndex: 0,
+                oldCategoryIndex: 0,
+                oldDishIndex: 0,
                 todayMenuId: 0,
                 dishId: 0,
                 downX: 0,
                 upX: 0,
                 moveX: 0,
-                widthX: 60,
-                transition: 0,
+                widthX: 0,
+                transitionX: 0,
                 blackListShow: false,
                 inBlack: false,
+                showCart: false,
+                oldCount: null
             };
         },
         components: {
             Weekdays,
             SwipeList,
+            Cart
         },
         methods: {
+            cartOpen() {
+
+            },
+            cartClose() {
+
+            },
             // Кнопка вверх
-            async scrollTop(){
+            async scrollTop() {
                 $('body').animate({'scrollTop': 0}, 500);
                 $('html').animate({'scrollTop': 0}, 500)
             },
+
             // Добавление блюда
-            buyDish(menu_id, dish_id, index, categoryIndex, buttonId) {
+            buyDish(menu_id, dish_id, index, categoryIndex, buttonId, count) {
                 if (buttonId === 'card') {
-                    if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count === 0) {
-                        this.$store.dispatch("OrderDish", {menu_id, dish_id});
-                        this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++
+                    if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count == 0) {
+                        this.$store.dispatch("OrderDish", {menu_id, dish_id, count});
+                        this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++;
+
                         this.todayMenu.basket_summ = this.todayMenu.basket_summ
-                            + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
+                            + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price);
+                        this.todayCart.basket_summ = this.todayMenu.basket_summ;
                     }
                     event.stopPropagation()
-                } else {
-                    this.$store.dispatch("OrderDish", {menu_id, dish_id});
-                    this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++
+                }
+                // Если инпут
+                else if(buttonId === 'input') {
+                    console.log(this.oldCount)
+                    console.log(count)
+                    if (this.oldCount < count) {
+                        count = count - this.oldCount;
+                        this.$store.dispatch("OrderDish", {menu_id, dish_id, count});
+                        this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count + count;
+                    }
+                    else if(this.oldCount > count) {
+                        count = this.oldCount - count;
+                        this.$store.dispatch("DeleteDish", {menu_id, dish_id, count});
+                        this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count - count;
+                    }
+                }
+                else {
+                    this.$store.dispatch("OrderDish", {menu_id, dish_id, count});
+                    this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++;
                     this.todayMenu.basket_summ = this.todayMenu.basket_summ
                         + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
+
+                    this.todayCart.basket_summ = this.todayMenu.basket_summ;
                     event.stopPropagation()
                 }
             },
             // Удаление блюда
-            deleteDish(menu_id, dish_id, index, categoryIndex) {
+            deleteDish(menu_id, dish_id, index, categoryIndex, count) {
                 if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count != 0) {
-                    this.$store.dispatch("DeleteDish", {menu_id, dish_id});
-                    this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count--
+                    this.$store.dispatch("DeleteDish", {menu_id, dish_id, count});
+                    this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count--;
+                    // this.todayCart.basket_dishes[index].count--;
                     this.todayMenu.basket_summ = this.todayMenu.basket_summ
                         - parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
+
+                    this.todayCart.basket_summ = this.todayMenu.basket_summ;
                 }
                 event.stopPropagation()
             },
             closeContent() {
                 this.$refs.list[this.categoryIndex].close()
-                this.$store.commit('showBlackList', {
-                    indexCategory: this.categoryIndex,
-                    indexDishes: this.dishIndex,
-                    bool: false
-                });
+                setTimeout(() => {
+                    this.$store.commit('showBlackList', {
+                        indexCategory: this.categoryIndex,
+                        indexDishes: this.dishIndex,
+                        bool: true
+                    });
+                    this.$store.commit('showTransition', {
+                        indexCategory: this.categoryIndex,
+                        indexDishes: this.dishIndex,
+                        bool: false
+                    });
+                    if (window.screen.width > 620) {
+                        this.widthX = 60;
+                    } else if (window.screen.width <= 620 && window.screen.width > 500) {
+                        this.widthX = 30;
+                    } else if (window.screen.width <= 500 && window.screen.width > 400) {
+                        this.widthX = 10;
+                    } else if (window.screen.width <= 400) {
+                        this.widthX = 0;
+                    }
+                }, 50)
             },
             blackListChange(menu_id, dish_id, index, categoryIndex) {
                 let whichFunc = this.todayMenu.categories[categoryIndex].dishes[index].in_blacklist
@@ -279,9 +338,21 @@
                     this.todayMenu.basket_summ - this.todayMenu.basket_summ_limit :
                     this.todayMenu.basket_summ_limit - this.todayMenu.basket_summ
             },
+            todayCart() {
+                return this.$store.getters.getTodayCart;
+            }
         },
         async mounted() {
             let self = this;
+            if (window.screen.width > 620) {
+                this.widthX = 60;
+            } else if (window.screen.width <= 620 && window.screen.width > 500) {
+                this.widthX = 30;
+            } else if (window.screen.width <= 500 && window.screen.width > 400) {
+                this.widthX = 10;
+            } else if (window.screen.width <= 400) {
+                this.widthX = 0;
+            }
             await this.$store.dispatch('fetchMenu');
             if (this.$store.getters.getError) {
                 await this.$store.dispatch("SetNotAuth");
@@ -290,8 +361,10 @@
             }
             $(document).on("touchstart", ".card-content", function (event) {
                 self.categoryIndex = event.currentTarget.dataset.categoryindex;
-                self.$refs.list[self.categoryIndex].close();
                 self.dishIndex = event.currentTarget.dataset.dishindex;
+                if (self.categoryIndex != self.oldCategoryIndex || self.dishIndex != self.oldDishIndex) {
+                    self.$refs.list[self.oldCategoryIndex].$children[self.oldDishIndex].close();
+                }
                 self.todayMenuId = event.currentTarget.dataset.todaymenuid;
                 self.dishId = event.currentTarget.dataset.dishid;
                 self.buttonId = event.currentTarget.dataset.buttonId;
@@ -308,41 +381,57 @@
             });
             $(document).on("touchmove", ".card-content", function (event) {
                 self.moveX = event.changedTouches[0].clientX;
-                if (self.moveX - self.downX >= 3 * window.screen.width / 4) {
+                if (self.moveX - self.downX >= window.screen.width / 1.6) {
                     self.transition = self.moveX - self.downX;
                     if (self.inBlack) {
                         self.widthX = 220;
-                        self.$store.commit('showBlackList', {
-                            indexCategory: self.categoryIndex,
-                            indexDishes: self.dishIndex,
-                            bool: false
-                        });
+                        setTimeout(() => {
+                            self.$store.commit('showBlackList', {
+                                indexCategory: self.categoryIndex,
+                                indexDishes: self.dishIndex,
+                                bool: false
+                            });
+                        }, 50)
                     } else {
                         self.widthX = 220;
-                        self.$store.commit('showTransition', {
-                            indexCategory: self.categoryIndex,
-                            indexDishes: self.dishIndex,
-                            bool: true
-                        });
+                        setTimeout(() => {
+                            self.$store.commit('showTransition', {
+                                indexCategory: self.categoryIndex,
+                                indexDishes: self.dishIndex,
+                                bool: true
+                            });
+                        }, 0)
                     }
-                } else if (self.moveX - self.downX <= -(3 * window.screen.width / 4)) {
+                } else if (self.moveX - self.downX <= -(window.screen.width / 1.6)) {
                     if (self.inBlack) {
                         self.widthX = 220;
-                        self.$store.commit('showTransition', {
-                            indexCategory: self.categoryIndex,
-                            indexDishes: self.dishIndex,
-                            bool: true
-                        });
+                        setTimeout(() => {
+                            self.$store.commit('showTransition', {
+                                indexCategory: self.categoryIndex,
+                                indexDishes: self.dishIndex,
+                                bool: true
+                            });
+                        }, 0)
                     } else {
                         self.widthX = 220;
-                        self.$store.commit('showBlackList', {
-                            indexCategory: self.categoryIndex,
-                            indexDishes: self.dishIndex,
-                            bool: false
-                        });
+                        setTimeout(() => {
+                            self.$store.commit('showBlackList', {
+                                indexCategory: self.categoryIndex,
+                                indexDishes: self.dishIndex,
+                                bool: false
+                            });
+                        }, 50)
                     }
                 } else {
-                    self.widthX = 60;
+                    // if (window.screen.width > 620) {
+                    //     self.widthX = 60;
+                    // } else if (window.screen.width <= 620 && window.screen.width > 500) {
+                    //     self.widthX = 30;
+                    // } else if (window.screen.width <= 500 && window.screen.width > 400) {
+                    //     self.widthX = 10;
+                    // } else if (window.screen.width <= 400) {
+                    //     self.widthX = 0;
+                    // }
                     self.$store.commit('showBlackList', {
                         indexCategory: self.categoryIndex,
                         indexDishes: self.dishIndex,
@@ -358,9 +447,11 @@
             $(document).on("touchend", ".card-content", function (event) {
                 self.upX = event.changedTouches[0].clientX;
                 self.revealed = event.currentTarget.dataset.revealed;
-            })
+                self.oldCategoryIndex = self.categoryIndex;
+                self.oldDishIndex = self.dishIndex;
+            });
             // Кнопка вверх
-            $(window).scroll(() =>{
+            $(window).scroll(() => {
                 $(window).scrollTop() > 200
                     ? $('.arrow').addClass('active')
                     : $('.arrow').removeClass('active')
@@ -368,37 +459,59 @@
         },
         watch: {
             upX: function () {
-                if (Math.abs(this.upX - this.downX) >= 3 * window.screen.width / 4) {
+                if (Math.abs(this.upX - this.downX) >= window.screen.width / 1.6) {
                     if (this.revealed === 'right') {
-                        this.deleteDish(this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex)
+                        /*eslint-disable */
+                        this.deleteDish(this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex, 1)
+                        /*eslint-enable */
                         this.$refs.list[this.categoryIndex].close()
-                        setTimeout(() => (
+                        setTimeout(() => {
                             this.$store.commit('showBlackList', {
                                 indexCategory: this.categoryIndex,
                                 indexDishes: this.dishIndex,
                                 bool: true
-                            }),
-                                this.$store.commit('showTransition', {
-                                    indexCategory: this.categoryIndex,
-                                    indexDishes: this.dishIndex,
-                                    bool: false
-                                }),
-                                this.widthX = 60), 50)
+                            });
+                            this.$store.commit('showTransition', {
+                                indexCategory: this.categoryIndex,
+                                indexDishes: this.dishIndex,
+                                bool: false
+                            });
+                            if (window.screen.width > 620) {
+                                this.widthX = 60;
+                            } else if (window.screen.width <= 620 && window.screen.width > 500) {
+                                this.widthX = 30;
+                            } else if (window.screen.width <= 500 && window.screen.width > 400) {
+                                this.widthX = 10;
+                            } else if (window.screen.width <= 400) {
+                                this.widthX = 0;
+                            }
+                        }, 50)
                     } else if (this.revealed === 'left') {
-                        this.buyDish(this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex, this.buttonId);
+                        /*eslint-disable */
+                        this.buyDish(this.todayMenuId, this.dishId, this.dishIndex, this.categoryIndex, this.buttonId, 1);
+                        /*eslint-enable */
                         this.$refs.list[this.categoryIndex].close()
-                        setTimeout(() => (
+                        setTimeout(() => {
                             this.$store.commit('showBlackList', {
                                 indexCategory: this.categoryIndex,
                                 indexDishes: this.dishIndex,
                                 bool: true
-                            }),
-                                this.$store.commit('showTransition', {
-                                    indexCategory: this.categoryIndex,
-                                    indexDishes: this.dishIndex,
-                                    bool: false
-                                }),
-                                this.widthX = 60), 50)
+                            });
+                            this.$store.commit('showTransition', {
+                                indexCategory: this.categoryIndex,
+                                indexDishes: this.dishIndex,
+                                bool: false
+                            });
+                            if (window.screen.width > 620) {
+                                this.widthX = 60;
+                            } else if (window.screen.width <= 620 && window.screen.width > 500) {
+                                this.widthX = 30;
+                            } else if (window.screen.width <= 500 && window.screen.width > 400) {
+                                this.widthX = 10;
+                            } else if (window.screen.width <= 400) {
+                                this.widthX = 0;
+                            }
+                        }, 50)
                     }
                 } else {
                     this.$store.commit('showBlackList', {
@@ -411,7 +524,15 @@
                         indexDishes: this.dishIndex,
                         bool: false
                     });
-                    this.widthX = 60
+                    if (window.screen.width > 620) {
+                        this.widthX = 60;
+                    } else if (window.screen.width <= 620 && window.screen.width > 500) {
+                        this.widthX = 30;
+                    } else if (window.screen.width <= 500 && window.screen.width > 400) {
+                        this.widthX = 10;
+                    } else if (window.screen.width <= 400) {
+                        this.widthX = 0;
+                    }
                 }
             }
         },
@@ -421,51 +542,39 @@
 <style scoped lang="scss">
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
+
+    .cart_comp {
+        position: fixed;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 20;
+        overscroll-behavior: contain;
+    }
+
     /*Кнопка вверх*/
-    .arrow{
+    .arrow {
         position: fixed;
         bottom: -55px;
         right: 100px;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        border: 2px solid #460B79;
-        background: white;
         z-index: 9999;
         outline: none;
         transition: .4s;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        img {
+            width: 50px;
+            height: 50px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+        }
     }
-    .arrow:after{
-        content: '';
-        width: 14px;
-        height: 14px;
-        border-top: 3px solid black;
-        border-left: 3px solid black;
-        transform: rotate(45deg);
-        position: absolute;
-        top: -8px;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        margin: auto;
-    }
-    .arrow:before{
-        content: '';
-        width: 0px;
-        height: 30px;
-        border-left: 3px solid black;
-        position: absolute;
-        top: 4px;
-        bottom: 0;
-        left: 1px;
-        right: 0;
-        margin: auto;
-    }
-    .arrow.active{
+    .arrow.active {
         bottom: 33px;
     }
 
+    // =======
+    // .container:last-child {
+    //     margin-bottom: 60px;
+    // >>>>>>> yulya
 
     .dishes {
         max-width: 1500px;
@@ -480,25 +589,27 @@
     .category-name {
         font-size: 40px;
         color: #000;
-        margin-left: 150px;
-        margin-bottom: 2%;
+        width: 25%;
+        margin: 0 auto;
+        margin-bottom: 1%;
         font-weight: 400;
+        text-align: center;
     }
 
     /* контейнер для кнопочки открывающей кнопку чс */
     .black-list-container {
         outline: none;
         width: fit-content;
-        padding: 10px 15px 5px 0;
-        margin-left: 290px;
+        padding: 15px 15px 5px 0;
+        margin-left: 325px;
         cursor: pointer;
         background: transparent;
         display: flex;
         justify-content: flex-end;
 
         .black-list {
-            width: 45px;
-            height: 22.5px;
+            width: 10px;
+            height: 25px;
         }
     }
 
@@ -567,7 +678,7 @@
         bottom: 0;
         left: 50%;
         transform: translateX(-50%);
-        z-index: 20;
+        z-index: 501;
 
         p {
             font-size: 24px;
@@ -584,83 +695,6 @@
         justify-content: center;
         align-items: center;
         margin: 0 2%;
-    }
-
-    /* контейнер слайдера чс */
-    .show-black-listed {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        position: fixed;
-        right: 15%;
-        // transform: translateX(-50%);
-        z-index: 2;
-
-        p {
-            margin-left: 15px;
-            color: #000;
-            font-size: 18px;
-            font-weight: 700;
-        }
-    }
-
-    /* слайдер */
-    .switch {
-        position: relative;
-        display: inline-block;
-        width: 60px;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        margin-left: 20px;
-        justify-content: center;
-        z-index: 2;
-    }
-
-    /* убрать дефолтный чекбокс */
-    .switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-    }
-
-    /* слайдер для включения чс*/
-    .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #ccc;
-        transition: .3s;
-
-        &:before {
-            position: absolute;
-            content: "";
-            height: 26px;
-            width: 26px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: .3s;
-        }
-    }
-
-    input:checked + .slider {
-        background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
-    }
-
-    input:checked + .slider:before {
-        transform: translateX(26px);
-    }
-
-    .slider.round {
-        border-radius: 30px;
-
-        &:before {
-            border-radius: 50%;
-        }
     }
 
     .dishes {
@@ -709,7 +743,7 @@
         }
 
         &-category {
-            margin-bottom: 50px;
+            margin-bottom: 5%;
         }
 
         // &-category:last-child {
@@ -729,6 +763,16 @@
                 display: flex;
                 justify-content: center;
                 padding-top: 5px;
+                input{
+                    color: $font-color;
+                    font-weight: 700;
+                    font-size: 18px;
+                    text-align: center;
+                    width: 90%;
+                    border: none;
+                    outline: none;
+                    margin-top: -2px;
+                }
             }
         }
 
@@ -860,7 +904,16 @@
 
     // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
     @media (max-width: 790px) {
-        .arrow{
+        // .cart_comp {
+        //  width: 60% !important;
+        //   height: 67% !important;
+        //   margin: auto;
+        //   left: 20%;
+        //   right: auto;
+        //   bottom: 0%;
+
+        // }
+        .arrow {
             display: none;
         }
         .category-name {
@@ -902,7 +955,7 @@
                     width: 60px;
 
                     img {
-                        width: 60px;
+                        width: 40px;
                     }
 
                     div {
@@ -927,7 +980,7 @@
                     width: 60px;
 
                     img {
-                        width: 60px;
+                        width: 40px;
                     }
 
                     div {
@@ -953,7 +1006,7 @@
                     width: 100%;
 
                     img {
-                        width: 50px;
+                        width: 30px;
                     }
 
                     div {
@@ -979,7 +1032,7 @@
                     width: 100%;
 
                     img {
-                        width: 60px;
+                        width: 40px;
                     }
 
                     div {
@@ -995,16 +1048,16 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                height: 130px;
+                height: 110px;
                 background: #FFFFFF;
                 width: 100%;
                 border-top: 1px solid #F2EDF6;
 
                 .dish-mobile-img {
                     img {
-                        width: 150px;
+                        width: 135px;
                         height: auto;
-                        clip-path: circle(55px at center);
+                        clip-path: circle(50px at center);
                         margin-left: -12px;
 
                     }
@@ -1035,7 +1088,7 @@
                 }
 
                 .dish-mobile-price {
-                    width: 25%;
+                    width: 23%;
 
                     .dish-mobile-price-grams, .dish-mobile-price-price {
                         font-weight: 400;
@@ -1081,15 +1134,9 @@
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            // height: 45px;
-            // border-top: 10px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 10px 10px rgba(255, 255, 255, 0.9);
-            // 0 0 5px 5px rgba(255, 255, 255, 0.2);
-            // background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.9));
-            background: rgba(255, 255, 255, 0.9);
             width: 100%;
             z-index: 20;
-            height: 95px;
+            // height: 95px;
             flex-direction: column;
         }
         .total-container {
@@ -1146,15 +1193,16 @@
         input:checked + .slider:before {
             transform: translateX(22px);
         }
+
     }
 
     // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
     @media (max-width: 620px) {
-        .container .week {
+        .week {
             margin-bottom: 0;
         }
         .container {
-            margin-bottom: 120px;
+            margin-bottom: 20px;
         }
         .category-name {
             width: 85%;
@@ -1173,14 +1221,9 @@
             }
 
             .swipeout-action.dish-mobile-delete {
-                width: 160px;
 
                 .dish-mobile-delete-dish {
                     width: 30px;
-
-                    img {
-                        width: 40px;
-                    }
 
                     div {
                         font-size: 12px;
@@ -1189,14 +1232,9 @@
             }
 
             .swipeout-action.dish-mobile-add {
-                width: 160px;
 
                 .dish-mobile-add-dish {
                     width: 30px;
-
-                    img {
-                        width: 40px;
-                    }
 
                     div {
                         font-size: 12px;
@@ -1205,41 +1243,35 @@
             }
 
             .swipeout-action.dish-mobile-black-add {
-                width: 30px;
+                width: 20px;
 
                 .dish-mobile-black-add-dish {
-                    img {
-                        width: 30px;
-                    }
 
                     div {
-                        font-size: 12px;
+                        font-size: 10px;
                     }
                 }
             }
 
             .swipeout-action.dish-mobile-black-delete {
-                width: 30px;
+                width: 20px;
 
                 .dish-mobile-black-delete-dish {
-                    img {
-                        width: 40px;
-                    }
 
                     div {
-                        font-size: 12px;
+                        font-size: 10px;
                     }
                 }
             }
 
             .card-content {
-                height: 105px;
+                height: 90px;
 
                 .dish-mobile-img {
                     img {
-                        width: 150px;
+                        width: 110px;
                         height: auto;
-                        clip-path: circle(55px at center);
+                        clip-path: circle(40px at center);
                         margin-left: -12px;
                     }
                 }
@@ -1254,18 +1286,25 @@
 
                     .dish-mobile-text-prelude {
                         font-size: 14px;
+                        max-height: 40%;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
                     }
                 }
 
                 .dish-mobile-price {
-                    width: 25%;
-
                     .dish-mobile-price-grams, .dish-mobile-price-price {
                         font-size: 20px;
                     }
                 }
             }
         }
+        // .card-content:last-child {
+        //     margin-bottom: 80px;
+        // }
+        //        ::i-block-chrome, .container {
+        //     margin-bottom: 80px;
+        // }
         .total-sum {
             height: 100px;
         }
@@ -1335,23 +1374,24 @@
         }
     }
 
-    // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
-    @media (max-width: 475px) {
-        .container .week {
-            margin-bottom: 0;
+    @media (max-width: 650px) {
+        .cart_comp {
+            padding-top: 50px;
         }
+    }
+
+    @media (max-width: 500px) {
         .dish-mobile {
             display: flex;
             width: 100%;
 
             .swipeout-action.dish-mobile-delete {
-                width: 120px;
 
                 .dish-mobile-delete-dish {
                     width: 10px;
 
                     img {
-                        width: 40px;
+                        width: 25px;
                     }
 
                     div {
@@ -1361,13 +1401,12 @@
             }
 
             .swipeout-action.dish-mobile-add {
-                width: 120px;
 
                 .dish-mobile-add-dish {
                     width: 10px;
 
                     img {
-                        width: 40px;
+                        width: 25px;
                     }
 
                     div {
@@ -1377,61 +1416,42 @@
             }
 
             .swipeout-action.dish-mobile-black-add {
-                width: 10px;
+                width: 5px;
 
                 .dish-mobile-black-add-dish {
                     img {
-                        width: 30px;
+                        width: 15px;
                     }
 
                     div {
-                        font-size: 10px;
+                        font-size: 9px;
                     }
                 }
             }
 
             .swipeout-action.dish-mobile-black-delete {
-                width: 10px;
+                width: 5px;
 
                 .dish-mobile-black-delete-dish {
                     img {
-                        width: 40px;
+                        width: 25px;
                     }
 
                     div {
-                        font-size: 10px;
-                    }
-                }
-            }
-
-            .card-content {
-                .dish-mobile-text {
-                    width: 50%;
-                    height: 125px;
-                    margin-right: 2%;
-
-                    .dish-mobile-text-disc {
-                        font-size: 13px;
-                    }
-
-                    .dish-mobile-text-prelude {
-                        font-size: 12px;
-                    }
-                }
-
-                .dish-mobile-price {
-                    width: 30%;
-
-                    &-amount {
-                        font-size: 12px;;
-                    }
-
-                    .dish-mobile-price-grams, .dish-mobile-price-price {
-                        font-size: 18px;
+                        font-size: 9px;
                     }
                 }
             }
         }
+
+    }
+
+    // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
+    @media (max-width: 475px) {
+        .container .week {
+            margin-bottom: 0;
+        }
+
         .total-sum {
             height: 95px;
         }
@@ -1462,6 +1482,18 @@
         //     transform: translateX(35px);
         // }
         .dish-mobile {
+            .card-content {
+                .dish-mobile-price {
+                    width: 30%;
+                }
+
+                .dish-mobile-text {
+                    .dish-mobile-text-prelude {
+                        max-height: 28%;
+                    }
+                }
+            }
+
             &-middle {
                 &-about {
                     padding-left: 10px;
@@ -1492,14 +1524,13 @@
         }
         .dish-mobile {
             .swipeout-action.dish-mobile-delete {
-                width: 100px;
 
                 .dish-mobile-delete-dish {
                     width: 0px;
 
-                    img {
-                        width: 35px;
-                    }
+                    // img {
+                    //     width: 35px;
+                    // }
 
                     div {
                         font-size: 10px;
@@ -1508,14 +1539,13 @@
             }
 
             .swipeout-action.dish-mobile-add {
-                width: 100px;
 
                 .dish-mobile-add-dish {
                     width: 0px;
 
-                    img {
-                        width: 40px;
-                    }
+                    // img {
+                    //     width: 40px;
+                    // }
 
                     div {
                         font-size: 10px;
@@ -1527,12 +1557,12 @@
                 width: 0px;
 
                 .dish-mobile-black-add-dish {
-                    img {
-                        width: 30px;
-                    }
+                    // img {
+                    //     width: 30px;
+                    // }
 
                     div {
-                        font-size: 10px;
+                        font-size: 8px;
                     }
                 }
             }
@@ -1541,9 +1571,9 @@
                 width: 0px;
 
                 .dish-mobile-black-delete-dish {
-                    img {
-                        width: 35px;
-                    }
+                    // img {
+                    //     width: 35px;
+                    // }
 
                     div {
                         font-size: 9px;
@@ -1552,15 +1582,14 @@
             }
 
             .card-content {
-                max-height: 70px;
-                height: auto;
+                height: 50px;
                 padding: 2% 0 2% 0;
 
                 .dish-mobile-img {
                     img {
                         width: 100px;
                         height: auto;
-                        clip-path: circle(36px at center);
+                        clip-path: circle(30px at center);
                         margin-left: -10px;
                     }
                 }
@@ -1578,6 +1607,8 @@
                 }
 
                 .dish-mobile-price {
+                    width: 30%;
+
                     &-amount {
                         font-size: 10px;
                     }
@@ -1686,8 +1717,10 @@
             }
         }
     }
+
 </style>
 <style>
+
     .swipeout {
         position: relative;
         overflow: hidden;
@@ -1709,11 +1742,28 @@
         cursor: pointer;
     }
 
-    .aloneButton {
+    .aloneButtonL {
         transform: translate3d(312px, 0px, 0px) !important;
     }
 
-    .aloneButtonDel {
+    .aloneButtonM {
+        transform: translate3d(220px, 0px, 0px) !important;
+    }
+
+    .aloneButtonS {
+        transform: translate3d(170px, 0px, 0px) !important;
+    }
+
+    .aloneButtonDelL {
         transform: translate3d(-312px, 0px, 0px) !important;
     }
+
+    .aloneButtonDelM {
+        transform: translate3d(-220px, 0px, 0px) !important;
+    }
+
+    .aloneButtonDelS {
+        transform: translate3d(-170px, 0px, 0px) !important;
+    }
+
 </style>
