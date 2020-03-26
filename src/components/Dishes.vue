@@ -193,7 +193,6 @@
                     text: 'Добавить в черный список'
                 },
                 revealed: '',
-                zak: 0,
                 categoryIndex: 0,
                 dishIndex: 0,
                 oldCategoryIndex: 0,
@@ -204,7 +203,6 @@
                 upX: 0,
                 moveX: 0,
                 widthX: 0,
-                transitionX: 0,
                 blackListShow: false,
                 inBlack: false,
                 showCart: false,
