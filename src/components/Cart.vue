@@ -85,20 +85,18 @@
       },
       clearCart(menu_id) {
         let dish_id = 0;
-        let count = 0;
 		let categoryIndex = 0;
 		console.log(menu_id);
 		this.$store.dispatch("ClearCart", { menu_id });
         for (let i = 0; i < this.todayCart.basket_dishes.length; i++) {
           dish_id = this.todayCart.basket_dishes[i].id;
-          count = this.todayCart.basket_dishes[i].count;
           categoryIndex = this.todayCart.basket_dishes[i].category_id;
-          this.todayCart.basket_dishes[i].count -= count;
+          this.todayCart.basket_dishes[i].count = 0;
           for (let k = 0; k < this.todayMenu.categories.length; k++) {
             if (this.todayMenu.categories[k].id == categoryIndex) {
               for (let j = 0; j < this.todayMenu.categories[k].dishes.length; j++)
                 if (this.todayMenu.categories[k].dishes[j].id == dish_id) {
-                  this.todayMenu.categories[k].dishes[j].in_basket_count -= count;
+                  this.todayMenu.categories[k].dishes[j].in_basket_count = 0;
                 }
             }
           }
