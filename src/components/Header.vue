@@ -22,7 +22,7 @@
         </div>
 
     <modal name="profile-modal">
-        <div class="profile-modal">
+        <div class="profile-modal-container">
           <div class="head">
             <div class="close-btn" @click="hide"><img id="close-btn-img" src="../assets/img/close_icon.svg" /> </div>
             <img v-if="avatar"
@@ -144,35 +144,38 @@
   .v--modal-box.v--modal {
     top: 0 !important;
     left: 0 !important;
-    width: 480px !important;
-    height: auto !important;
+    width: 430px !important;
+    height: auto!important;
     border: none;
     border-radius: 10px;
     box-shadow: 0px 4px 33px rgba(0, 0, 0, 0.75);
     margin: auto;
   }
+    @media (max-width: 1190px) {
+      .v--modal-box.v--modal {
+          width: 408px;
+          height: auto;
+      }
+  }
   @media (max-width: 768px) {
       .v--modal-box.v--modal {
-          width: 408px !important;
-          height: auto !important;
+          width: 408px;
+          height: auto;
       }
   }
     @media (max-width: 450px) {
       .v--modal-box.v--modal {
-          width: 250px !important;
-          height: auto !important;
+          width: 290px !important;
+          height: auto;
+          top: 0;
       }
   }
-  @media (max-width: 1190px) {
-      .v--modal-box.v--modal {
-          width: 408px !important;
-          height: auto !important;
-      }
-  }
+
 </style>
 <style scoped lang="scss">
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
+
 .sum {
     display: flex;
     align-items: center;

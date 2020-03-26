@@ -131,10 +131,9 @@
 	box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.25);
 	background: #fff;
 	border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
+    border-bottom-right-radius: 10px;
 	.dish-container {
-		max-height: 500px;
-		min-height: 380px;
+	height: 500px;
     padding-top: 2%;
     overflow-y: scroll;
 	}
@@ -246,15 +245,16 @@
 		button {
 			border-radius: 46px;
 			outline: none;
-			width: 190px;
+			width: 192px;
 			height: 48px;
 			font-family: 'Roboto', sans-serif;
-      font-size: 16px;
-      background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
-      border-radius: 46px;
-      border: none;
-      color: #fff;
-      text-transform: uppercase;
+            font-size: 16px;
+            background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
+            border-radius: 46px;
+            border: none;
+            color: #fff;
+            text-transform: uppercase;
+			font-weight: 700;
 		}
 	}
 @media (max-width: 790px) {
@@ -262,7 +262,7 @@
     display: none;
   }
 	.cart {
-		width: 100vw;
+	width: 100vw;
     height: 100vh;
     // margin-top: 50px;
 	}
@@ -281,8 +281,8 @@
 		}
 	}
 	.dish-container {
-	min-height: 80%;
-  height: auto;
+	height: 72%;
+    height: auto;
 	overflow:scroll;
 	margin-top: 20px;
 	}
@@ -290,8 +290,8 @@
 		img {
 			width: 110px;
 			height: auto;
-      clip-path: circle(40px at center);
-      margin: 10px 10px 0 10px;
+            clip-path: circle(40px at center);
+            margin: 10px 10px 0 10px;
 		}
 	}
 	.dish {
@@ -309,15 +309,20 @@
 			}
 		}
   }
-  .btns {
+    .btns {
     position: absolute;
     bottom: 5%;
+	button {
+	font-weight: 400;
+	width: 170px;
+	font-size: 14px;
+	height: 44px;
+	}
   }
 }
 @media (max-width: 650px) {
 	.dish-container {
-		min-height: 58%;
-		height: auto;
+	height: 70vh;
     padding-top: 0;
 	overflow:scroll;
 	margin-top: 0;
@@ -352,7 +357,13 @@
   }
     .btns {
     position: absolute;
-    bottom: 5%;
+    bottom: 13%;
+	button {
+	font-weight: 400;
+	width: 170px;
+	font-size: 14px;
+	height: 44px;
+	}
   }
 }
 @media (max-width: 470px) {
@@ -375,7 +386,7 @@
     }
   }
 	.dish-container {
-		height: 64%;
+	height: 77%;
     overflow:scroll;
 	}
 	.dish-photo {
@@ -420,13 +431,23 @@
 }
 @media (max-width: 376px) {
 	.dish-container {
-     height: 50%;
+     height: 79%;
      overflow:scroll;
 	}
+	.btns {
+    position: absolute;
+    bottom: 13%;
+	button {
+	font-weight: 400;
+	width: 170px;
+	font-size: 14px;
+	height: 44px;
+	}
+  }
 }
 @media (max-width: 340px) {
 	.dish-container {
-    max-height: 46%;
+    height: 71%;
     overflow:scroll;
   }
   
@@ -470,7 +491,13 @@
   }
     .btns {
     position: absolute;
-    bottom: 5%;
+    bottom: 17%;
+	button {
+	font-weight: 400;
+	width: 170px;
+	font-size: 14px;
+	height: 44px;
+	}
   }
 }
 // .limit {
