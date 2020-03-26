@@ -49,16 +49,16 @@
                             <div class="dish-mobile-text-disc-cart">
                                 {{ item.name }}
                             </div>
-                        </div>
-                        <div class="dish-mobile-price-cart">
-                            <div class="dish-mobile-price-count-cart">
-                                Количество: {{ item.count }}
-                            </div>
                             <div class="dish-mobile-price-grams-cart">
                                 {{ item.weight }} г.
                             </div>
                             <div class="dish-mobile-price-price-cart">
                                 {{ item.price.replace(/.00/, '') }} &#8381;
+                            </div>
+                        </div>
+                        <div class="dish-mobile-price-cart">
+                            <div class="dish-mobile-price-count-cart">
+                                Кол-во: {{ item.count }} шт.
                             </div>
                         </div>
                     </div>
@@ -175,18 +175,18 @@
                 }
             },
             clearCart(menu_id) {
-				let dish_id = 0;
-				let categoryIndex = 0;
-				this.$store.dispatch("ClearCart", { menu_id });
-				for (let i = 0; i < this.todayCart.basket_dishes.length; i++) {
-				dish_id = this.todayCart.basket_dishes[i].id;
-				categoryIndex = this.todayCart.basket_dishes[i].category_id;
-				this.todayCart.basket_dishes[i].count = 0;
-				for (let k = 0; k < this.todayMenu.categories.length; k++) {
-					if (this.todayMenu.categories[k].id == categoryIndex) {
-					for (let j = 0; j < this.todayMenu.categories[k].dishes.length; j++)
-						if (this.todayMenu.categories[k].dishes[j].id == dish_id) {
-						this.todayMenu.categories[k].dishes[j].in_basket_count = 0;
+                let dish_id = 0;
+                let categoryIndex = 0;
+                this.$store.dispatch("ClearCart", {menu_id});
+                for (let i = 0; i < this.todayCart.basket_dishes.length; i++) {
+                    dish_id = this.todayCart.basket_dishes[i].id;
+                    categoryIndex = this.todayCart.basket_dishes[i].category_id;
+                    this.todayCart.basket_dishes[i].count = 0;
+                    for (let k = 0; k < this.todayMenu.categories.length; k++) {
+                        if (this.todayMenu.categories[k].id == categoryIndex) {
+                            for (let j = 0; j < this.todayMenu.categories[k].dishes.length; j++)
+                                if (this.todayMenu.categories[k].dishes[j].id == dish_id) {
+                                    this.todayMenu.categories[k].dishes[j].in_basket_count = 0;
                                 }
                         }
                     }
@@ -349,11 +349,11 @@
 
 <style lang="scss" scoped>
     @import "../assets/scss/vars.scss";
-	@import "../assets/scss/root.scss";
-	
-	.dish-mobile-cart {
-		display: none;
-	}
+    @import "../assets/scss/root.scss";
+
+    .dish-mobile-cart {
+        display: none;
+    }
 
     .cart {
         width: 500px;
@@ -602,7 +602,7 @@
                     }
 
                     .dish-mobile-text-cart {
-                        width: 65%;
+                        width: 60%;
                         height: 125px;
                         display: flex;
                         align-items: flex-start;
@@ -616,18 +616,10 @@
                             font-size: 22px;
                             color: #460B79;
                         }
-                    }
-
-                    .dish-mobile-price-cart {
-                        width: 15%;
-
-                        .dish-mobile-price-count-cart {
-
-                        }
 
                         .dish-mobile-price-grams-cart, .dish-mobile-price-price-cart {
                             font-weight: 400;
-                            font-size: 28px;
+                            font-size: 20px;
                             display: flex;
                             align-items: center;
                             text-align: right;
@@ -636,6 +628,14 @@
 
                         .dish-mobile-price-price-cart {
                             font-weight: 700;
+                        }
+                    }
+
+                    .dish-mobile-price-cart {
+                        width: 20%;
+
+                        .dish-mobile-price-count-cart {
+                            font-size: 20px;
                         }
                     }
                 }
@@ -723,11 +723,15 @@
                         .dish-mobile-text-disc-cart {
                             font-size: 18px;
                         }
+
+                        .dish-mobile-price-grams-cart, .dish-mobile-price-price-cart {
+                            font-size: 16px;
+                        }
                     }
 
                     .dish-mobile-price-cart {
-                        .dish-mobile-price-grams-cart, .dish-mobile-price-price-cart {
-                            font-size: 20px;
+                        .dish-mobile-price-count-cart {
+                            font-size: 18px;
                         }
                     }
                 }
@@ -744,6 +748,16 @@
                 }
             }
         }
+        @media (max-width: 550px) {
+            .dish-mobile-cart {
+                .card-content-cart {
+                    .dish-mobile-price-cart {
+                        width: 13%;
+                    }
+                }
+            }
+        }
+
         @media (max-width: 500px) {
             .sum {
                 p {
@@ -803,6 +817,73 @@
             }
         }
 
+        @media (max-width: 475px) {
+            .dish-mobile-cart {
+                .card-content-cart {
+                    height: 90px;
+
+                    .dish-mobile-img-cart {
+                        img {
+                            width: 110px;
+                            height: auto;
+                            clip-path: circle(35px at center);
+                            margin-left: -12px;
+                        }
+                    }
+
+                    .dish-mobile-text-cart {
+                        width: 60%;
+                        height: 125px;
+
+                        .dish-mobile-text-disc-cart {
+                            font-size: 16px;
+                        }
+
+                        .dish-mobile-price-grams-cart, .dish-mobile-price-price-cart {
+                            font-size: 14px;
+                        }
+                    }
+
+                    .dish-mobile-price-cart {
+                        .dish-mobile-price-count-cart {
+                            font-size: 16px;
+                        }
+                    }
+                }
+            }
+        }
+
+        @media (max-width: 430px) {
+            .dish-mobile-cart {
+                .card-content-cart {
+
+                    .dish-mobile-img-cart {
+                    }
+
+                    .dish-mobile-text-cart {
+                        width: 60%;
+                        height: 125px;
+
+                        .dish-mobile-text-disc-cart {
+                            font-size: 16px;
+                        }
+
+                        .dish-mobile-price-grams-cart, .dish-mobile-price-price-cart {
+                            font-size: 14px;
+                        }
+                    }
+
+                    .dish-mobile-price-cart {
+                        width: 15%;
+
+                        .dish-mobile-price-count-cart {
+                            font-size: 16px;
+                        }
+                    }
+                }
+            }
+        }
+
         @media (max-width: 400px) {
             .dish-mobile-cart {
 
@@ -832,6 +913,74 @@
 
                         div {
                             font-size: 10px;
+                        }
+                    }
+                }
+
+                .card-content-cart {
+                    height: 90px;
+
+                    .dish-mobile-img-cart {
+                        img {
+                            width: 90px;
+                            clip-path: circle(30px at center);
+                        }
+                    }
+
+                    .dish-mobile-text-cart {
+                        width: 60%;
+                        height: 125px;
+
+                        .dish-mobile-text-disc-cart {
+                            font-size: 13px;
+                        }
+
+                        .dish-mobile-price-grams-cart, .dish-mobile-price-price-cart {
+                            font-size: 16px;
+                        }
+                    }
+
+                    .dish-mobile-price-cart {
+                        width: 15%;
+
+                        .dish-mobile-price-count-cart {
+                            font-size: 15px;
+                        }
+                    }
+                }
+            }
+        }
+
+        @media (max-width: 400px) {
+            .dish-mobile-cart {
+
+                .card-content-cart {
+
+                    .dish-mobile-img-cart {
+                        img {
+                            width: 90px;
+                            clip-path: circle(30px at center);
+                        }
+                    }
+
+                    .dish-mobile-text-cart {
+                        width: 50%;
+                        height: 125px;
+
+                        .dish-mobile-text-disc-cart {
+                            font-size: 13px;
+                        }
+
+                        .dish-mobile-price-grams-cart, .dish-mobile-price-price-cart {
+                            font-size: 14px;
+                        }
+                    }
+
+                    .dish-mobile-price-cart {
+                        width: 20%;
+
+                        .dish-mobile-price-count-cart {
+                            font-size: 15px;
                         }
                     }
                 }
@@ -880,7 +1029,7 @@
             // }
             .btns {
                 position: absolute;
-                bottom: 17%;
+                bottom: 14%;
 
                 button {
                     font-weight: 400;
