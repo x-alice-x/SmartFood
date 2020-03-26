@@ -1318,9 +1318,6 @@
         //        ::i-block-chrome, .container {
         //     margin-bottom: 80px;
         // }
-        .total-sum {
-            height: 100px;
-        }
         .money-spent, .money-left {
             font-size: 24px;
             font-weight: 700;
@@ -1464,10 +1461,6 @@
         .container .week {
             margin-bottom: 0;
         }
-
-        .total-sum {
-            height: 95px;
-        }
         .money-spent, .money-left {
             font-size: 24px;
             font-weight: 700;
@@ -1502,7 +1495,7 @@
 
                 .dish-mobile-text {
                     .dish-mobile-text-prelude {
-                        max-height: 28%;
+                        max-height: 2.5em;
                     }
                 }
             }
