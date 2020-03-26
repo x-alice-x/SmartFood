@@ -9,7 +9,7 @@
                     <div class="info">
                         <p class="name">{{dish.name}}</p>
                         <p class="weight">{{dish.weight}} г.</p>
-                        <p class="price">{{dish.price.replace(/.00/, '')}} P</p>
+                        <p class="price">{{dish.price.replace(/.00/, '')}} &#8381;</p>
                     </div>
                     <div class="dish-add">
                         <img src="../assets/img/minus.svg"
@@ -58,7 +58,7 @@
                                 {{ item.weight }} г.
                             </div>
                             <div class="dish-mobile-price-price-cart">
-                                {{ item.price.replace(/.00/, '') }} Р
+                                {{ item.price.replace(/.00/, '') }} &#8381;
                             </div>
                         </div>
                     </div>
@@ -102,12 +102,12 @@
         <div class="sum-container">
             <div class="sum">
                 <p>Итого:</p>
-                <p class="number">{{todayCart.basket_summ}} P</p>
+                <p class="number">{{todayCart.basket_summ}} &#8381;</p>
             </div>
             <div class="limit"
                  :style="{'color' : (this.todayCart.basket_summ >= this.todayCart.basket_summ_limit ? '#ED2736':'#42D547')}">
                 <p>Оставшийся лимит:</p>
-                <p class="number">{{todayCart.basket_summ_limit - this.todayCart.basket_summ}} P</p>
+                <p class="number">{{todayCart.basket_summ_limit - this.todayCart.basket_summ}} &#8381;</p>
             </div>
         </div>
         <div class="btns">

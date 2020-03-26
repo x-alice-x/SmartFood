@@ -14,7 +14,7 @@
             <div class="cart">
                 <div class="sum" 
                      :style="{'color' : (this.currentSum >= this.limit ? '#ED2736' : '#FFFFFF')}">
-                        {{ currentSum }} P
+                        {{ currentSum }} &#8381;
                 </div>
                 <img src="../assets/img/cart_white.svg" 
                      alt="Cart ico">

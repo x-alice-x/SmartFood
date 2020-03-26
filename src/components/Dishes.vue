@@ -51,7 +51,7 @@
                         </div>
                         <div class="dish-bottom">
                             <div class="dish-typ">
-                                <a>{{ dish.price.replace(/.00/, '') }} Р</a>
+                                <a>{{ dish.price.replace(/.00/, '') }} &#8381;</a>
                                 <a>{{ dish.weight }} г.</a>
                             </div>
                         </div>
@@ -95,7 +95,7 @@
                                         {{ item.weight }} г.
                                     </div>
                                     <div class="dish-mobile-price-price">
-                                        {{ item.price.replace(/.00/, '') }} Р
+                                        {{ item.price.replace(/.00/, '') }} &#8381;
                                     </div>
                                 </div>
                             </div>
@@ -156,12 +156,12 @@
             <div class="total-sum-container" @click="showCart = !showCart">
                 <div class="total-sum">
                     <div class="total-container">
-                        <p class="money-spent">{{todayMenu.basket_summ}} Р</p>
+                        <p class="money-spent">{{todayMenu.basket_summ}} &#8381;</p>
                         <img class="cart-icon" src="../assets/img/cart_white.svg"/>
                         <!-- Юля добавила ви байнд в р тэг ниже, не удалять -->
                         <p class="money-left"
                            v-bind:style="{'color' : (this.todayMenu.basket_summ >= this.todayMenu.basket_summ_limit ? '#ED2736':'#42D547')}">
-                            {{moneyLeft}} Р</p>
+                            {{moneyLeft}} &#8381;</p>
                     </div>
                     <div class="show-black-listed">
                         <label class="switch">
