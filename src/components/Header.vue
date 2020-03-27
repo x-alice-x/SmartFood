@@ -267,7 +267,9 @@
         background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
         color: $font-color;
         z-index: 700;
-        position: relative;
+        position: fixed;
+        margin-bottom: 20px;
+        top: 0;
         .container{
             display: flex;
             align-items: center;
@@ -282,15 +284,14 @@
                 position: absolute;
             }
             .logo {
+                width: 100%;
+                text-align: center;
                 a {
                     font-weight: 900;
                     font-size: 30px;
                     line-height: 45px;
                     color: #ffffff;
-                    position: absolute;
-                    top: 0%;
-                    margin-top: 3px;
-                    left: 44%;
+                    margin-right: 15px;
                 }
             }
             .cart {
@@ -371,6 +372,7 @@
 }
 @media (max-width: 790px){
     .header{
+        position: relative;
         .container {
             padding: 0 15px;
             .logo a{
