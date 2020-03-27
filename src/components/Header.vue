@@ -267,7 +267,9 @@
         background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
         color: $font-color;
         z-index: 700;
-        position: relative;
+        position: fixed;
+        margin-bottom: 20px;
+        top: 0;
         .container{
             display: flex;
             align-items: center;
@@ -370,6 +372,7 @@
 }
 @media (max-width: 790px){
     .header{
+        position: relative;
         .container {
             padding: 0 15px;
             .logo a{

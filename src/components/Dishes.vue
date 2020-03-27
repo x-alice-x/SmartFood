@@ -220,9 +220,13 @@
                 $('html').animate({'scrollTop': 0}, 500)
             },
             cartActive() {
-               this.showCart = true;
+               this.showCart = !this.showCart;
                if (this.showCart == true) {
                   $('body').css('overflow', 'hidden');
+                  $('cart_comp').css('overflow', 'unset');
+               }
+               else {
+                   $('body').css('overflow', 'unset');
                }
 
             },
