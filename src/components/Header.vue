@@ -284,15 +284,14 @@
                 position: absolute;
             }
             .logo {
+                width: 100%;
+                text-align: center;
                 a {
                     font-weight: 900;
                     font-size: 30px;
                     line-height: 45px;
                     color: #ffffff;
-                    position: absolute;
-                    top: 0%;
-                    margin-top: 3px;
-                    left: 44%;
+                    margin-right: 15px;
                 }
             }
             .cart {
