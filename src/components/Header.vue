@@ -1,6 +1,7 @@
 <template>
     <div class="header" >
         <div class="container">
+
             <div class="user">
                 <img src="../assets/img/user.svg" 
                      alt="User Image"
@@ -10,10 +11,10 @@
                 <a>SmartFood</a>
             </div>
 
-            <div class="cart cart_comp" @click="cartOpen">
+            <div class="cart">
                 <div class="sum" 
                      :style="{'color' : (this.currentSum >= this.limit ? '#ED2736' : '#FFFFFF')}">
-                        {{ currentSum }} P
+                        {{ currentSum }} &#8381;
                 </div>
                 <img src="../assets/img/cart_white.svg" 
                      alt="Cart ico">
@@ -49,8 +50,8 @@
           </div>
         </div>
       </modal>
-<!-- 
-      <Cart class="cart_comp"
+
+      <!-- <Cart class="cart_comp"
             v-if="showCart"
             @closeCart="showCart=false" /> -->
     </div>
@@ -58,9 +59,8 @@
 
 <script>
   import $ from "jquery";
-// import Cart from "./Cart.vue";
+//   import Cart from "./Cart.vue";
   export default {
-        name: 'Header',
         // components: {Cart},
         data() {
             return {
@@ -90,9 +90,6 @@
             }
         },
         methods: {
-            cartOpen() {
-               this.$emit('openCart')
-            },
             show() {
               this.$modal.show('profile-modal');
             },
@@ -117,7 +114,6 @@
                 $(document).mouseup(function (e) {
                     let container = $('.cart_comp');
                     let container_can = $('.cart');
-                    console.log(e.target);
                     
                     if (!container.has(e.target).length && !container_can.has(e.target).length) {
                         self.showCart = false;
@@ -168,17 +164,15 @@
   }
     @media (max-width: 450px) {
       .v--modal-box.v--modal {
-          width: 250px !important;
+          width: 290px !important;
           height: auto;
           top: 0;
       }
   }
-
 </style>
 <style scoped lang="scss">
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
-
 .sum {
     display: flex;
     align-items: center;
