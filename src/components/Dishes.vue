@@ -174,7 +174,7 @@
             </div>
         </div>
         <button @click="scrollTop" class="arrow"></button>
-        <notifications group="foo"/>
+        <notifications class="my-style" group="foo"/>
     </div>
 </template>
 
@@ -244,7 +244,8 @@
                                 group: 'foo',
                                 title: this.todayMenu.categories[categoryIndex].dishes[index].name
                                     + ' добавлено в корзину',
-                                duration: 450
+                                duration: 450,
+                                width: '130px',
                             });
                         }
                     }
@@ -531,6 +532,9 @@
 <style scoped lang="scss">
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
+    .my-style {
+       margin-top: 36px;
+    }
     .cart_comp {
         position: fixed;
         top: 50px;
