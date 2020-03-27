@@ -152,8 +152,8 @@
                     </swipe-list>
                 </div>
             </div>
-            <Cart v-if="showCart" @closeCartMobile="showCart=false" class="cart_comp"/>
-            <div class="total-sum-container" @click="showCart = !showCart">
+            <Cart v-if="showCart" @closeCartMobile="showCart=false"  class="cart_comp" />
+            <div class="total-sum-container" @click="cartActive()">
                 <div class="total-sum">
                     <div class="total-container">
                         <p class="money-spent">{{todayMenu.basket_summ}} &#8381;</p>
@@ -218,6 +218,13 @@
             async scrollTop() {
                 $('body').animate({'scrollTop': 0}, 500);
                 $('html').animate({'scrollTop': 0}, 500)
+            },
+            cartActive() {
+               this.showCart = true;
+               if (this.showCart == true) {
+                  $('body').css('overflow', 'hidden');
+               }
+
             },
             // Добавление блюда
             buyDish(menu_id, dish_id, index, categoryIndex, buttonId, count) {
@@ -527,11 +534,10 @@
 
     .cart_comp {
         position: fixed;
-        top: 0;
+        top: 50px;
         width: 100vw;
-        height: 100vh;
+        height: 93vh;
         z-index: 20;
-        overscroll-behavior: contain;
     }
 
     /*Кнопка вверх*/
@@ -878,6 +884,7 @@
     }
 
     @media (max-width: 839px) {
+
         /* плашка внизу страницы */
         .total-sum {
             flex-direction: column;
@@ -898,14 +905,13 @@
 
     // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
     @media (max-width: 790px) {
-        // .cart_comp {
-        //  width: 60% !important;
-        //   height: 67% !important;
-        //   margin: auto;
-        //   left: 20%;
-        //   right: auto;
-        //   bottom: 0%;
-        // }
+        .dishes {
+            overscroll-behavior: contain;
+        }
+    .cart_comp {
+        height: 96vh;
+    }
+
         .arrow {
             display: none;
         }
@@ -1357,11 +1363,11 @@
         }
     }
 
-    @media (max-width: 650px) {
-        .cart_comp {
-            padding-top: 50px;
-        }
-    }
+    // @media (max-width: 650px) {
+    //     .cart_comp {
+    //         padding-top: 50px;
+    //     }
+    // }
 
     @media (max-width: 500px) {
         .dish-mobile {
@@ -1440,6 +1446,9 @@
                 font-size: 18px;
             }
         }
+            .cart_comp {
+        height: 95vh;
+    }
         /* слайдер */
         // .switch {
         //     width: 70px;
@@ -1688,6 +1697,7 @@
 
 </style>
 <style>
+
     .vue-notification {
         background: #F2EDF6 !important;
         border: none !important;

@@ -169,12 +169,10 @@
           top: 0;
       }
   }
-
 </style>
 <style scoped lang="scss">
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
-
 .sum {
     display: flex;
     align-items: center;
