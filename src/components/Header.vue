@@ -51,17 +51,17 @@
         </div>
       </modal>
 
-      <!-- <Cart class="cart_comp"
+      <Cart class="cart_comp"
             v-if="showCart"
-            @closeCart="showCart=false" /> -->
+            @closeCart="showCart=false" />
     </div>
 </template>
 
 <script>
   import $ from "jquery";
-//   import Cart from "./Cart.vue";
+  import Cart from "./Cart.vue";
   export default {
-        // components: {Cart},
+        components: {Cart},
         data() {
             return {
                 showCart: false,
@@ -266,7 +266,7 @@
         width: 100%;
         background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
         color: $font-color;
-        z-index: 10;
+        z-index: 700;
         position: relative;
         .container{
             display: flex;

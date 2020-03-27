@@ -153,7 +153,7 @@
                 </div>
             </div>
             <Cart v-if="showCart" @closeCartMobile="showCart=false"  class="cart_comp" />
-            <div class="total-sum-container" @click="showCart = !showCart" v-on:openCart="cartActive()">
+            <div class="total-sum-container" @click="cartActive()">
                 <div class="total-sum">
                     <div class="total-container">
                         <p class="money-spent">{{todayMenu.basket_summ}} &#8381;</p>
@@ -221,6 +221,10 @@
             },
             cartActive() {
                this.showCart = true;
+               if (this.showCart == true) {
+                  $('body').css('overflow', 'hidden');
+               }
+
             },
             // Добавление блюда
             buyDish(menu_id, dish_id, index, categoryIndex, buttonId, count) {
@@ -530,7 +534,7 @@
 
     .cart_comp {
         position: fixed;
-        top: 0;
+        top: 50px;
         width: 100vw;
         height: 93vh;
         z-index: 20;
@@ -880,6 +884,7 @@
     }
 
     @media (max-width: 839px) {
+
         /* плашка внизу страницы */
         .total-sum {
             flex-direction: column;
@@ -900,6 +905,9 @@
 
     // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
     @media (max-width: 790px) {
+        .dishes {
+            overscroll-behavior: contain;
+        }
     .cart_comp {
         height: 96vh;
     }
@@ -1689,6 +1697,7 @@
 
 </style>
 <style>
+
     .vue-notification {
         background: #F2EDF6 !important;
         border: none !important;

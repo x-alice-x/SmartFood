@@ -1,8 +1,7 @@
 <template>
     <div class="cart">
-
         <div class="dish-container">
-            <Header/>
+            <!-- <Header/> -->
             <div v-for="(dish, index) in todayCart.basket_dishes" :key="index">
                 <div class="dish" v-show="dish.count > 0">
                     <div class="dish-photo">
@@ -125,9 +124,9 @@
     import {SwipeList} from 'vue-swipe-actions';
     import 'vue-swipe-actions/dist/vue-swipe-actions.css';
     import $ from "jquery";
-    import Header from './Header'
+    // import Header from './Header'
     export default {
-        components: {SwipeList, Header},
+        components: {SwipeList},
         data() {
             return {
                 revealedCart: '',
