@@ -137,14 +137,15 @@
 </script>
 
 <style>
+
   .v--modal-background-click{
       padding-top: 20vh;
   }
   .v--modal-box.v--modal {
     top: 0 !important;
     left: 0 !important;
-    width: 430px !important;
-    height: auto!important;
+    width: 480px !important;
+    height: auto !important;
     border: none;
     border-radius: 10px;
     box-shadow: 0px 4px 33px rgba(0, 0, 0, 0.75);

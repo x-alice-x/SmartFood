@@ -38,9 +38,12 @@
                                     <img src="../assets/img/minus.svg"
                                          @click="deleteDish(todayMenu.id, dish.id, index, categoryIndex, count = 1)">
                                 </button>
-                                <div class="dish-amount">
+                                <div class="dish-amount" 
+                                     :class="{invalid: invalid}">
                                     <div class="dish-amount-color">
-                                        {{dish.in_basket_count}}
+                                        <input type="text" v-model.trim="dish.in_basket_count"
+                                            @focusout="buyDish(todayMenu.id, dish.id, index, categoryIndex, buttonId = 'input',count = dish.in_basket_count)"
+                                            @click="oldCount = dish.in_basket_count">
                                     </div>
                                 </div>
                                 <button>
@@ -173,7 +176,7 @@
                 </div>
             </div>
         </div>
-        <button @click="scrollTop" class="arrow"></button>
+        <button @click="scrollTop" class="arrow"><img src="../assets/img/arrow.svg" alt="arrow"></button>
         <notifications group="foo"/>
     </div>
 </template>
@@ -203,9 +206,14 @@
                 upX: 0,
                 moveX: 0,
                 widthX: 0,
+                transitionX: 0,
                 blackListShow: false,
                 inBlack: false,
                 showCart: false,
+                oldCount: null,
+                validationInput05: /^[0-9]+[0-9]|[,.]+[05]+$/,
+                validationInput: /^[0-9]+$/,
+                invalid: false
             };
         },
         components: {
@@ -214,6 +222,12 @@
             Cart
         },
         methods: {
+            cartOpen() {
+
+            },
+            cartClose() {
+
+            },
             // Кнопка вверх
             async scrollTop() {
                 $('body').animate({'scrollTop': 0}, 500);
@@ -231,16 +245,15 @@
 
             },
             // Добавление блюда
-            buyDish(menu_id, dish_id, index, categoryIndex, buttonId, count) {
+            async buyDish(menu_id, dish_id, index, categoryIndex, buttonId, count) {
                 if (buttonId === 'card') {
                     if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count == 0) {
                         this.$store.dispatch("OrderDish", {menu_id, dish_id, count});
                         this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++;
+
                         this.todayMenu.basket_summ = this.todayMenu.basket_summ
                             + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price);
                         this.todayCart.basket_summ = this.todayMenu.basket_summ;
-                        console.log("before if");
-
                         if (window.screen.width > 790) {
                             console.log("notif");
 
@@ -253,7 +266,51 @@
                         }
                     }
                     event.stopPropagation()
-                } else {
+                }
+                // Если инпут
+                else if(buttonId === 'input') {
+                    let valid;
+                    categoryIndex == 9 ? valid = this.validationInput05 : valid = this.validationInput;
+                    let regexp = new RegExp(valid);
+                    let isInputValid = regexp.test(count);
+
+                    if (isInputValid) {
+                        this.invalid = false;
+                        if (this.oldCount < count) {
+                            console.log(count)
+                            count = count - this.oldCount;
+                            await this.$store.dispatch("OrderDish", {menu_id, dish_id, count});
+                            this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count + count;
+                        }
+                        else if(this.oldCount > count) {
+                            count = this.oldCount - count;
+                            await this.$store.dispatch("DeleteDish", {menu_id, dish_id, count});
+                            this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count - count; 
+                        }
+                        let sum = 0;
+                        await this.$store.dispatch("fetchCart");
+                        console.log(this.todayCart);
+                        for (let i = 0; i < this.todayCart.basket_dishes.length; i++) {
+                            sum += this.todayCart.basket_dishes[i].price * this.todayCart.basket_dishes[i].count;
+                        }
+                        this.todayCart.basket_summ = sum;
+                    }
+                    else if (!count) {
+                        count = this.oldCount;
+                        await this.$store.dispatch("DeleteDish", {menu_id, dish_id, count});
+                        await this.$store.dispatch("fetchCart");
+                        this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count = 0;
+                        let sum = 0;
+                        for (let i = 0; i < this.todayCart.basket_dishes.length; i++) {
+                            sum += this.todayCart.basket_dishes[i].price * this.todayCart.basket_dishes[i].count;
+                        }
+                        this.todayCart.basket_summ = sum;
+                    }
+                    else {
+                        this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count = this.oldCount;
+                    }
+                }
+                else {
                     this.$store.dispatch("OrderDish", {menu_id, dish_id, count});
                     this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++;
                     this.todayMenu.basket_summ = this.todayMenu.basket_summ
@@ -536,6 +593,13 @@
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
 
+    .invalid {
+        border: 1px solid red !important;
+        input {
+            color: red !important;
+        }
+    }
+
     .cart_comp {
         position: fixed;
         top: 50px;
@@ -549,45 +613,16 @@
         position: fixed;
         bottom: -55px;
         right: 100px;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        border: 2px solid #460B79;
-        background: white;
         z-index: 9999;
         outline: none;
         transition: .4s;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        img {
+            width: 50px;
+            height: 50px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+        }
     }
-
-    .arrow:after {
-        content: '';
-        width: 14px;
-        height: 14px;
-        border-top: 3px solid black;
-        border-left: 3px solid black;
-        transform: rotate(45deg);
-        position: absolute;
-        top: -8px;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        margin: auto;
-    }
-
-    .arrow:before {
-        content: '';
-        width: 0px;
-        height: 30px;
-        border-left: 3px solid black;
-        position: absolute;
-        top: 4px;
-        bottom: 0;
-        left: 1px;
-        right: 0;
-        margin: auto;
-    }
-
     .arrow.active {
         bottom: 33px;
     }
@@ -777,6 +812,16 @@
                 display: flex;
                 justify-content: center;
                 padding-top: 5px;
+                input{
+                    color: $font-color;
+                    font-weight: 700;
+                    font-size: 18px;
+                    text-align: center;
+                    width: 90%;
+                    border: none;
+                    outline: none;
+                    margin-top: -2px;
+                }
             }
         }
 
@@ -1194,6 +1239,7 @@
         input:checked + .slider:before {
             transform: translateX(22px);
         }
+
     }
 
     // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер

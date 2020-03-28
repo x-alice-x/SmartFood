@@ -97,7 +97,7 @@ export default {
                     console.log(resp);
                 },
                 err => {
-                    console.log(err);
+                    console.log(err.response.data);
                 }
             );
         },
