@@ -177,7 +177,7 @@
             </div>
         </div>
         <button @click="scrollTop" class="arrow"><img src="../assets/img/arrow.svg" alt="arrow"></button>
-        <notifications group="foo"/>
+        <notifications class="my-style" group="foo"/>
     </div>
 </template>
 
@@ -187,7 +187,6 @@
     import Weekdays from './Weekdays'
     import Cart from './Cart'
     import $ from "jquery";
-
     export default {
         data() {
             return {
@@ -242,7 +241,6 @@
                else {
                    $('body').css('overflow', 'unset');
                }
-
             },
             // Добавление блюда
             async buyDish(menu_id, dish_id, index, categoryIndex, buttonId, count) {
@@ -256,12 +254,12 @@
                         this.todayCart.basket_summ = this.todayMenu.basket_summ;
                         if (window.screen.width > 790) {
                             console.log("notif");
-
                             this.$notify({
                                 group: 'foo',
                                 title: this.todayMenu.categories[categoryIndex].dishes[index].name
                                     + ' добавлено в корзину',
-                                duration: 450
+                                duration: 450,
+                                width: '130px',
                             });
                         }
                     }
@@ -592,14 +590,9 @@
 <style scoped lang="scss">
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
-
-    .invalid {
-        border: 1px solid red !important;
-        input {
-            color: red !important;
-        }
+    .my-style {
+       margin-top: 36px;
     }
-
     .cart_comp {
         position: fixed;
         top: 50px;
@@ -607,7 +600,6 @@
         height: 93vh;
         z-index: 20;
     }
-
     /*Кнопка вверх*/
     .arrow {
         position: fixed;
@@ -626,16 +618,13 @@
     .arrow.active {
         bottom: 33px;
     }
-
     .dishes {
         max-width: 1500px;
         margin: auto;
     }
-
     .active {
         cursor: pointer;
     }
-
     // категории
     .category-name {
         font-size: 40px;
@@ -646,7 +635,6 @@
         font-weight: 400;
         text-align: center;
     }
-
     /* контейнер для кнопочки открывающей кнопку чс */
     .black-list-container {
         outline: none;
@@ -657,13 +645,11 @@
         background: transparent;
         display: flex;
         justify-content: flex-end;
-
         .black-list {
             width: 10px;
             height: 25px;
         }
     }
-
     /* сама кнопка чс */
     #black-list-content {
         display: none;
@@ -671,7 +657,6 @@
         width: 100%;
         z-index: 1;
     }
-
     #black-list-content button {
         width: 90%;
         cursor: pointer;
@@ -687,32 +672,26 @@
         font-size: 16px;
         z-index: 2;
     }
-
     .black-list-container:focus + #black-list-content, #black-list-content:hover {
         display: block;
         z-index: 1;
     }
-
     #black-list-content button:hover {
         opacity: 1;
     }
-
     /* класс, который делает карточки черно-белыми */
     .is_blacklisted {
         transition: .3s;
         filter: grayscale(100%);
     }
-
     #blacklisted {
         transition: .3s;
         filter: grayscale(100%);
     }
-
     /* плашка внизу страницы */
     .total-sum {
         display: none;
     }
-
     .total-container {
         display: flex;
         flex-direction: row;
@@ -730,7 +709,6 @@
         left: 50%;
         transform: translateX(-50%);
         z-index: 501;
-
         p {
             font-size: 24px;
             font-weight: bold;
@@ -738,7 +716,6 @@
             text-align: center;
         }
     }
-
     .cart-icon {
         width: 30px;
         height: 30px;
@@ -747,11 +724,9 @@
         align-items: center;
         margin: 0 2%;
     }
-
     .dishes {
         height: 600px;
     }
-
     // .week-mob {
     //     display: none !important;
     // }
@@ -762,13 +737,11 @@
         color: $font-color;
         margin-bottom: 10px;
     }
-
     .dish-main {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
     }
-
     .dish {
         width: 350px;
         display: flex;
@@ -790,11 +763,9 @@
         &:hover {
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
         }
-
         &-category {
             margin-bottom: 5%;
         }
-
         // &-category:last-child {
         //     margin-bottom: 30px;
         // }
@@ -805,7 +776,6 @@
             border: 1px solid $font-color;
             border-radius: 10px;
             color: $font-color;
-
             &-color {
                 font-weight: 700;
                 font-size: 18px;
@@ -824,7 +794,6 @@
                 }
             }
         }
-
         &-middle {
             width: 100%;
             background: white;
@@ -834,7 +803,6 @@
             flex-direction: column;
             justify-content: space-between;
         }
-
         &-name {
             font-weight: 700;
             font-size: 22px;
@@ -844,7 +812,6 @@
             margin-right: auto;
             margin-left: auto;
         }
-
         &-descr {
             width: 90%;
             font-weight: 300;
@@ -855,18 +822,15 @@
             margin-top: 20px;
             padding-bottom: 20px;
         }
-
         &-add {
             padding-bottom: 20px;
             display: flex;
             justify-content: center;
-
             button {
                 background: none;
                 border: none;
                 outline: none;
                 cursor: pointer;
-
                 img {
                     outline: none;
                     margin: 0 10px;
@@ -875,40 +839,34 @@
                 }
             }
         }
-
         &-top {
             height: 250px;
             position: relative;
             text-align: right;
         }
-
         &-img {
             height: 250px;
             background-repeat: no-repeat;
             background-position: center;
             background-size: cover;
         }
-
         &-typ {
             display: flex;
             justify-content: space-evenly;
             align-items: center;
             background: $c-main;
             height: 60px;
-
             a {
                 z-index: 10;
                 font-weight: bold;
                 font-size: 30px;
                 line-height: 35px;
             }
-
             a:nth-child(2n) {
                 font-weight: 300;
                 font-size: 24px;
                 line-height: 28px;
             }
-
             /*&-background {*/
             /*    top: 0;*/
             /*    right: 0;*/
@@ -916,11 +874,9 @@
             /*}*/
         }
     }
-
     .dish-mobile {
         display: none;
     }
-
     @media (max-width: 1110px) {
         /* плашка внизу страницы */
         .total-container {
@@ -931,9 +887,7 @@
             right: 7%;
         }
     }
-
     @media (max-width: 839px) {
-
         /* плашка внизу страницы */
         .total-sum {
             flex-direction: column;
@@ -951,7 +905,6 @@
             margin-bottom: 90px;
         }
     }
-
     // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
     @media (max-width: 790px) {
         .dishes {
@@ -960,7 +913,6 @@
     .cart_comp {
         height: 96vh;
     }
-
         .arrow {
             display: none;
         }
@@ -983,7 +935,6 @@
         .dish-mobile {
             display: flex;
             width: 100%;
-
             .swipeout-action {
                 display: flex;
                 align-items: center;
@@ -991,21 +942,17 @@
                 cursor: pointer;
                 left: 0;
             }
-
             .swipeout-action.dish-mobile-delete {
                 height: 100%;
                 background: linear-gradient(90deg, #A60000 0%, #CE0000 100%), #FFFFFF;
-
                 .dish-mobile-delete-dish {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
                     width: 60px;
-
                     img {
                         width: 40px;
                     }
-
                     div {
                         margin-top: 5px;
                         font-weight: 700;
@@ -1014,23 +961,19 @@
                     }
                 }
             }
-
             .swipeout-action.dish-mobile-add {
                 display: flex;
                 justify-content: flex-end;
                 height: 100%;
                 background: linear-gradient(90deg, #460B79 0%, #88267F 100%), #FFFFFF;
-
                 .dish-mobile-add-dish {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
                     width: 60px;
-
                     img {
                         width: 40px;
                     }
-
                     div {
                         margin-top: 5px;
                         font-weight: 700;
@@ -1039,12 +982,10 @@
                     }
                 }
             }
-
             .swipeout-action.dish-mobile-black-add {
                 width: 60px;
                 height: 100%;
                 background: linear-gradient(0deg, #F2EDF6, #F2EDF6), #FFFFFF;
-
                 .dish-mobile-black-add-dish {
                     display: flex;
                     justify-content: center;
@@ -1052,11 +993,9 @@
                     align-items: center;
                     text-align: center;
                     width: 100%;
-
                     img {
                         width: 30px;
                     }
-
                     div {
                         margin-top: 5px;
                         font-weight: 700;
@@ -1065,12 +1004,10 @@
                     }
                 }
             }
-
             .swipeout-action.dish-mobile-black-delete {
                 width: 60px;
                 height: 100%;
                 background: linear-gradient(90deg, #000000 0%, rgba(0, 0, 0, 0.81) 100%), #FFFFFF;
-
                 .dish-mobile-black-delete-dish {
                     display: flex;
                     justify-content: center;
@@ -1078,11 +1015,9 @@
                     align-items: center;
                     text-align: center;
                     width: 100%;
-
                     img {
                         width: 40px;
                     }
-
                     div {
                         margin-top: 5px;
                         font-weight: 700;
@@ -1091,7 +1026,6 @@
                     }
                 }
             }
-
             .card-content {
                 display: flex;
                 justify-content: center;
@@ -1100,7 +1034,6 @@
                 background: #FFFFFF;
                 width: 100%;
                 border-top: 1px solid #F2EDF6;
-
                 .dish-mobile-img {
                     img {
                         width: 135px;
@@ -1109,7 +1042,6 @@
                         margin-left: -12px;
                     }
                 }
-
                 .dish-mobile-text {
                     width: 60%;
                     height: 125px;
@@ -1117,7 +1049,6 @@
                     align-items: flex-start;
                     justify-content: center;
                     flex-direction: column;
-
                     .dish-mobile-text-disc {
                         display: flex;
                         flex-wrap: wrap;
@@ -1125,7 +1056,6 @@
                         font-size: 22px;
                         color: #460B79;
                     }
-
                     .dish-mobile-text-prelude {
                         height: auto;
                         font-weight: 400;
@@ -1133,10 +1063,8 @@
                         color: #460B79;
                     }
                 }
-
                 .dish-mobile-price {
                     width: 23%;
-
                     .dish-mobile-price-grams, .dish-mobile-price-price {
                         font-weight: 400;
                         font-size: 28px;
@@ -1145,30 +1073,24 @@
                         text-align: right;
                         color: #460B79;
                     }
-
                     .dish-mobile-price-price {
                         font-weight: 700;
                     }
                 }
             }
-
             .transition-right {
                 transform: translate3d(100%, 0, 0) !important;
             }
-
             .transition-left {
                 transform: translate3d(-500%, 0, 0) !important;
             }
-
             .toolbar {
                 display: flex;
                 align-items: center;
             }
-
             .toolbar .toolbar-section {
                 flex: 0 0 auto;
             }
-
             .toolbar .toolbar-section--center {
                 flex: 1000 1 0%;
             }
@@ -1194,7 +1116,6 @@
             z-index: 2;
             justify-content: center;
             align-items: center;
-
             p {
                 font-size: 24px;
             }
@@ -1217,7 +1138,6 @@
             justify-content: center;
             width: 100%;
             z-index: 2;
-
             p {
                 font-size: 18px;
             }
@@ -1241,7 +1161,6 @@
         }
 
     }
-
     // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
     @media (max-width: 620px) {
         .week {
@@ -1257,7 +1176,6 @@
         .dish-mobile {
             display: flex;
             width: 100%;
-
             .swipeout-action {
                 display: flex;
                 align-items: center;
@@ -1265,50 +1183,40 @@
                 cursor: pointer;
                 left: 0;
             }
-
             .swipeout-action.dish-mobile-delete {
                 .dish-mobile-delete-dish {
                     width: 30px;
-
                     div {
                         font-size: 12px;
                     }
                 }
             }
-
             .swipeout-action.dish-mobile-add {
                 .dish-mobile-add-dish {
                     width: 30px;
-
                     div {
                         font-size: 12px;
                     }
                 }
             }
-
             .swipeout-action.dish-mobile-black-add {
                 width: 20px;
-
                 .dish-mobile-black-add-dish {
                     div {
                         font-size: 10px;
                     }
                 }
             }
-
             .swipeout-action.dish-mobile-black-delete {
                 width: 20px;
-
                 .dish-mobile-black-delete-dish {
                     div {
                         font-size: 10px;
                     }
                 }
             }
-
             .card-content {
                 height: 90px;
-
                 .dish-mobile-img {
                     img {
                         width: 110px;
@@ -1317,15 +1225,12 @@
                         margin-left: -12px;
                     }
                 }
-
                 .dish-mobile-text {
                     width: 60%;
                     height: 125px;
-
                     .dish-mobile-text-disc {
                         font-size: 18px;
                     }
-
                     .dish-mobile-text-prelude {
                         font-size: 14px;
                         max-height: 40%;
@@ -1333,7 +1238,6 @@
                         text-overflow: ellipsis;
                     }
                 }
-
                 .dish-mobile-price {
                     .dish-mobile-price-grams, .dish-mobile-price-price {
                         font-size: 20px;
@@ -1374,106 +1278,83 @@
         //     transform: translateX(35px);
         // }
     }
-
     .dish-mobile {
         grid-template-columns: 25% 100% 25%;
-
         &-middle {
             transform: translateX(-25%);
-
             &-to-right {
                 transform: translateX(0%);
             }
-
             &-to-left {
                 transform: translateX(-50%);
             }
-
             &-to-middle {
                 transform: translateX(-25%);
             }
-
             &-about {
                 padding-left: 60px;
                 width: 60%;
-
                 &-name {
                     font-weight: 700;
                     font-size: 20px;
                 }
             }
-
             &-typ {
                 padding: 10px 5px 10px 0;
-
                 &-PW {
                     font-size: 20px;
                 }
             }
         }
     }
-
     // @media (max-width: 650px) {
     //     .cart_comp {
     //         padding-top: 50px;
     //     }
     // }
-
     @media (max-width: 500px) {
         .dish-mobile {
             display: flex;
             width: 100%;
-
             .swipeout-action.dish-mobile-delete {
                 .dish-mobile-delete-dish {
                     width: 10px;
-
                     img {
                         width: 25px;
                     }
-
                     div {
                         font-size: 10px;
                     }
                 }
             }
-
             .swipeout-action.dish-mobile-add {
                 .dish-mobile-add-dish {
                     width: 10px;
-
                     img {
                         width: 25px;
                     }
-
                     div {
                         font-size: 10px;
                     }
                 }
             }
-
             .swipeout-action.dish-mobile-black-add {
                 width: 5px;
-
                 .dish-mobile-black-add-dish {
                     img {
                         width: 15px;
                     }
-
                     div {
                         font-size: 9px;
                     }
                 }
             }
-
             .swipeout-action.dish-mobile-black-delete {
                 width: 5px;
-
                 .dish-mobile-black-delete-dish {
                     img {
                         width: 25px;
                     }
-
                     div {
                         font-size: 9px;
                     }
@@ -1481,7 +1362,6 @@
             }
         }
     }
-
     // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
     @media (max-width: 475px) {
         .container .week {
@@ -1521,36 +1401,30 @@
                 .dish-mobile-price {
                     width: 30%;
                 }
-
                 .dish-mobile-text {
                     .dish-mobile-text-prelude {
                         max-height: 2.5em;
                     }
                 }
             }
-
             &-middle {
                 &-about {
                     padding-left: 10px;
                     width: 65%;
-
                     &-name {
                         font-size: 18px;
                     }
-
                     &-desc {
                         padding-top: 5px;
                         font-size: 13px;
                     }
                 }
-
                 &-typ {
                     padding: 5px 10px 5px 0;
                 }
             }
         }
     }
-
     // вот этот квери полностью новый обяз добавить
     @media (max-width: 400px) {
         .category-name {
@@ -1569,7 +1443,6 @@
                     }
                 }
             }
-
             .swipeout-action.dish-mobile-add {
                 .dish-mobile-add-dish {
                     width: 0px;
@@ -1581,10 +1454,8 @@
                     }
                 }
             }
-
             .swipeout-action.dish-mobile-black-add {
                 width: 0px;
-
                 .dish-mobile-black-add-dish {
                     // img {
                     //     width: 30px;
@@ -1594,10 +1465,8 @@
                     }
                 }
             }
-
             .swipeout-action.dish-mobile-black-delete {
                 width: 0px;
-
                 .dish-mobile-black-delete-dish {
                     // img {
                     //     width: 35px;
@@ -1607,11 +1476,9 @@
                     }
                 }
             }
-
             .card-content {
                 height: 50px;
                 padding: 2% 0 2% 0;
-
                 .dish-mobile-img {
                     img {
                         width: 100px;
@@ -1620,49 +1487,38 @@
                         margin-left: -10px;
                     }
                 }
-
                 .dish-mobile-text {
                     width: 70%;
-
                     .dish-mobile-text-disc {
                         font-size: 12px;
                     }
-
                     .dish-mobile-text-prelude {
                         font-size: 10px;
                     }
                 }
-
                 .dish-mobile-price {
                     width: 30%;
-
                     &-amount {
                         font-size: 10px;
                     }
-
                     .dish-mobile-price-grams, .dish-mobile-price-price {
                         font-size: 14px;
                         margin-right: 1%;
                     }
                 }
             }
-
             .total-sum {
                 flex-direction: column;
             }
-
             .total-container p {
                 font-size: 20px;
             }
-
             .show-black-listed p {
                 font-size: 18px;
             }
-
             .money-spent, .money-left {
                 font-size: 20px;
             }
-
             .money-left {
                 color: #42D547;
             }
@@ -1688,7 +1544,6 @@
                 justify-content: center;
                 width: 100%;
                 z-index: 2;
-
                 p {
                     font-size: 16px;
                 }
@@ -1715,15 +1570,12 @@
                     &-about {
                         padding-left: 10px;
                         width: 65%;
-
                         &-name {
                             font-size: 9px;
                         }
-
                         &-desc {
                             font-size: 0px;
                         }
-
                         // &-name{
                         //     font-size: 16px;
                         // }
@@ -1732,11 +1584,9 @@
                         //     font-size: 12px;
                         // }
                     }
-
                     &-typ {
                         padding: 5px 10px 5px 0;
                     }
-
                     // &-typ{
                     //     padding: 5px 10px 5px 0;
                     // }
@@ -1744,10 +1594,8 @@
             }
         }
     }
-
 </style>
 <style>
-
     .vue-notification {
         background: #F2EDF6 !important;
         border: none !important;
@@ -1756,50 +1604,40 @@
         font-size: 16px !important;
         color: #460B79 !important;
     }
-
     .swipeout {
         position: relative;
         overflow: hidden;
         display: flex;
         /* margin-top: 5px; */
     }
-
     .swipeout .swipeout-left, .swipeout .swipeout-right {
         position: absolute;
         height: 100%;
         display: flex;
         z-index: 0;
     }
-
     button {
         background: none;
         border: none;
         outline: none;
         cursor: pointer;
     }
-
     .aloneButtonL {
         transform: translate3d(312px, 0px, 0px) !important;
     }
-
     .aloneButtonM {
         transform: translate3d(220px, 0px, 0px) !important;
     }
-
     .aloneButtonS {
         transform: translate3d(170px, 0px, 0px) !important;
     }
-
     .aloneButtonDelL {
         transform: translate3d(-312px, 0px, 0px) !important;
     }
-
     .aloneButtonDelM {
         transform: translate3d(-220px, 0px, 0px) !important;
     }
-
     .aloneButtonDelS {
         transform: translate3d(-170px, 0px, 0px) !important;
     }
-
 </style>
