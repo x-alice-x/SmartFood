@@ -372,7 +372,7 @@
 }
 @media (max-width: 790px){
     .header{
-        position: relative;
+        // position: relative;
         .container {
             padding: 0 15px;
             .logo a{

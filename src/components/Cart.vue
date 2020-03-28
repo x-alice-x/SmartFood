@@ -507,6 +507,7 @@
             .dish-mobile-cart {
                 display: flex;
                 width: 100%;
+                overflow-y: scroll;
                 .swipeout-action {
                     display: flex;
                     align-items: center;
