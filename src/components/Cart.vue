@@ -159,9 +159,12 @@
                 // this.todayMenu.categories[categoryIndex].dishes[dish_id].in_basket_count++;
             },
             deleteDish(index, categoryIndex, menu_id, dish_id, count) {
+                if (this.todayCart.basket_dishes[index].count == 0.5) {
+                    count = 0.5;
+                }
                 this.$store.dispatch("DeleteDish", {menu_id, dish_id, count});
                 console.log(this.todayCart.basket_dishes[index])
-                this.todayCart.basket_dishes[index].count--;
+                this.todayCart.basket_dishes[index].count -= count;
                 this.todayCart.basket_summ = this.todayCart.basket_summ
                     - parseInt(this.todayCart.basket_dishes[index].price);
                 this.todayMenu.basket_summ = this.todayCart.basket_summ;
@@ -169,7 +172,7 @@
                     if (this.todayMenu.categories[i].id == categoryIndex) {
                         for (let j = 0; j < this.todayMenu.categories[i].dishes.length; j++)
                             if (this.todayMenu.categories[i].dishes[j].id == dish_id) {
-                                this.todayMenu.categories[i].dishes[j].in_basket_count--;
+                                this.todayMenu.categories[i].dishes[j].in_basket_count -= count;
                             }
                     }
                 }
