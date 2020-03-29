@@ -345,7 +345,7 @@
                     } else if (window.screen.width <= 500 && window.screen.width > 400) {
                         this.widthX = 10;
                     } else if (window.screen.width <= 400) {
-                        this.widthX = 0;
+                        this.widthX = 1;
                     }
                 }, 50)
             },
@@ -395,7 +395,7 @@
             } else if (window.screen.width <= 500 && window.screen.width > 400) {
                 this.widthX = 10;
             } else if (window.screen.width <= 400) {
-                this.widthX = 0;
+                this.widthX = 1;
             }
             await this.$store.dispatch('fetchMenu');
             if (this.$store.getters.getError) {
@@ -467,15 +467,6 @@
                         }, 50)
                     }
                 } else {
-                    // if (window.screen.width > 620) {
-                    //     self.widthX = 60;
-                    // } else if (window.screen.width <= 620 && window.screen.width > 500) {
-                    //     self.widthX = 30;
-                    // } else if (window.screen.width <= 500 && window.screen.width > 400) {
-                    //     self.widthX = 10;
-                    // } else if (window.screen.width <= 400) {
-                    //     self.widthX = 0;
-                    // }
                     self.$store.commit('showBlackList', {
                         indexCategory: self.categoryIndex,
                         indexDishes: self.dishIndex,
@@ -527,7 +518,7 @@
                             } else if (window.screen.width <= 500 && window.screen.width > 400) {
                                 this.widthX = 10;
                             } else if (window.screen.width <= 400) {
-                                this.widthX = 0;
+                                this.widthX = 1;
                             }
                         }, 50)
                     } else if (this.revealed === 'left') {
@@ -553,7 +544,7 @@
                             } else if (window.screen.width <= 500 && window.screen.width > 400) {
                                 this.widthX = 10;
                             } else if (window.screen.width <= 400) {
-                                this.widthX = 0;
+                                this.widthX = 1;
                             }
                         }, 50)
                     }
@@ -575,7 +566,7 @@
                     } else if (window.screen.width <= 500 && window.screen.width > 400) {
                         this.widthX = 10;
                     } else if (window.screen.width <= 400) {
-                        this.widthX = 0;
+                        this.widthX = 1;
                     }
                 }
             }
