@@ -519,7 +519,7 @@
                 // margin-top: 50px;
             }
             .dish-container {
-                height: 850px;
+                height: 110%;
                 overflow: scroll;
                 // margin-top: 38px;
             }
@@ -679,7 +679,7 @@
         }
         @media (max-width: 650px) {
             .dish-container {
-                height: 800px;
+                // height: 800px;
                 // padding-top: 50px;
                 overflow: scroll;
                 margin-top: 0;
@@ -773,7 +773,7 @@
                 }
             }
             .dish-container {
-                height: 500px;
+                // height: 500px;
                 overflow: scroll;
             }
             .dish-mobile-cart {
@@ -847,7 +847,7 @@
         }
         @media (max-width: 430px) {
             .dish-container {
-                height: 600px;
+                // height: 600px;
             }
             .dish-mobile-cart {
                 .card-content-cart {
@@ -974,7 +974,7 @@
 
         @media (max-width: 376px) {
             .dish-container {
-                height: 520px;
+                // height: 520px;
             }
             .btns {
                 position: fixed;
@@ -983,12 +983,12 @@
         }
         @media (max-width: 375px) and (min-height: 800px) {
             .dish-container {
-                height: 670px;
+                // height: 670px;
             }
         }
         @media (max-width: 340px) {
             .dish-container {
-                height: 450px;
+                // height: 450px;
                 overflow: scroll;
             }
             .btns {

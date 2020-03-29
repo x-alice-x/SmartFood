@@ -705,6 +705,7 @@
         display: flex;
         flex-direction: row;
         justify-content: space-around;
+        // margin-top: 50px;
         align-items: center;
         width: 300px;
         background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
