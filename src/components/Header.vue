@@ -14,7 +14,7 @@
             <div class="cart">
                 <div class="sum" 
                      :style="{'color' : (this.currentSum >= this.limit ? '#ED2736' : '#FFFFFF')}">
-                        {{ currentSum }} P
+                        {{ currentSum }} &#8381;
                 </div>
                 <img src="../assets/img/cart_white.svg" 
                      alt="Cart ico">
@@ -22,7 +22,7 @@
         </div>
 
     <modal name="profile-modal">
-        <div class="profile-modal">
+        <div class="profile-modal-container">
           <div class="head">
             <div class="close-btn" @click="hide"><img id="close-btn-img" src="../assets/img/close_icon.svg" /> </div>
             <img v-if="avatar"
@@ -107,7 +107,6 @@
                 this.blackListShow ? this.$store.dispatch("fetchMenu", 0) : this.$store.dispatch("fetchMenu", 1)
             }
         },
-
         //закрывает корзину по клику снаружи корзины
         async created() {
             if(window.screen.width > 790) {
@@ -115,7 +114,7 @@
                 $(document).mouseup(function (e) {
                     let container = $('.cart_comp');
                     let container_can = $('.cart');
-
+                    
                     if (!container.has(e.target).length && !container_can.has(e.target).length) {
                         self.showCart = false;
                     }
@@ -152,29 +151,29 @@
     box-shadow: 0px 4px 33px rgba(0, 0, 0, 0.75);
     margin: auto;
   }
+    @media (max-width: 1190px) {
+      .v--modal-box.v--modal {
+          width: 408px;
+          height: auto;
+      }
+  }
   @media (max-width: 768px) {
       .v--modal-box.v--modal {
-          width: 408px !important;
-          height: auto !important;
+          width: 408px;
+          height: auto;
       }
   }
     @media (max-width: 450px) {
       .v--modal-box.v--modal {
-          width: 250px !important;
-          height: auto !important;
-      }
-  }
-  @media (max-width: 1190px) {
-      .v--modal-box.v--modal {
-          width: 408px !important;
-          height: auto !important;
+          width: 290px !important;
+          height: auto;
+          top: 0;
       }
   }
 </style>
 <style scoped lang="scss">
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
-
 .sum {
     display: flex;
     align-items: center;
@@ -185,26 +184,22 @@
     margin-right: 25px;
     min-width: 25%;
 }
-
     .close-btn {
         position: absolute;
         cursor: pointer;
         right: 31px;
         top: 20px;
-
         #close-btn-img {
         width: 34px;
         height: 34px;
         }
     }
-
         .totel-sum-container {
             align-items: center;
             justify-content: center;
             width: 100%;
             z-index: 2;
         }
-
         .show-black-listed {
             display: flex;
             align-items: center;
@@ -216,7 +211,6 @@
                 color: #000000;
             }
         }
-
     /* слайдер */
     .switch {
         position: relative;
@@ -229,14 +223,12 @@
         justify-content: center;
         z-index: 2;
     }
-
     /* убрать дефолтный чекбокс */
     .switch input {
         opacity: 0;
         width: 0;
         height: 0;
     }
-
     /* слайдер для включения чс*/
     .slider {
         position: absolute;
@@ -247,7 +239,6 @@
         bottom: 0;
         background-color: #ccc;
         transition: .3s;
-
         &:before {
             position: absolute;
             content: "";
@@ -259,32 +250,27 @@
             transition: .3s;
         }
     }
-
     input:checked + .slider {
         background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
     }
-
     input:checked + .slider:before {
         transform: translateX(26px);
     }
-
     .slider.round {
         border-radius: 30px;
-
         &:before {
             border-radius: 50%;
         }
     }
-
-
     .header{
         height: 50px;
         width: 100%;
         background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
         color: $font-color;
         z-index: 700;
-        position: relative;
-
+        position: fixed;
+        margin-bottom: 20px;
+        top: 0;
         .container{
             display: flex;
             align-items: center;
@@ -299,15 +285,14 @@
                 position: absolute;
             }
             .logo {
+                width: 100%;
+                text-align: center;
                 a {
                     font-weight: 900;
                     font-size: 30px;
                     line-height: 45px;
                     color: #ffffff;
-                    position: absolute;
-                    top: 0%;
-                    margin-top: 3px;
-                    left: 44%;
+                    margin-right: 15px;
                 }
             }
             .cart {
@@ -385,10 +370,10 @@
     position: absolute;
     right: 5%;
     z-index: 500;
-
 }
 @media (max-width: 790px){
     .header{
+        // position: relative;
         .container {
             padding: 0 15px;
             .logo a{
@@ -401,7 +386,6 @@
             }
             div {
                 display: none;
-
             }
         }
     }
@@ -437,7 +421,6 @@
             }
             div {
                 font-size: 22px;
-
             }
         }
         }
@@ -449,20 +432,17 @@
 @media (max-width: 450px) {
     
         .show-black-listed {
-
             width: 85%;
             p {
                 font-size: 16px;
             }
         }
-
     /* слайдер */
     .switch {
         width: 50px;
         height: 27px;
         margin-left: 10px;
     }
-
     /* слайдер для включения чс*/
     .slider {
         &:before {
@@ -472,7 +452,6 @@
             bottom: 2px;
         }
     }
-
     input:checked + .slider:before {
         transform: translateX(23px);
     }
@@ -494,7 +473,6 @@
 .email {
   font-weight: 400;
   font-size: 16px;
-
 }
 .logout-btn {
   margin-bottom: 20px;
@@ -511,7 +489,6 @@
         cursor: pointer;
         right: 10px;
         top: 0;
-
         #close-btn-img {
         width: 20px;
         height: 20px;

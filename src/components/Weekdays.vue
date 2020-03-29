@@ -68,7 +68,7 @@
 
     .swiper {
         width: auto;
-        padding-top: 20px;
+        padding-top: 45px;
         padding-bottom: 10px;
         cursor: pointer;
         margin-left: -10px;
@@ -106,6 +106,8 @@
 
     @media (max-width: 790px) {
         .swiper {
+            padding-top: 20px;
+            margin-top: 40px;
             &-slide {
                 width: 150px !important;
 
