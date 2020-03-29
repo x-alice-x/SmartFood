@@ -116,7 +116,6 @@
         <div class="btns">
             <button class="clear-cart" @click="clearCart(todayCart.id)">Очистить корзину</button>
         </div>
-
     </div>
 </template>
 
@@ -849,8 +848,6 @@
             }
             .dish-mobile-cart {
                 .card-content-cart {
-                    .dish-mobile-img-cart {
-                    }
 
                     .dish-mobile-text-cart {
                         width: 60%;
