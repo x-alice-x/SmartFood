@@ -238,7 +238,7 @@
                 this.showCart = !this.showCart;
                 if (this.showCart == true) {
                     $('body').css('overflow', 'hidden');
-                    $('cart_comp').css('overflow', 'unset');
+                    $('cart_comp').css('overflow-y', 'scroll');
                 } else {
                     $('body').css('overflow', 'unset');
                 }
@@ -918,6 +918,7 @@
         }
         .cart_comp {
             height: 96vh;
+            overflow-y: scroll;
         }
         .arrow {
             display: none;
