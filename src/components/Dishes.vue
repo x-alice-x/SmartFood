@@ -317,9 +317,13 @@
             },
             // Удаление блюда
             deleteDish(menu_id, dish_id, index, categoryIndex, count) {
+                if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count == 0.5) {
+                    count = 0.5;
+                    console.log(count);
+                }
                 if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count != 0) {
                     this.$store.dispatch("DeleteDish", {menu_id, dish_id, count});
-                    this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count--;
+                    this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count -= count;
                     // this.todayCart.basket_dishes[index].count--;
                     this.todayMenu.basket_summ = this.todayMenu.basket_summ
                         - parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
