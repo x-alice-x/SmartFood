@@ -32,7 +32,7 @@ export default {
         }
     },
     actions: {
-        async fetchMenu({commit}, blackList = 1) {
+        async fetchMenu({ commit }, blackList = 1) {
             commit("CLEAR_ERROR");
             let requestParams = {}
             let menu = []
@@ -40,7 +40,7 @@ export default {
             requestParams = {
                 url: url,
                 method: 'GET',
-                params: {with_blacklist: blackList}
+                params: { with_blacklist: blackList }
             }
             await axios(requestParams)
                 .then(resp => {
@@ -49,7 +49,7 @@ export default {
                                 for (let j = 0; j < resp.data.data[i].categories.length; j++) {
                                     for (let k = 0; k < resp.data.data[i].categories[j].dishes.length; k++) {
                                         if (resp.data.data[i].categories[j].dishes[k].image === 'https://edatomsk.ru/images/delivery/delivery.svg') {
-                                            resp.data.data[i].categories[j].dishes[k].image = 'https://image.flaticon.com/icons/svg/857/857681.svg'
+                                            resp.data.data[i].categories[j].dishes[k].image = '../assets/img/dish_placeholder.svg'
                                         }
                                         resp.data.data[i].categories[j].dishes[k].showBlackList = true;
                                         resp.data.data[i].categories[j].dishes[k].showTransition = false;
