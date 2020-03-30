@@ -115,7 +115,7 @@
                 <p class="number">{{todayCart.basket_summ_limit - this.todayCart.basket_summ}} &#8381;</p>
             </div>
         </div>
-        <div class="empty-div"></div>
+        <!-- <div class="empty-div"></div> -->
         <div class="btns">
             <button class="clear-cart" @click="clearCart(todayCart.id)">Очистить корзину</button>
         </div>
@@ -357,9 +357,9 @@
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
 
-.empty-div {
-display: none;
-}
+// .empty-div {
+// display: none;
+// }
 
     .dish-mobile-cart {
         display: none;
@@ -517,10 +517,10 @@ display: none;
         }
 
         @media (max-width: 790px) {
-            .empty-div {
-            height: 80px;
-            margin-bottom: 60px;
-            }
+            // .empty-div {
+            // height: 80px;
+            // margin-bottom: 60px;
+            // }
             .sum-container {
                 display: none;
             }
@@ -531,7 +531,7 @@ display: none;
             }
             .dish-container {
                 height: auto;
-                
+                padding-bottom: 170px;
                 // -webkit-touch-callout: none;
                 // height: calc(100vh - 200px);
                 // height: 820px;
@@ -863,9 +863,9 @@ display: none;
             }
         }
         @media (max-width: 430px) {
-            .dish-container {
-                // height: 400px;
-            }
+            // .dish-container {
+            //    height: 400px;
+            // }
             .dish-mobile-cart {
                 .card-content-cart {
 
@@ -990,27 +990,27 @@ display: none;
         }
 
         @media (max-width: 376px) {
-            .dish-container {
-                // -webkit-touch-callout: none;
-                // // height: calc(100vh - 190px);
-            }
+            // .dish-container {
+            //     -webkit-touch-callout: none;
+            //     height: calc(100vh - 190px);
+            // }
             .btns {
                 position: fixed;
                 bottom: 40px;
             }
         }
         @media (max-width: 375px) and (min-height: 800px) {
-            .dish-container {
-                // -webkit-touch-callout: none;
-                // height: calc(100vh - 210px);
-            }
+            // .dish-container {
+            //     -webkit-touch-callout: none;
+            //     height: calc(100vh - 210px);
+            // }
         }
         @media (max-width: 340px) {
-            .dish-container {
-                // -webkit-touch-callout: none;
-                // height: calc(100vh - 210px);
-                overflow: scroll;
-            }
+            // .dish-container {
+            //     -webkit-touch-callout: none;
+            //     height: calc(100vh - 210px);
+            //     overflow: scroll;
+            // }
             .btns {
                 position: fixed;
                 bottom: 40px;
