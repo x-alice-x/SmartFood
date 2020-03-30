@@ -1,4 +1,3 @@
-// import Vue from 'vue'
 import axios from 'axios';
 
 export default {
@@ -32,7 +31,7 @@ export default {
         }
     },
     actions: {
-        async fetchMenu({commit}, blackList = 1) {
+        async fetchMenu({ commit }, blackList = 1) {
             commit("CLEAR_ERROR");
             let requestParams = {}
             let menu = []
@@ -40,7 +39,7 @@ export default {
             requestParams = {
                 url: url,
                 method: 'GET',
-                params: {with_blacklist: blackList}
+                params: { with_blacklist: blackList }
             }
             await axios(requestParams)
                 .then(resp => {

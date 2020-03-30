@@ -1,8 +1,8 @@
 <template>
     <div class="cart">
         <div class="dish-container">
-            <!-- <Header/> -->
             <div v-for="(dish, index) in todayCart.basket_dishes" :key="index">
+                
                 <div class="dish" v-show="dish.count > 0">
                     <div class="dish-photo">
                         <img :src="dish.image">
@@ -22,6 +22,7 @@
                              @click="buyDish(index, dish.category_id, todayCart.id, dish.id, count = 1)">
                     </div>
                 </div>
+                
             </div>
             <swipe-list
                     ref="list"
@@ -123,7 +124,6 @@
     import {SwipeList} from 'vue-swipe-actions';
     import 'vue-swipe-actions/dist/vue-swipe-actions.css';
     import $ from "jquery";
-    // import Header from './Header'
     export default {
         components: {SwipeList},
         data() {
@@ -138,7 +138,6 @@
                 upXCart: 0,
                 moveXCart: 0,
                 widthXCart: 0,
-                // showCart: false,
             }
         },
         methods: {
@@ -354,6 +353,7 @@
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
 
+
     .dish-mobile-cart {
         display: none;
     }
@@ -510,18 +510,18 @@
         }
 
         @media (max-width: 790px) {
+
             .sum-container {
                 display: none;
             }
             .cart {
                 width: 100vw;
                 height: 95vh;
-                // margin-top: 50px;
             }
             .dish-container {
-                height: 110%;
+                height: auto;
+                padding-bottom: 170px;
                 overflow: scroll;
-                // margin-top: 38px;
             }
             .dish {
                 display: none;
@@ -679,9 +679,6 @@
         }
         @media (max-width: 650px) {
             .dish-container {
-                // height: 800px;
-                // padding-top: 50px;
-                overflow: scroll;
                 margin-top: 0;
             }
             .dish-mobile-cart {
@@ -772,10 +769,6 @@
                     margin-right: 20px;
                 }
             }
-            .dish-container {
-                // height: 500px;
-                overflow: scroll;
-            }
             .dish-mobile-cart {
                 .swipeout-action.dish-mobile-delete-cart {
                     .dish-mobile-delete-dish-cart {
@@ -846,9 +839,7 @@
             }
         }
         @media (max-width: 430px) {
-            .dish-container {
-                // height: 600px;
-            }
+
             .dish-mobile-cart {
                 .card-content-cart {
 
@@ -884,9 +875,6 @@
                 .swipeout-action.dish-mobile-delete-cart {
                     .dish-mobile-delete-dish-cart {
                         width: 0px;
-                        /*img {*/
-                        /*    width: 25px;*/
-                        /*}*/
                         div {
                             font-size: 10px;
                         }
@@ -896,9 +884,6 @@
                 .swipeout-action.dish-mobile-add-cart {
                     .dish-mobile-add-dish-cart {
                         width: 0px;
-                        /*img {*/
-                        /*    width: 25px;*/
-                        /*}*/
                         div {
                             font-size: 10px;
                         }
@@ -973,35 +958,18 @@
         }
 
         @media (max-width: 376px) {
-            .dish-container {
-                // height: 520px;
-            }
             .btns {
                 position: fixed;
                 bottom: 40px;
             }
         }
-        @media (max-width: 375px) and (min-height: 800px) {
-            .dish-container {
-                // height: 670px;
-            }
-        }
+
         @media (max-width: 340px) {
-            .dish-container {
-                // height: 450px;
-                overflow: scroll;
-            }
             .btns {
                 position: fixed;
                 bottom: 40px;
             }
         }
-        // .limit {
-        //   // color: #44A334;
-        //   font-size: 18px;
-        //   font-weight: 400;
-        //   margin-left: 25px;
-        //   margin-bottom: 14px;
     }
 
 </style>
