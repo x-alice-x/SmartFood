@@ -3,6 +3,7 @@
         <div class="dish-container">
             <!-- <Header/> -->
             <div v-for="(dish, index) in todayCart.basket_dishes" :key="index">
+                
                 <div class="dish" v-show="dish.count > 0">
                     <div class="dish-photo">
                         <img :src="dish.image">
@@ -22,6 +23,7 @@
                              @click="buyDish(index, dish.category_id, todayCart.id, dish.id, count = 1)">
                     </div>
                 </div>
+                
             </div>
             <swipe-list
                     ref="list"
@@ -113,6 +115,7 @@
                 <p class="number">{{todayCart.basket_summ_limit - this.todayCart.basket_summ}} &#8381;</p>
             </div>
         </div>
+        <div class="empty-div"></div>
         <div class="btns">
             <button class="clear-cart" @click="clearCart(todayCart.id)">Очистить корзину</button>
         </div>
@@ -354,6 +357,10 @@
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
 
+.empty-div {
+display: none;
+}
+
     .dish-mobile-cart {
         display: none;
     }
@@ -510,6 +517,10 @@
         }
 
         @media (max-width: 790px) {
+            .empty-div {
+            height: 80px;
+            margin-bottom: 60px;
+            }
             .sum-container {
                 display: none;
             }
@@ -519,8 +530,10 @@
                 // margin-top: 50px;
             }
             .dish-container {
-                -webkit-touch-callout: none;
-                height: calc(100vh - 200px);
+                height: auto;
+                
+                // -webkit-touch-callout: none;
+                // height: calc(100vh - 200px);
                 // height: 820px;
                 overflow: scroll;
                 // margin-top: 38px;
@@ -681,7 +694,7 @@
         }
         @media (max-width: 650px) {
             .dish-container {
-                -webkit-touch-callout: none;
+                // -webkit-touch-callout: none;
                 // height: 800px;
                 // padding-top: 50px;
                 overflow: scroll;
@@ -776,8 +789,8 @@
                 }
             }
             .dish-container {
-                -webkit-touch-callout: none;
-                height: calc(100vh - 160px);
+                // -webkit-touch-callout: none;
+                // height: calc(100vh - 160px);
                 overflow: scroll;
             }
             .dish-mobile-cart {
@@ -851,7 +864,6 @@
         }
         @media (max-width: 430px) {
             .dish-container {
-                -webkit-touch-callout: none;
                 // height: 400px;
             }
             .dish-mobile-cart {
@@ -979,8 +991,8 @@
 
         @media (max-width: 376px) {
             .dish-container {
-                -webkit-touch-callout: none;
-                // height: calc(100vh - 190px);
+                // -webkit-touch-callout: none;
+                // // height: calc(100vh - 190px);
             }
             .btns {
                 position: fixed;
@@ -989,14 +1001,14 @@
         }
         @media (max-width: 375px) and (min-height: 800px) {
             .dish-container {
-                -webkit-touch-callout: none;
-                height: calc(100vh - 210px);
+                // -webkit-touch-callout: none;
+                // height: calc(100vh - 210px);
             }
         }
         @media (max-width: 340px) {
             .dish-container {
-                -webkit-touch-callout: none;
-                height: calc(100vh - 210px);
+                // -webkit-touch-callout: none;
+                // height: calc(100vh - 210px);
                 overflow: scroll;
             }
             .btns {
