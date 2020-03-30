@@ -519,7 +519,8 @@
                 // margin-top: 50px;
             }
             .dish-container {
-                height: 110%;
+                height: calc(100vh - 160px);
+                // height: 820px;
                 overflow: scroll;
                 // margin-top: 38px;
             }
@@ -847,7 +848,7 @@
         }
         @media (max-width: 430px) {
             .dish-container {
-                // height: 600px;
+                // height: 400px;
             }
             .dish-mobile-cart {
                 .card-content-cart {
@@ -974,7 +975,7 @@
 
         @media (max-width: 376px) {
             .dish-container {
-                // height: 520px;
+                // height: 500px;
             }
             .btns {
                 position: fixed;
@@ -988,7 +989,7 @@
         }
         @media (max-width: 340px) {
             .dish-container {
-                // height: 450px;
+                // height: calc(100vh - 150px);
                 overflow: scroll;
             }
             .btns {
