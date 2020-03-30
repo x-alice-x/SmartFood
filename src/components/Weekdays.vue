@@ -27,7 +27,17 @@
                 let index = this.$refs.mySwiper.swiper.activeIndex
                 console.log("weeks")
                 this.$store.commit('setDishes', index)
-                this.$store.commit("SET_CART", index)
+                let menu = this.date;
+                let cart = this.$store.getters.getCart;
+                // console.log(cart, menu);
+                for (let i = 0; i < cart.length; i++) {
+                    // console.log(cart[i].id);
+                    if (cart[i].id == menu[index].id) {
+                        // console.log(i);
+                        this.$store.commit("SET_CART", i);
+                    }
+                }
+                
             }
         },
         computed: {

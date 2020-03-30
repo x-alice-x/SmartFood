@@ -147,6 +147,9 @@ export default {
         },
         getLimit(state) {
             return state.todayCart.basket_summ_limit;
+        },
+        getCart(state) {
+            return state.cart;
         }
     }
 }
