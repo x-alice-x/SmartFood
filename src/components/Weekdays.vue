@@ -1,7 +1,7 @@
 <template>
-    <div class="container">
+    <div class="container-week">
         <swiper @slideChange="dateChange" class="swiper" ref="mySwiper" :options="swiperOption">
-            <swiper-slide v-for="(date, index) in transformDates" 
+            <swiper-slide v-for="(date, index) in transformDates"
                           :key="index">
                 {{date}}
             </swiper-slide>
@@ -59,11 +59,12 @@
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
 
-    .container {
+    .container-week {
         z-index: 10;
         position: sticky;
         top: 20px;
         height: auto;
+        margin-bottom: 10px;
     }
 
     .swiper {
@@ -72,6 +73,7 @@
         padding-bottom: 10px;
         cursor: pointer;
         margin-left: -10px;
+
         &-slide {
             font-weight: 700;
             font-size: 20px;
@@ -85,6 +87,7 @@
             border-radius: 46px;
             opacity: 0.5;
             margin: 0 10px !important;
+
             &-active {
                 background: linear-gradient(90deg, #460B79 0%, #88267F 100%) !important;
                 width: 150px !important;
@@ -108,6 +111,7 @@
         .swiper {
             padding-top: 20px;
             margin-top: 40px;
+
             &-slide {
                 width: 150px !important;
 
@@ -117,28 +121,34 @@
             }
         }
     }
+
     @media (max-width: 660px) {
-        .swiper{
+        .swiper {
             padding: 0;
-            &-slide{
+
+            &-slide {
                 font-size: 12px;
                 height: 30px;
                 width: 100px !important;
-                &-active{
+
+                &-active {
                     height: 30px;
                     width: 100px !important;
                 }
             }
         }
     }
+
     @media (max-width: 660px) {
-        .swiper{
+        .swiper {
             padding: 0;
-            &-slide{
+
+            &-slide {
                 font-size: 12px;
                 height: 30px;
                 width: 100px !important;
-                &-active{
+
+                &-active {
                     height: 30px;
                     width: 100px !important;
                 }
