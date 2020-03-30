@@ -1,8 +1,7 @@
 <template>
     <div class="dishes">
-        <Weekdays class="week"></Weekdays>
         <div class="container">
-            <!--            <Weekdays class="week"></Weekdays>-->
+            <Weekdays class="week"></Weekdays>
             <div class="dish-category" v-for="(categories, categoryIndex) in todayMenu.categories"
                  :key="categoryIndex">
                 <h3 class="category-name" v-if="categories.dishes.length">{{categories.name}}</h3>
