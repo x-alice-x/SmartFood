@@ -519,6 +519,7 @@
                 // margin-top: 50px;
             }
             .dish-container {
+                -webkit-touch-callout: none;
                 height: calc(100vh - 200px);
                 // height: 820px;
                 overflow: scroll;
@@ -680,6 +681,7 @@
         }
         @media (max-width: 650px) {
             .dish-container {
+                -webkit-touch-callout: none;
                 // height: 800px;
                 // padding-top: 50px;
                 overflow: scroll;
@@ -774,6 +776,7 @@
                 }
             }
             .dish-container {
+                -webkit-touch-callout: none;
                 height: calc(100vh - 160px);
                 overflow: scroll;
             }
@@ -848,6 +851,7 @@
         }
         @media (max-width: 430px) {
             .dish-container {
+                -webkit-touch-callout: none;
                 // height: 400px;
             }
             .dish-mobile-cart {
@@ -975,6 +979,7 @@
 
         @media (max-width: 376px) {
             .dish-container {
+                -webkit-touch-callout: none;
                 // height: calc(100vh - 190px);
             }
             .btns {
@@ -984,11 +989,13 @@
         }
         @media (max-width: 375px) and (min-height: 800px) {
             .dish-container {
-                height: calc(100vh - 200px);
+                -webkit-touch-callout: none;
+                height: calc(100vh - 210px);
             }
         }
         @media (max-width: 340px) {
             .dish-container {
+                -webkit-touch-callout: none;
                 height: calc(100vh - 210px);
                 overflow: scroll;
             }
