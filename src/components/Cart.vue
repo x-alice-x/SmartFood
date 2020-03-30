@@ -1,7 +1,6 @@
 <template>
     <div class="cart">
         <div class="dish-container">
-            <!-- <Header/> -->
             <div v-for="(dish, index) in todayCart.basket_dishes" :key="index">
                 
                 <div class="dish" v-show="dish.count > 0">
@@ -115,7 +114,6 @@
                 <p class="number">{{todayCart.basket_summ_limit - this.todayCart.basket_summ}} &#8381;</p>
             </div>
         </div>
-        <!-- <div class="empty-div"></div> -->
         <div class="btns">
             <button class="clear-cart" @click="clearCart(todayCart.id)">Очистить корзину</button>
         </div>
@@ -126,7 +124,6 @@
     import {SwipeList} from 'vue-swipe-actions';
     import 'vue-swipe-actions/dist/vue-swipe-actions.css';
     import $ from "jquery";
-    // import Header from './Header'
     export default {
         components: {SwipeList},
         data() {
@@ -141,7 +138,6 @@
                 upXCart: 0,
                 moveXCart: 0,
                 widthXCart: 0,
-                // showCart: false,
             }
         },
         methods: {
@@ -357,9 +353,6 @@
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
 
-// .empty-div {
-// display: none;
-// }
 
     .dish-mobile-cart {
         display: none;
@@ -517,26 +510,18 @@
         }
 
         @media (max-width: 790px) {
-            // .empty-div {
-            // height: 80px;
-            // margin-bottom: 60px;
-            // }
+
             .sum-container {
                 display: none;
             }
             .cart {
                 width: 100vw;
                 height: 95vh;
-                // margin-top: 50px;
             }
             .dish-container {
                 height: auto;
                 padding-bottom: 170px;
-                // -webkit-touch-callout: none;
-                // height: calc(100vh - 200px);
-                // height: 820px;
                 overflow: scroll;
-                // margin-top: 38px;
             }
             .dish {
                 display: none;
@@ -694,10 +679,6 @@
         }
         @media (max-width: 650px) {
             .dish-container {
-                // -webkit-touch-callout: none;
-                // height: 800px;
-                // padding-top: 50px;
-                overflow: scroll;
                 margin-top: 0;
             }
             .dish-mobile-cart {
@@ -788,11 +769,6 @@
                     margin-right: 20px;
                 }
             }
-            .dish-container {
-                // -webkit-touch-callout: none;
-                // height: calc(100vh - 160px);
-                overflow: scroll;
-            }
             .dish-mobile-cart {
                 .swipeout-action.dish-mobile-delete-cart {
                     .dish-mobile-delete-dish-cart {
@@ -863,9 +839,7 @@
             }
         }
         @media (max-width: 430px) {
-            // .dish-container {
-            //    height: 400px;
-            // }
+
             .dish-mobile-cart {
                 .card-content-cart {
 
@@ -901,9 +875,6 @@
                 .swipeout-action.dish-mobile-delete-cart {
                     .dish-mobile-delete-dish-cart {
                         width: 0px;
-                        /*img {*/
-                        /*    width: 25px;*/
-                        /*}*/
                         div {
                             font-size: 10px;
                         }
@@ -913,9 +884,6 @@
                 .swipeout-action.dish-mobile-add-cart {
                     .dish-mobile-add-dish-cart {
                         width: 0px;
-                        /*img {*/
-                        /*    width: 25px;*/
-                        /*}*/
                         div {
                             font-size: 10px;
                         }
@@ -990,38 +958,18 @@
         }
 
         @media (max-width: 376px) {
-            // .dish-container {
-            //     -webkit-touch-callout: none;
-            //     height: calc(100vh - 190px);
-            // }
             .btns {
                 position: fixed;
                 bottom: 40px;
             }
         }
-        @media (max-width: 375px) and (min-height: 800px) {
-            // .dish-container {
-            //     -webkit-touch-callout: none;
-            //     height: calc(100vh - 210px);
-            // }
-        }
+
         @media (max-width: 340px) {
-            // .dish-container {
-            //     -webkit-touch-callout: none;
-            //     height: calc(100vh - 210px);
-            //     overflow: scroll;
-            // }
             .btns {
                 position: fixed;
                 bottom: 40px;
             }
         }
-        // .limit {
-        //   // color: #44A334;
-        //   font-size: 18px;
-        //   font-weight: 400;
-        //   margin-left: 25px;
-        //   margin-bottom: 14px;
     }
 
 </style>
