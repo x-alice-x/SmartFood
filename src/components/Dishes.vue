@@ -294,6 +294,7 @@
                             sum += this.todayCart.basket_dishes[i].price * this.todayCart.basket_dishes[i].count;
                         }
                         this.todayCart.basket_summ = sum;
+                        this.todayMenu.basket_summ = sum;
                     } else if (!count) {
                         count = this.oldCount;
                         await this.$store.dispatch("DeleteDish", {menu_id, dish_id, count});
@@ -304,6 +305,7 @@
                             sum += this.todayCart.basket_dishes[i].price * this.todayCart.basket_dishes[i].count;
                         }
                         this.todayCart.basket_summ = sum;
+                        this.todayMenu.basket_summ = sum;
                     } else {
                         this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count = this.oldCount;
                     }
