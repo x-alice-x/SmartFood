@@ -11,6 +11,7 @@ export default {
             if (index) {
                 state.dateIndex = index
                 state.todayCart = state.cart[state.dateIndex]
+                console.log(state.todayCart);
             } else {
                 if (index == 0) {
                     state.todayCart = state.cart[0]
@@ -19,6 +20,7 @@ export default {
                     state.todayCart = state.cart[state.dateIndex]
                 }
             }
+            console.log(state.todayCart)
         },
         UPDATE_CART(state, cart) {
             state.cart = cart;

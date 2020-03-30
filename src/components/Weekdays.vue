@@ -25,6 +25,7 @@
         methods: {
             dateChange() {
                 let index = this.$refs.mySwiper.swiper.activeIndex
+                console.log("weeks")
                 this.$store.commit('setDishes', index)
                 this.$store.commit("SET_CART", index)
             }
@@ -52,7 +53,7 @@
                 return curentDates
             },
         }
-    }
+  }
 </script>
 
 <style scoped lang="scss">

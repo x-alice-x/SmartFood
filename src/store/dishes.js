@@ -22,6 +22,7 @@ export default {
                     state.todayMenu = state.menu[state.dateIndex]
                 }
             }
+            console.log(state.todayMenu);
         },
         showBlackList(state, payload) {
             state.todayMenu.categories[payload.indexCategory].dishes[payload.indexDishes].showBlackList = payload.bool

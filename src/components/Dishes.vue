@@ -42,9 +42,9 @@
                                      :class="{invalid: invalid}">
                                     <div class="dish-amount-color">
                                         <input type="text" v-model.trim="dish.in_basket_count"
-                                               @keyup.enter="buyDish(todayMenu.id, dish.id, index, categoryIndex, buttonId = 'input',count = dish.in_basket_count)"
                                                @focusout="buyDish(todayMenu.id, dish.id, index, categoryIndex, buttonId = 'input',count = dish.in_basket_count)"
-                                               @click="oldCount = dish.in_basket_count">
+                                               @click="oldCount = dish.in_basket_count"
+                                               class="input-amount">
                                     </div>
                                 </div>
                                 <button>
