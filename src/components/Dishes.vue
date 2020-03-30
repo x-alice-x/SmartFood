@@ -38,9 +38,12 @@
                                     <img src="../assets/img/minus.svg"
                                          @click="deleteDish(todayMenu.id, dish.id, index, categoryIndex, count = 1)">
                                 </button>
-                                <div class="dish-amount">
+                                <div class="dish-amount"
+                                     :class="{invalid: invalid}">
                                     <div class="dish-amount-color">
-                                        {{dish.in_basket_count}}
+                                        <input type="text" v-model.trim="dish.in_basket_count"
+                                               @focusout="buyDish(todayMenu.id, dish.id, index, categoryIndex, buttonId = 'input',count = dish.in_basket_count)"
+                                               @click="oldCount = dish.in_basket_count">
                                     </div>
                                 </div>
                                 <button>
@@ -152,7 +155,9 @@
                     </swipe-list>
                 </div>
             </div>
-            <Cart v-if="showCart" @closeCartMobile="showCart=false"  class="cart_comp" />
+            <transition name="slide-fade">
+                <Cart v-if="showCart" @closeCartMobile="showCart=false" class="cart_comp"/>
+            </transition>
             <div class="total-sum-container" @click="cartActive()">
                 <div class="total-sum">
                     <div class="total-container">
@@ -173,7 +178,7 @@
                 </div>
             </div>
         </div>
-        <button @click="scrollTop" class="arrow"></button>
+        <button @click="scrollTop" class="arrow"><img src="../assets/img/arrow.svg" alt="arrow"></button>
         <notifications class="my-style" group="foo"/>
     </div>
 </template>
@@ -202,9 +207,14 @@
                 upX: 0,
                 moveX: 0,
                 widthX: 0,
+                transitionX: 0,
                 blackListShow: false,
                 inBlack: false,
                 showCart: false,
+                oldCount: null,
+                validationInput05: /^[0-9]+[0-9]|[,.]+[05]+$/,
+                validationInput: /^[0-9]+$/,
+                invalid: false
             };
         },
         components: {
@@ -213,31 +223,36 @@
             Cart
         },
         methods: {
+            cartOpen() {
+
+            },
+            cartClose() {
+
+            },
             // Кнопка вверх
             async scrollTop() {
                 $('body').animate({'scrollTop': 0}, 500);
                 $('html').animate({'scrollTop': 0}, 500)
             },
             cartActive() {
-               this.showCart = !this.showCart;
-               if (this.showCart == true) {
-                  $('body').css('overflow', 'hidden');
-                  $('cart_comp').css('overflow', 'unset');
-               }
-               else {
-                   $('body').css('overflow', 'unset');
-               }
+                this.showCart = !this.showCart;
+                if (this.showCart == true) {
+                    $('body').css('overflow', 'hidden');
+                    $('cart_comp').css('overflow-y', 'scroll');
+                } else {
+                    $('body').css('overflow', 'unset');
+                }
             },
             // Добавление блюда
-            buyDish(menu_id, dish_id, index, categoryIndex, buttonId, count) {
+            async buyDish(menu_id, dish_id, index, categoryIndex, buttonId, count) {
                 if (buttonId === 'card') {
                     if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count == 0) {
                         this.$store.dispatch("OrderDish", {menu_id, dish_id, count});
                         this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++;
+
                         this.todayMenu.basket_summ = this.todayMenu.basket_summ
                             + parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price);
                         this.todayCart.basket_summ = this.todayMenu.basket_summ;
-                        console.log("before if");
                         if (window.screen.width > 790) {
                             console.log("notif");
                             this.$notify({
@@ -250,6 +265,47 @@
                         }
                     }
                     event.stopPropagation()
+                }
+                // Если инпут
+                else if (buttonId === 'input') {
+                    let valid;
+                    categoryIndex == 9 ? valid = this.validationInput05 : valid = this.validationInput;
+                    let regexp = new RegExp(valid);
+                    let isInputValid = regexp.test(count);
+
+                    if (isInputValid) {
+                        this.invalid = false;
+                        if (this.oldCount < count) {
+                            console.log(count)
+                            count = count - this.oldCount;
+                            await this.$store.dispatch("OrderDish", {menu_id, dish_id, count});
+                            this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count + count;
+                        } else if (this.oldCount > count) {
+                            count = this.oldCount - count;
+                            await this.$store.dispatch("DeleteDish", {menu_id, dish_id, count});
+                            this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count - count;
+                        }
+                        let sum = 0;
+                        await this.$store.dispatch("fetchCart");
+                        console.log(this.todayCart);
+                        for (let i = 0; i < this.todayCart.basket_dishes.length; i++) {
+                            sum += this.todayCart.basket_dishes[i].price * this.todayCart.basket_dishes[i].count;
+                        }
+                        this.todayCart.basket_summ = sum;
+                    } else if (!count) {
+                        count = this.oldCount;
+                        await this.$store.dispatch("DeleteDish", {menu_id, dish_id, count});
+                        await this.$store.dispatch("fetchCart");
+                        this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count = 0;
+                        let sum = 0;
+                        for (let i = 0; i < this.todayCart.basket_dishes.length; i++) {
+                            sum += this.todayCart.basket_dishes[i].price * this.todayCart.basket_dishes[i].count;
+                        }
+                        this.todayCart.basket_summ = sum;
+                    }
+                    else {
+                        this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count = this.oldCount;
+                    }
                 } else {
                     this.$store.dispatch("OrderDish", {menu_id, dish_id, count});
                     this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count++;
@@ -261,9 +317,13 @@
             },
             // Удаление блюда
             deleteDish(menu_id, dish_id, index, categoryIndex, count) {
+                if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count == 0.5) {
+                    count = 0.5;
+                    console.log(count);
+                }
                 if (this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count != 0) {
                     this.$store.dispatch("DeleteDish", {menu_id, dish_id, count});
-                    this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count--;
+                    this.todayMenu.categories[categoryIndex].dishes[index].in_basket_count -= count;
                     // this.todayCart.basket_dishes[index].count--;
                     this.todayMenu.basket_summ = this.todayMenu.basket_summ
                         - parseInt(this.todayMenu.categories[categoryIndex].dishes[index].price)
@@ -291,7 +351,7 @@
                     } else if (window.screen.width <= 500 && window.screen.width > 400) {
                         this.widthX = 10;
                     } else if (window.screen.width <= 400) {
-                        this.widthX = 0;
+                        this.widthX = 1;
                     }
                 }, 50)
             },
@@ -341,7 +401,7 @@
             } else if (window.screen.width <= 500 && window.screen.width > 400) {
                 this.widthX = 10;
             } else if (window.screen.width <= 400) {
-                this.widthX = 0;
+                this.widthX = 1;
             }
             await this.$store.dispatch('fetchMenu');
             if (this.$store.getters.getError) {
@@ -413,15 +473,6 @@
                         }, 50)
                     }
                 } else {
-                    // if (window.screen.width > 620) {
-                    //     self.widthX = 60;
-                    // } else if (window.screen.width <= 620 && window.screen.width > 500) {
-                    //     self.widthX = 30;
-                    // } else if (window.screen.width <= 500 && window.screen.width > 400) {
-                    //     self.widthX = 10;
-                    // } else if (window.screen.width <= 400) {
-                    //     self.widthX = 0;
-                    // }
                     self.$store.commit('showBlackList', {
                         indexCategory: self.categoryIndex,
                         indexDishes: self.dishIndex,
@@ -473,7 +524,7 @@
                             } else if (window.screen.width <= 500 && window.screen.width > 400) {
                                 this.widthX = 10;
                             } else if (window.screen.width <= 400) {
-                                this.widthX = 0;
+                                this.widthX = 1;
                             }
                         }, 50)
                     } else if (this.revealed === 'left') {
@@ -499,7 +550,7 @@
                             } else if (window.screen.width <= 500 && window.screen.width > 400) {
                                 this.widthX = 10;
                             } else if (window.screen.width <= 400) {
-                                this.widthX = 0;
+                                this.widthX = 1;
                             }
                         }, 50)
                     }
@@ -521,7 +572,7 @@
                     } else if (window.screen.width <= 500 && window.screen.width > 400) {
                         this.widthX = 10;
                     } else if (window.screen.width <= 400) {
-                        this.widthX = 0;
+                        this.widthX = 1;
                     }
                 }
             }
@@ -532,6 +583,20 @@
 <style scoped lang="scss">
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
+
+    // Плавное появление корзины
+    .slide-fade-enter-active {
+        transition: all .35s ease;
+    }
+    .slide-fade-leave-active {
+        transition: all .35s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    }
+    .slide-fade-enter, .slide-fade-leave-to
+        /* .slide-fade-leave-active до версии 2.1.8 */ {
+        transform: translateY(400px);
+        opacity: 0;
+    }
+
     .my-style {
        margin-top: 36px;
     }
@@ -547,42 +612,18 @@
         position: fixed;
         bottom: -55px;
         right: 100px;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        border: 2px solid #460B79;
-        background: white;
         z-index: 9999;
         outline: none;
         transition: .4s;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+
+        img {
+            width: 50px;
+            height: 50px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+        }
     }
-    .arrow:after {
-        content: '';
-        width: 14px;
-        height: 14px;
-        border-top: 3px solid black;
-        border-left: 3px solid black;
-        transform: rotate(45deg);
-        position: absolute;
-        top: -8px;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        margin: auto;
-    }
-    .arrow:before {
-        content: '';
-        width: 0px;
-        height: 30px;
-        border-left: 3px solid black;
-        position: absolute;
-        top: 4px;
-        bottom: 0;
-        left: 1px;
-        right: 0;
-        margin: auto;
-    }
+
     .arrow.active {
         bottom: 33px;
     }
@@ -664,6 +705,7 @@
         display: flex;
         flex-direction: row;
         justify-content: space-around;
+        // margin-top: 50px;
         align-items: center;
         width: 300px;
         background: linear-gradient(90deg, #460B79 0%, #88267F 100%);
@@ -750,6 +792,17 @@
                 display: flex;
                 justify-content: center;
                 padding-top: 5px;
+
+                input {
+                    color: $font-color;
+                    font-weight: 700;
+                    font-size: 18px;
+                    text-align: center;
+                    width: 90%;
+                    border: none;
+                    outline: none;
+                    margin-top: -2px;
+                }
             }
         }
         &-middle {
@@ -868,9 +921,10 @@
         .dishes {
             overscroll-behavior: contain;
         }
-    .cart_comp {
-        height: 96vh;
-    }
+        .cart_comp {
+            height: 96vh;
+            overflow-y: scroll;
+        }
         .arrow {
             display: none;
         }
@@ -1117,6 +1171,7 @@
         input:checked + .slider:before {
             transform: translateX(22px);
         }
+
     }
     // Юля оч много меняла в этом медиа квери, лучше целиком его добавлять в мастер
     @media (max-width: 620px) {
@@ -1333,9 +1388,9 @@
                 font-size: 18px;
             }
         }
-            .cart_comp {
-        height: 95vh;
-    }
+        .cart_comp {
+            height: 95vh;
+        }
         /* слайдер */
         // .switch {
         //     width: 70px;
@@ -1389,12 +1444,11 @@
             margin: 10px auto 20px auto;
         }
         .dish-mobile {
+
             .swipeout-action.dish-mobile-delete {
                 .dish-mobile-delete-dish {
                     width: 0px;
-                    // img {
-                    //     width: 35px;
-                    // }
+
                     div {
                         font-size: 10px;
                     }
@@ -1403,33 +1457,27 @@
             .swipeout-action.dish-mobile-add {
                 .dish-mobile-add-dish {
                     width: 0px;
-                    // img {
-                    //     width: 40px;
-                    // }
+
                     div {
                         font-size: 10px;
                     }
                 }
             }
             .swipeout-action.dish-mobile-black-add {
-                width: 0px;
                 .dish-mobile-black-add-dish {
-                    // img {
-                    //     width: 30px;
-                    // }
+                    width: 0px;
+
                     div {
                         font-size: 8px;
                     }
                 }
             }
             .swipeout-action.dish-mobile-black-delete {
-                width: 0px;
                 .dish-mobile-black-delete-dish {
-                    // img {
-                    //     width: 35px;
-                    // }
+                    width: 0px;
+
                     div {
-                        font-size: 9px;
+                        font-size: 8px;
                     }
                 }
             }
@@ -1480,76 +1528,51 @@
                 color: #42D547;
             }
         }
-        @media (max-width: 360px) {
-            /* плашка внизу страницы */
-            .total-sum {
-                flex-direction: column;
-            }
-            .total-container {
-                display: flex;
-                flex-direction: row;
-                width: 100%;
-                z-index: 2;
-            }
-            .cart-icon {
-                width: 30px;
-                height: 30px;
-            }
-            /* контейнер слайдера чс */
-            .show-black-listed {
-                align-items: center;
-                justify-content: center;
-                width: 100%;
-                z-index: 2;
-                p {
-                    font-size: 16px;
-                }
-            }
-            /* слайдер */
-            // .switch {
-            //     width: 50px;
-            //     height: 28px;
-            // }
-            // /* слайдер для включения чс*/
-            // .slider {
-            //     &:before {
-            //         height: 22px;
-            //         width: 22px;
-            //         left: 3px;
-            //         bottom: 3px;
-            //     }
-            // }
-            // input:checked + .slider:before {
-            //     transform: translateX(22px);
-            // }
-            .dish-mobile {
-                &-middle {
-                    &-about {
-                        padding-left: 10px;
-                        width: 65%;
-                        &-name {
-                            font-size: 9px;
-                        }
-                        &-desc {
-                            font-size: 0px;
-                        }
-                        // &-name{
-                        //     font-size: 16px;
-                        // }
-                        // &-desc{
-                        //     padding-top: 5px;
-                        //     font-size: 12px;
-                        // }
-                    }
-                    &-typ {
-                        padding: 5px 10px 5px 0;
-                    }
-                    // &-typ{
-                    //     padding: 5px 10px 5px 0;
-                    // }
-                }
+    }
+
+    @media (max-width: 360px) {
+        /* плашка внизу страницы */
+        .total-sum {
+            flex-direction: column;
+        }
+        .total-container {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            z-index: 2;
+        }
+        .cart-icon {
+            width: 30px;
+            height: 30px;
+        }
+        /* контейнер слайдера чс */
+        .show-black-listed {
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            z-index: 2;
+
+            p {
+                font-size: 16px;
             }
         }
+        /* слайдер */
+        // .switch {
+        //     width: 50px;
+        //     height: 28px;
+        // }
+        // /* слайдер для включения чс*/
+        // .slider {
+        //     &:before {
+        //         height: 22px;
+        //         width: 22px;
+        //         left: 3px;
+        //         bottom: 3px;
+        //     }
+        // }
+        // input:checked + .slider:before {
+        //     transform: translateX(22px);
+        // }
     }
 </style>
 <style>

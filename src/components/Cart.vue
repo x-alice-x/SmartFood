@@ -28,9 +28,9 @@
                     class="dish-mobile-cart"
                     :items="todayCart.basket_dishes"
             >
-            
+
                 <template v-slot="{item, index, revealed}">
-                    
+
                     <!-- item is the corresponding object from the array -->
                     <!-- index is clearly the index -->
                     <!-- revealLeft is method which toggles the left side -->
@@ -116,7 +116,6 @@
         <div class="btns">
             <button class="clear-cart" @click="clearCart(todayCart.id)">Очистить корзину</button>
         </div>
-
     </div>
 </template>
 
@@ -160,9 +159,12 @@
                 // this.todayMenu.categories[categoryIndex].dishes[dish_id].in_basket_count++;
             },
             deleteDish(index, categoryIndex, menu_id, dish_id, count) {
+                if (this.todayCart.basket_dishes[index].count == 0.5) {
+                    count = 0.5;
+                }
                 this.$store.dispatch("DeleteDish", {menu_id, dish_id, count});
                 console.log(this.todayCart.basket_dishes[index])
-                this.todayCart.basket_dishes[index].count--;
+                this.todayCart.basket_dishes[index].count -= count;
                 this.todayCart.basket_summ = this.todayCart.basket_summ
                     - parseInt(this.todayCart.basket_dishes[index].price);
                 this.todayMenu.basket_summ = this.todayCart.basket_summ;
@@ -170,7 +172,7 @@
                     if (this.todayMenu.categories[i].id == categoryIndex) {
                         for (let j = 0; j < this.todayMenu.categories[i].dishes.length; j++)
                             if (this.todayMenu.categories[i].dishes[j].id == dish_id) {
-                                this.todayMenu.categories[i].dishes[j].in_basket_count--;
+                                this.todayMenu.categories[i].dishes[j].in_basket_count -= count;
                             }
                     }
                 }
@@ -211,7 +213,7 @@
                     } else if (window.screen.width <= 500 && window.screen.width > 400) {
                         this.widthXCart = 10;
                     } else if (window.screen.width <= 400) {
-                        this.widthXCart = 0;
+                        this.widthXCart = 1;
                     }
                 }, 50)
             },
@@ -233,7 +235,7 @@
             } else if (window.screen.width <= 500 && window.screen.width > 400) {
                 this.widthXCart = 10;
             } else if (window.screen.width <= 400) {
-                this.widthXCart = 0;
+                this.widthXCart = 1;
             }
             await this.$store.dispatch("fetchCart");
             $(document).on("touchstart", ".card-content-cart", function (event) {
@@ -302,7 +304,7 @@
                             } else if (window.screen.width <= 500 && window.screen.width > 400) {
                                 this.widthXCart = 10;
                             } else if (window.screen.width <= 400) {
-                                this.widthXCart = 0;
+                                this.widthXCart = 1;
                             }
                         }, 50)
                     } else if (this.revealedCart === 'left') {
@@ -323,7 +325,7 @@
                             } else if (window.screen.width <= 500 && window.screen.width > 400) {
                                 this.widthXCart = 10;
                             } else if (window.screen.width <= 400) {
-                                this.widthXCart = 0;
+                                this.widthXCart = 1;
                             }
                         }, 50)
                     }
@@ -340,7 +342,7 @@
                     } else if (window.screen.width <= 500 && window.screen.width > 400) {
                         this.widthXCart = 10;
                     } else if (window.screen.width <= 400) {
-                        this.widthXCart = 0;
+                        this.widthXCart = 1;
                     }
                 }
             }
@@ -351,9 +353,11 @@
 <style lang="scss" scoped>
     @import "../assets/scss/vars.scss";
     @import "../assets/scss/root.scss";
+
     .dish-mobile-cart {
         display: none;
     }
+
     .cart {
         width: 500px;
         height: auto;
@@ -361,15 +365,18 @@
         background: #fff;
         border-bottom-left-radius: 10px;
         border-bottom-right-radius: 10px;
+
         .dish-container {
             height: 500px;
             // padding-top: 2%;
             overflow-y: scroll;
         }
+
         .dish-photo {
             display: flex;
             justify-content: center;
             align-items: center;
+
             img {
                 width: 80px;
                 height: auto;
@@ -379,6 +386,7 @@
                 margin-right: 10px;
             }
         }
+
         .dish {
             display: flex;
             flex-direction: row;
@@ -386,6 +394,7 @@
             margin: 2%;
             width: 94%;
             height: 80px;
+
             .info {
                 display: flex;
                 flex-direction: column;
@@ -395,15 +404,18 @@
                 height: auto;
                 font-size: 14px;
                 font-weight: 700;
+
                 .name {
                     font-size: 16px;
                 }
+
                 .weight {
                     font-size: 14px;
                     font-weight: 300;
                     text-align: left;
                     margin-top: 5px;
                 }
+
                 .price {
                     font-weight: 700;
                     font-size: 14px;
@@ -412,10 +424,12 @@
                 }
             }
         }
+
         .dish-add {
             display: flex;
             align-items: center;
             justify-content: center;
+
             img {
                 width: 20px;
                 height: auto;
@@ -423,6 +437,7 @@
                 padding: 9px;
                 cursor: pointer;
             }
+
             .amount {
                 border: 1px solid #460b79;
                 border-radius: 10px;
@@ -435,6 +450,7 @@
                 align-items: center;
             }
         }
+
         .sum-container {
             width: 100%;
             border-top: 1px solid #bfbcbc;
@@ -442,6 +458,7 @@
             margin-bottom: 2%;
             overflow: hidden;
         }
+
         .sum {
             display: flex;
             justify-content: space-between;
@@ -451,6 +468,7 @@
             font-weight: 700;
             margin: 14px auto 10px 25px;
         }
+
         .limit {
             display: flex;
             justify-content: space-between;
@@ -461,10 +479,12 @@
             margin-left: 25px;
             margin-bottom: 14px;
         }
+
         .number {
             margin-right: 5%;
             font-size: 18px;
         }
+
         .btns {
             margin-bottom: 2%;
             width: 100%;
@@ -472,6 +492,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+
             button {
                 border-radius: 46px;
                 outline: none;
@@ -487,6 +508,7 @@
                 font-weight: 700;
             }
         }
+
         @media (max-width: 790px) {
             .sum-container {
                 display: none;
@@ -497,7 +519,7 @@
                 // margin-top: 50px;
             }
             .dish-container {
-                height: 850px;
+                height: 110%;
                 overflow: scroll;
                 // margin-top: 38px;
             }
@@ -507,6 +529,8 @@
             .dish-mobile-cart {
                 display: flex;
                 width: 100%;
+                overflow-y: scroll;
+
                 .swipeout-action {
                     display: flex;
                     align-items: center;
@@ -514,17 +538,21 @@
                     cursor: pointer;
                     left: 0;
                 }
+
                 .swipeout-action.dish-mobile-delete-cart {
                     height: 100%;
                     background: linear-gradient(90deg, #A60000 0%, #CE0000 100%), #FFFFFF;
+
                     .dish-mobile-delete-dish-cart {
                         display: flex;
                         flex-direction: column;
                         align-items: center;
                         width: 60px;
+
                         img {
                             width: 40px;
                         }
+
                         div {
                             margin-top: 5px;
                             font-weight: 700;
@@ -533,19 +561,23 @@
                         }
                     }
                 }
+
                 .swipeout-action.dish-mobile-add-cart {
                     display: flex;
                     justify-content: flex-end;
                     height: 100%;
                     background: linear-gradient(90deg, #460B79 0%, #88267F 100%), #FFFFFF;
+
                     .dish-mobile-add-dish-cart {
                         display: flex;
                         flex-direction: column;
                         align-items: center;
                         width: 60px;
+
                         img {
                             width: 40px;
                         }
+
                         div {
                             margin-top: 5px;
                             font-weight: 700;
@@ -554,6 +586,7 @@
                         }
                     }
                 }
+
                 .card-content-cart {
                     display: flex;
                     justify-content: center;
@@ -562,6 +595,7 @@
                     background: #FFFFFF;
                     width: 100%;
                     border-top: 1px solid #F2EDF6;
+
                     .dish-mobile-img-cart {
                         img {
                             width: 135px;
@@ -570,6 +604,7 @@
                             margin-left: -12px;
                         }
                     }
+
                     .dish-mobile-text-cart {
                         width: 60%;
                         height: 125px;
@@ -577,6 +612,7 @@
                         align-items: flex-start;
                         justify-content: center;
                         flex-direction: column;
+
                         .dish-mobile-text-disc-cart {
                             display: flex;
                             flex-wrap: wrap;
@@ -584,6 +620,7 @@
                             font-size: 22px;
                             color: #460B79;
                         }
+
                         .dish-mobile-price-grams-cart, .dish-mobile-price-price-cart {
                             font-weight: 400;
                             font-size: 20px;
@@ -592,30 +629,38 @@
                             text-align: right;
                             color: #460B79;
                         }
+
                         .dish-mobile-price-price-cart {
                             font-weight: 700;
                         }
                     }
+
                     .dish-mobile-price-cart {
                         width: 20%;
+
                         .dish-mobile-price-count-cart {
                             font-size: 20px;
                         }
                     }
                 }
+
                 .transition-right {
                     transform: translate3d(100%, 0, 0) !important;
                 }
+
                 .transition-left {
                     transform: translate3d(-500%, 0, 0) !important;
                 }
+
                 .toolbar {
                     display: flex;
                     align-items: center;
                 }
+
                 .toolbar .toolbar-section {
                     flex: 0 0 auto;
                 }
+
                 .toolbar .toolbar-section--center {
                     flex: 1000 1 0%;
                 }
@@ -623,6 +668,7 @@
             .btns {
                 position: fixed;
                 bottom: 40px;
+
                 button {
                     font-weight: 400;
                     width: 170px;
@@ -633,7 +679,7 @@
         }
         @media (max-width: 650px) {
             .dish-container {
-                height: 800px;
+                // height: 800px;
                 // padding-top: 50px;
                 overflow: scroll;
                 margin-top: 0;
@@ -642,21 +688,26 @@
                 .swipeout-action.dish-mobile-delete-cart {
                     .dish-mobile-delete-dish-cart {
                         width: 30px;
+
                         div {
                             font-size: 12px;
                         }
                     }
                 }
+
                 .swipeout-action.dish-mobile-add-cart {
                     .dish-mobile-add-dish-cart {
                         width: 30px;
+
                         div {
                             font-size: 12px;
                         }
                     }
                 }
+
                 .card-content-cart {
                     height: 90px;
+
                     .dish-mobile-img-cart {
                         img {
                             width: 110px;
@@ -665,16 +716,20 @@
                             margin-left: -12px;
                         }
                     }
+
                     .dish-mobile-text-cart {
                         width: 60%;
                         height: 125px;
+
                         .dish-mobile-text-disc-cart {
                             font-size: 18px;
                         }
+
                         .dish-mobile-price-grams-cart, .dish-mobile-price-price-cart {
                             font-size: 16px;
                         }
                     }
+
                     .dish-mobile-price-cart {
                         .dish-mobile-price-count-cart {
                             font-size: 18px;
@@ -701,6 +756,7 @@
                 p {
                     font-size: 16px;
                 }
+
                 .number {
                     font-size: 16px;
                     margin-right: 20px;
@@ -710,33 +766,39 @@
                 p {
                     font-size: 16px;
                 }
+
                 .number {
                     font-size: 16px;
                     margin-right: 20px;
                 }
             }
             .dish-container {
-                height: 500px;
+                // height: 500px;
                 overflow: scroll;
             }
             .dish-mobile-cart {
                 .swipeout-action.dish-mobile-delete-cart {
                     .dish-mobile-delete-dish-cart {
                         width: 10px;
+
                         img {
                             width: 25px;
                         }
+
                         div {
                             font-size: 10px;
                         }
                     }
                 }
+
                 .swipeout-action.dish-mobile-add-cart {
                     .dish-mobile-add-dish-cart {
                         width: 10px;
+
                         img {
                             width: 25px;
                         }
+
                         div {
                             font-size: 10px;
                         }
@@ -748,6 +810,7 @@
             .dish-mobile-cart {
                 .card-content-cart {
                     height: 90px;
+
                     .dish-mobile-img-cart {
                         img {
                             width: 110px;
@@ -756,16 +819,20 @@
                             margin-left: -12px;
                         }
                     }
+
                     .dish-mobile-text-cart {
                         width: 60%;
                         height: 125px;
+
                         .dish-mobile-text-disc-cart {
                             font-size: 16px;
                         }
+
                         .dish-mobile-price-grams-cart, .dish-mobile-price-price-cart {
                             font-size: 14px;
                         }
                     }
+
                     .dish-mobile-price-cart {
                         .dish-mobile-price-count-cart {
                             font-size: 16px;
@@ -773,31 +840,34 @@
                     }
                 }
             }
-                .btns {
+            .btns {
                 position: fixed;
                 bottom: 30px;
             }
         }
         @media (max-width: 430px) {
             .dish-container {
-                height: 600px;
+                // height: 600px;
             }
             .dish-mobile-cart {
                 .card-content-cart {
-                    .dish-mobile-img-cart {
-                    }
+
                     .dish-mobile-text-cart {
                         width: 60%;
                         height: 125px;
+
                         .dish-mobile-text-disc-cart {
                             font-size: 16px;
                         }
+
                         .dish-mobile-price-grams-cart, .dish-mobile-price-price-cart {
                             font-size: 14px;
                         }
                     }
+
                     .dish-mobile-price-cart {
                         width: 15%;
+
                         .dish-mobile-price-count-cart {
                             font-size: 16px;
                         }
@@ -822,6 +892,7 @@
                         }
                     }
                 }
+
                 .swipeout-action.dish-mobile-add-cart {
                     .dish-mobile-add-dish-cart {
                         width: 0px;
@@ -833,26 +904,33 @@
                         }
                     }
                 }
+
                 .card-content-cart {
                     height: 90px;
+
                     .dish-mobile-img-cart {
                         img {
                             width: 90px;
                             clip-path: circle(30px at center);
                         }
                     }
+
                     .dish-mobile-text-cart {
                         width: 60%;
                         height: 125px;
+
                         .dish-mobile-text-disc-cart {
                             font-size: 13px;
                         }
+
                         .dish-mobile-price-grams-cart, .dish-mobile-price-price-cart {
                             font-size: 16px;
                         }
                     }
+
                     .dish-mobile-price-cart {
                         width: 15%;
+
                         .dish-mobile-price-count-cart {
                             font-size: 15px;
                         }
@@ -869,18 +947,23 @@
                             clip-path: circle(30px at center);
                         }
                     }
+
                     .dish-mobile-text-cart {
                         width: 50%;
                         height: 125px;
+
                         .dish-mobile-text-disc-cart {
                             font-size: 13px;
                         }
+
                         .dish-mobile-price-grams-cart, .dish-mobile-price-price-cart {
                             font-size: 14px;
                         }
                     }
+
                     .dish-mobile-price-cart {
                         width: 20%;
+
                         .dish-mobile-price-count-cart {
                             font-size: 15px;
                         }
@@ -891,7 +974,7 @@
 
         @media (max-width: 376px) {
             .dish-container {
-                height: 520px;
+                // height: 520px;
             }
             .btns {
                 position: fixed;
@@ -899,13 +982,13 @@
             }
         }
         @media (max-width: 375px) and (min-height: 800px) {
-                .dish-container {
-                height: 670px;
+            .dish-container {
+                // height: 670px;
             }
         }
         @media (max-width: 340px) {
             .dish-container {
-                height: 450px;
+                // height: 450px;
                 overflow: scroll;
             }
             .btns {
