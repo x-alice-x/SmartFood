@@ -51,7 +51,7 @@ export default {
                                     resp.data.data[i].basket_dishes[j].image = 'https://image.flaticon.com/icons/svg/857/857681.svg'
                                 }
                                 resp.data.data[i].basket_dishes[j].count =
-                                    resp.data.data[i].basket_dishes[j].count.toString().replace(/.0/, '');
+                                    resp.data.data[i].basket_dishes[j].count.toString().replace(/\.0/, '');
                                 resp.data.data[i].basket_dishes[j].showTransitionLeft = false;
                                 resp.data.data[i].basket_dishes[j].showTransitionRight = false;
                             }

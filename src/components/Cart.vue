@@ -10,7 +10,7 @@
                     <div class="info">
                         <p class="name">{{dish.name}}</p>
                         <p class="weight">{{dish.weight}} г.</p>
-                        <p class="price">{{dish.price.replace(/.00/, '')}} &#8381;</p>
+                        <p class="price">{{dish.price.replace(/\.00/, '')}} &#8381;</p>
                     </div>
                     <div class="dish-add">
                         <img src="../assets/img/minus.svg"
@@ -56,7 +56,7 @@
                                 {{ item.weight }} г.
                             </div>
                             <div class="dish-mobile-price-price-cart">
-                                {{ item.price.replace(/.00/, '') }} &#8381;
+                                {{ item.price.replace(/\.00/, '') }} &#8381;
                             </div>
                         </div>
                         <div class="dish-mobile-price-cart">

@@ -42,7 +42,7 @@
                                      :class="{invalid: invalid}">
                                     <div class="dish-amount-color">
                                         <input type="text" v-model.trim="dish.in_basket_count"
-                                               @focusout="buyDish(todayMenu.id, dish.id, index, categoryIndex, buttonId = 'input',count = dish.in_basket_count)"
+                                               @keyup.enter="buyDish(todayMenu.id, dish.id, index, categoryIndex, buttonId = 'input',count = dish.in_basket_count)"
                                                @click="oldCount = dish.in_basket_count">
                                     </div>
                                 </div>
@@ -54,7 +54,7 @@
                         </div>
                         <div class="dish-bottom">
                             <div class="dish-typ">
-                                <a>{{ dish.price.replace(/.00/, '') }} &#8381;</a>
+                                <a>{{ dish.price.replace(/\.00/, '') }} &#8381;</a>
                                 <a>{{ dish.weight }} г.</a>
                             </div>
                         </div>
@@ -98,7 +98,7 @@
                                         {{ item.weight }} г.
                                     </div>
                                     <div class="dish-mobile-price-price">
-                                        {{ item.price.replace(/.00/, '') }} &#8381;
+                                        {{ item.price.replace(/\.00/, '') }} &#8381;
                                     </div>
                                 </div>
                             </div>
